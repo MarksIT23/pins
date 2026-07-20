@@ -96,36 +96,43 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 
 -- Public can read active categories
+DROP POLICY IF EXISTS "public_read_categories" ON asset_categories;
 CREATE POLICY "public_read_categories" ON asset_categories
   FOR SELECT TO anon, authenticated
   USING (is_active = TRUE);
 
 -- Public can read active assets
+DROP POLICY IF EXISTS "public_read_assets" ON assets;
 CREATE POLICY "public_read_assets" ON assets
   FOR SELECT TO anon, authenticated
   USING (is_active = TRUE);
 
 -- Authenticated (admin) can do everything on categories
+DROP POLICY IF EXISTS "admin_all_categories" ON asset_categories;
 CREATE POLICY "admin_all_categories" ON asset_categories
   FOR ALL TO authenticated
   USING (TRUE) WITH CHECK (TRUE);
 
 -- Authenticated (admin) can do everything on assets
+DROP POLICY IF EXISTS "admin_all_assets" ON assets;
 CREATE POLICY "admin_all_assets" ON assets
   FOR ALL TO authenticated
   USING (TRUE) WITH CHECK (TRUE);
 
 -- Anonymous can INSERT orders (to submit orders without login)
+DROP POLICY IF EXISTS "anon_insert_orders" ON orders;
 CREATE POLICY "anon_insert_orders" ON orders
   FOR INSERT TO anon
   WITH CHECK (TRUE);
 
 -- Authenticated (admin) can read/update orders
+DROP POLICY IF EXISTS "admin_all_orders" ON orders;
 CREATE POLICY "admin_all_orders" ON orders
   FOR ALL TO authenticated
   USING (TRUE) WITH CHECK (TRUE);
 
 -- Authenticated can read order_items
+DROP POLICY IF EXISTS "admin_all_order_items" ON order_items;
 CREATE POLICY "admin_all_order_items" ON order_items
   FOR ALL TO authenticated
   USING (TRUE) WITH CHECK (TRUE);
