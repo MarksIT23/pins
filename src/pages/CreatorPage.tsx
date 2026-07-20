@@ -21,7 +21,7 @@ export function CreatorPage() {
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
   const { data: allAssets = [] } = useAllAssets()
-  const { config, activeCategory, resetCharacter } = useCharacterStore()
+  const { config, activeCategory, setActiveCategory, resetCharacter } = useCharacterStore()
 
   // Filter to our 6 active categories only
   const activeCategories = useMemo(() => filterActiveCategories(categories), [categories])
@@ -33,6 +33,14 @@ export function CreatorPage() {
   }, [allAssets])
 
   const activeCat = activeCategories.find((c) => c.slug === activeCategory)
+
+  // Validate persisted activeCategory against loaded categories
+  // Fixes stale persisted state after categories are deactivated
+  useEffect(() => {
+    if (activeCategories.length > 0 && !activeCat) {
+      setActiveCategory(activeCategories[0].slug)
+    }
+  }, [activeCategories, activeCat, setActiveCategory])
 
   // Generate preview on config change
   useEffect(() => {
