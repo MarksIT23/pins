@@ -20,15 +20,14 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
     return m
   }, [assetMap])
 
-  // Derive selected layers
   const selectedLayers = useMemo(() => deriveRenderedLayers(config, assetInfoMap), [config, assetInfoMap])
   const selectedMap = useMemo(() => new Map(selectedLayers.map((l) => [l.slug, l])), [selectedLayers])
-
   const selectedCount = selectedLayers.length
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-2 mb-2">
+      {/* ─── Header ─────────────────────────────────────────────── */}
+      <div className="flex items-center gap-2 mb-2 sm:mb-2">
         <Layers size={13} className="text-[#B8A0C8]" />
         <p className="font-fredoka text-xs font-semibold text-[#B8A0C8] uppercase tracking-wide">
           Layer Stack
@@ -38,8 +37,41 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
         </span>
       </div>
 
-      <div className="space-y-1">
-        {/* Always render the 6 slots in order — filled or empty */}
+      {/* ─── Mobile: compact horizontal icons ─────────────────────── */}
+      <div className="flex sm:hidden gap-1.5 justify-center">
+        {LAYER_SLUGS.map((slug, i) => {
+          const ui = CATEGORY_UI[slug]
+          const selected = selectedMap.get(slug)
+          const isFilled = !!selected
+
+          return (
+            <motion.div
+              key={slug}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.03 }}
+              className={`flex flex-col items-center gap-0.5 rounded-xl px-1.5 py-1.5 transition-all ${
+                isFilled
+                  ? 'bg-white border border-[#E0D0F0] shadow-sm'
+                  : 'bg-[#FCF8FF] border border-dashed border-[#E8E0F0]'
+              }`}
+            >
+              <span className="text-base leading-none">{ui?.icon ?? '🎀'}</span>
+              <span className="text-[8px] font-fredoka font-bold text-[#3D2B4F] leading-tight truncate max-w-[32px]">
+                {ui?.label ?? slug}
+              </span>
+              {isFilled ? (
+                <CheckCircle2 size={10} className="text-[#52B788]" />
+              ) : (
+                <Circle size={10} className="text-[#D0C8E0]" />
+              )}
+            </motion.div>
+          )
+        })}
+      </div>
+
+      {/* ─── Desktop: vertical list with details ──────────────────── */}
+      <div className="hidden sm:block space-y-1">
         {LAYER_SLUGS.map((slug, i) => {
           const ui = CATEGORY_UI[slug]
           const selected = selectedMap.get(slug)
@@ -58,15 +90,10 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
                   : 'bg-[#FCF8FF] border-dashed border-[#E8E0F0]'
               }`}
             >
-              {/* Position indicator */}
               <span className="text-[9px] font-fredoka font-bold text-[#C8B0D8] w-3 text-right">
                 {i + 1}
               </span>
-
-              {/* Icon */}
               <span className="text-sm flex-shrink-0">{ui?.icon ?? '🎀'}</span>
-
-              {/* Label + asset name */}
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-fredoka font-semibold text-[#3D2B4F] truncate">
                   {ui?.label ?? slug}
@@ -77,8 +104,6 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
                   </p>
                 )}
               </div>
-
-              {/* Check / empty */}
               {isFilled ? (
                 <CheckCircle2 size={14} className="text-[#52B788] flex-shrink-0" />
               ) : (
