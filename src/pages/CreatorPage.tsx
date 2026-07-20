@@ -57,24 +57,24 @@ export function CreatorPage() {
   const hasAnySelection = Object.values(config).some((v) => v != null)
 
   return (
-    <div className="h-screen flex flex-col bg-[#FFF8F0] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-[#FFF8F0] relative">
       <SparkleBackground />
       <Header />
 
-      <main className="flex-1 relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-5 py-3 sm:py-4 min-h-0 flex flex-col overflow-y-auto">
-        <div className="flex gap-4 lg:gap-6 min-h-0 flex-col lg:flex-row lg:flex-1">
+      <main className="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-5 py-3 sm:py-4">
+        <div className="flex gap-4 lg:gap-6 flex-col lg:flex-row">
 
           {/* ─── CATEGORIES + ASSET GRID — first on mobile, right on desktop ── */}
-          <div className="order-1 lg:order-2 lg:flex-1 flex flex-col min-w-0 min-h-0">
+          <div className="lg:order-2 lg:flex-1 min-w-0">
             {/* Page title */}
-            <h1 className="font-fredoka text-xl sm:text-2xl font-bold text-[#3D2B4F] mb-2 flex-shrink-0">
+            <h1 className="font-fredoka text-xl sm:text-2xl font-bold text-[#3D2B4F] mb-2">
               ✨ Character Creator
             </h1>
 
             {/* Category pills */}
-            <div className="flex-shrink-0 mb-3">
+            <div className="mb-3">
               {catsLoading ? (
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {Array.from({ length: 7 }).map((_, i) => (
                     <div key={i} className="h-8 w-16 sm:w-20 rounded-2xl shimmer" />
                   ))}
@@ -86,7 +86,7 @@ export function CreatorPage() {
 
             {/* Active category label */}
             {activeCat && (
-              <div className="flex items-center gap-2 mb-2 flex-shrink-0">
+              <div className="flex items-center gap-2 mb-2">
                 <span className="text-lg">{(activeCat as any).icon ?? '🎀'}</span>
                 <h2 className="font-fredoka text-base font-semibold text-[#3D2B4F]">
                   {activeCat.name}
@@ -94,8 +94,8 @@ export function CreatorPage() {
               </div>
             )}
 
-            {/* Asset grid */}
-            <div className="lg:flex-1 overflow-y-auto min-h-0 pr-1">
+            {/* Asset grid — scrolls on desktop, natural flow on mobile */}
+            <div className="lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto lg:pr-1">
               {activeCat ? (
                 <AssetGrid
                   categoryId={activeCat.id}
@@ -110,7 +110,7 @@ export function CreatorPage() {
           </div>
 
           {/* ─── CANVAS + LAYERS + ACTIONS — second on mobile, left on desktop ── */}
-          <div className="order-2 lg:order-1 flex flex-col items-center gap-3 w-full max-w-[300px] mx-auto lg:mx-0 flex-shrink-0">
+          <div className="lg:order-1 flex flex-col items-center gap-3 w-full max-w-[300px] mx-auto lg:mx-0 lg:flex-shrink-0">
             {/* Canvas — auto-sizes to container width */}
             <CharacterCanvas
               assetMap={assetMap}
