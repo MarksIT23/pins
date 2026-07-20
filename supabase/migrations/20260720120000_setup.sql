@@ -122,8 +122,14 @@ CREATE POLICY "admin_all_assets" ON assets
 -- Anonymous can INSERT orders (to submit orders without login)
 DROP POLICY IF EXISTS "anon_insert_orders" ON orders;
 CREATE POLICY "anon_insert_orders" ON orders
-  FOR INSERT TO anon
+  FOR INSERT TO public
   WITH CHECK (TRUE);
+
+-- Anonymous can SELECT their own orders
+DROP POLICY IF EXISTS "anon_select_orders" ON orders;
+CREATE POLICY "anon_select_orders" ON orders
+  FOR SELECT TO public
+  USING (TRUE);
 
 -- Authenticated (admin) can read/update orders
 DROP POLICY IF EXISTS "admin_all_orders" ON orders;
