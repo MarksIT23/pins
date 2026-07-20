@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 
@@ -24,10 +25,27 @@ const queryClient = new QueryClient({
   },
 })
 
+/** Restores SPA routing after GitHub Pages 404 redirect. */
+function RedirectHandler() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    const redirect = sessionStorage.getItem('redirect')
+    if (redirect) {
+      sessionStorage.removeItem('redirect')
+      try {
+        const url = new URL(redirect)
+        navigate(url.pathname.replace('/pins', '') + url.search + url.hash, { replace: true })
+      } catch { /* ignore */ }
+    }
+  }, [navigate])
+  return null
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename="/pins">
+        <RedirectHandler />
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<HomePage />} />
