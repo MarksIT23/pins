@@ -27,7 +27,7 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename="/pins">
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<HomePage />} />

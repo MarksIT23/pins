@@ -4,10 +4,9 @@
   <meta charset="utf-8">
   <title>PINS</title>
   <script>
-    // Redirect all 404s to index.html for SPA routing
-    sessionStorage.redirect = location.href;
+    sessionStorage.setItem('redirect', location.href);
   </script>
-  <meta http-equiv="refresh" content="0;URL='/'">
+  <meta http-equiv="refresh" content="0;URL='/pins/'">
 </head>
 <body></body>
 </html>
