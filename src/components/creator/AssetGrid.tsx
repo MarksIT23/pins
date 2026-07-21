@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, X } from 'lucide-react'
 import { Asset } from '@/types'
@@ -20,14 +20,26 @@ const ITEM_VARIANTS = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring' as const, stiffness: 300, damping: 20 } },
 } as const
 
+const FORCE_DEFAULT = ['clothes', 'background']
+
 export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
   const { config, setLayer, getSelectedForCategory } = useCharacterStore()
   const selected = getSelectedForCategory(categorySlug)
   const { data: assets, isLoading, error } = useAssetsByCategory(categoryId)
 
+  // Auto-select first asset for categories that don't allow "none"
+  useEffect(() => {
+    if (assets && assets.length > 0 && FORCE_DEFAULT.includes(categorySlug) && !selected) {
+      setLayer(categorySlug, assets[0].id)
+    }
+  }, [assets, categorySlug, selected, setLayer])
+
   function handleSelect(assetId: string) {
     if (selected === assetId) {
-      setLayer(categorySlug, null) // deselect
+      // Only allow deselect if the category allows "none"
+      if (!FORCE_DEFAULT.includes(categorySlug)) {
+        setLayer(categorySlug, null)
+      }
     } else {
       setLayer(categorySlug, assetId)
     }
@@ -70,22 +82,24 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
       animate="visible"
       className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-2.5"
     >
-      {/* None / Remove option */}
-      <motion.button
-        variants={ITEM_VARIANTS}
-        onClick={() => setLayer(categorySlug, null)}
-        className={`
-          aspect-square rounded-xl flex flex-col items-center justify-center gap-1
-          border-2 transition-all cursor-pointer text-xs font-nunito
-          ${!selected
-            ? 'border-[#FF85A1] bg-[#FFD6E8] text-[#FF85A1]'
-            : 'border-dashed border-[#E8D9FF] bg-white text-[#C8B0D8] hover:border-[#C8B0FF]'
-          }
-        `}
-      >
-        <X size={16} />
-        <span className="text-[10px]">None</span>
-      </motion.button>
+      {/* None / Remove option — hidden for categories that require a default */}
+      {!FORCE_DEFAULT.includes(categorySlug) && (
+        <motion.button
+          variants={ITEM_VARIANTS}
+          onClick={() => setLayer(categorySlug, null)}
+          className={`
+            aspect-square rounded-xl flex flex-col items-center justify-center gap-1
+            border-2 transition-all cursor-pointer text-xs font-nunito
+            ${!selected
+              ? 'border-[#FF85A1] bg-[#FFD6E8] text-[#FF85A1]'
+              : 'border-dashed border-[#E8D9FF] bg-white text-[#C8B0D8] hover:border-[#C8B0FF]'
+            }
+          `}
+        >
+          <X size={16} />
+          <span className="text-[10px]">None</span>
+        </motion.button>
+      )}
 
       {assets.map((asset) => (
         <AssetCard
