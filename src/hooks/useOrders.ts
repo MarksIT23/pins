@@ -64,24 +64,19 @@ export function useSubmitOrder() {
       // 1. Upload preview image
       const previewUrl = await uploadPreviewImage(previewBlob, orderId)
 
-      // 2. Insert order record
-      const { data, error } = await supabase
-        .from('orders')
-        .insert({
-          id: orderId,
-          order_number: orderNumber,
-          full_name: formData.full_name,
-          facebook_name: formData.facebook_name || null,
-          student_id: formData.student_id || null,
-          contact_number: formData.contact_number,
-          quantity: formData.quantity,
-          notes: formData.notes || null,
-          status: 'pending',
-          character_config: characterConfig,
-          preview_image_url: previewUrl,
-        })
-        .select()
-        .single()
+      // 2. Insert order via RPC (bypasses PostgREST RLS issues with anon key)
+      const { data, error } = await supabase.rpc('submit_order', {
+        p_id: orderId,
+        p_order_number: orderNumber,
+        p_full_name: formData.full_name,
+        p_facebook_name: formData.facebook_name || null,
+        p_student_id: formData.student_id || null,
+        p_contact_number: formData.contact_number,
+        p_quantity: formData.quantity,
+        p_notes: formData.notes || null,
+        p_character_config: characterConfig,
+        p_preview_image_url: previewUrl,
+      })
 
       if (error) throw error
       return data as Order
