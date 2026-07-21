@@ -46,6 +46,7 @@ export function CreatorPage() {
   const [textFont, setTextFont] = useState('Fredoka')
   const [textSize, setTextSize] = useState(1)
   const [textColor, setTextColor] = useState('#3D2B4F')
+  const [textOutline, setTextOutline] = useState(false)
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
   const { data: allAssets = [] } = useAllAssets()
@@ -94,11 +95,11 @@ export function CreatorPage() {
   useEffect(() => {
     const trimmed = textInput.trim().slice(0, 10)
     if (trimmed) {
-      setTextOverlay({ text: trimmed, font: textFont, size: textSize, color: textColor })
+      setTextOverlay({ text: trimmed, font: textFont, size: textSize, color: textColor, outline: textOutline })
     } else {
       setTextOverlay(null)
     }
-  }, [textInput, textFont, textSize, textColor, setTextOverlay])
+  }, [textInput, textFont, textSize, textColor, textOutline, setTextOverlay])
 
   // Restore persisted text overlay into local state
   useEffect(() => {
@@ -107,6 +108,7 @@ export function CreatorPage() {
       setTextFont(config.textOverlay.font)
       setTextSize(config.textOverlay.size)
       setTextColor(config.textOverlay.color)
+      setTextOutline(config.textOverlay.outline)
     }
   }, [])
 
@@ -128,6 +130,7 @@ export function CreatorPage() {
     setTextFont('Fredoka')
     setTextSize(1)
     setTextColor('#3D2B4F')
+    setTextOutline(false)
   }
 
   function handlePlaceOrder() {
@@ -285,6 +288,27 @@ export function CreatorPage() {
                         title="Custom color"
                       />
                     </div>
+                  </div>
+
+                  {/* Outline toggle */}
+                  <div>
+                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                      Outline
+                    </label>
+                    <button
+                      onClick={() => setTextOutline(!textOutline)}
+                      className={`
+                        flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold
+                        transition-all cursor-pointer
+                        ${textOutline
+                          ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
+                          : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
+                        }
+                      `}
+                    >
+                      <span className="text-base">{textOutline ? '☑' : '☐'}</span>
+                      <span>White outline</span>
+                    </button>
                   </div>
                 </div>
               ) : activeCat ? (
