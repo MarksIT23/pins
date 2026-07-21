@@ -77,7 +77,7 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
       setTextImg(null)
       return
     }
-    const url = renderCurvedText(textOverlay.text, textOverlay.font, textOverlay.size, canvasSize, canvasSize)
+    const url = renderCurvedText(textOverlay.text, textOverlay.font, textOverlay.size, textOverlay.color, canvasSize, canvasSize)
     setTextImageUrl(url)
     const img = new window.Image()
     img.onload = () => setTextImg(img)

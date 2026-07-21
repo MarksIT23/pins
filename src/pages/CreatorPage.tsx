@@ -27,6 +27,17 @@ const TEXT_SIZES = [
   { value: 3, label: 'Large', icon: 'A' },
 ]
 
+const TEXT_COLORS = [
+  { value: '#3D2B4F', label: 'Purple' },
+  { value: '#FF85A1', label: 'Pink' },
+  { value: '#B07FFF', label: 'Violet' },
+  { value: '#2D2D2D', label: 'Black' },
+  { value: '#FFFFFF', label: 'White' },
+  { value: '#FF6B6B', label: 'Red' },
+  { value: '#4ECDC4', label: 'Teal' },
+  { value: '#FFD93D', label: 'Yellow' },
+]
+
 export function CreatorPage() {
   const stageRef = useRef<any>(null)
   const [orderModalOpen, setOrderModalOpen] = useState(false)
@@ -34,6 +45,7 @@ export function CreatorPage() {
   const [textInput, setTextInput] = useState('')
   const [textFont, setTextFont] = useState('Fredoka')
   const [textSize, setTextSize] = useState(1)
+  const [textColor, setTextColor] = useState('#3D2B4F')
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
   const { data: allAssets = [] } = useAllAssets()
@@ -82,11 +94,11 @@ export function CreatorPage() {
   useEffect(() => {
     const trimmed = textInput.trim().slice(0, 10)
     if (trimmed) {
-      setTextOverlay({ text: trimmed, font: textFont, size: textSize })
+      setTextOverlay({ text: trimmed, font: textFont, size: textSize, color: textColor })
     } else {
       setTextOverlay(null)
     }
-  }, [textInput, textFont, textSize, setTextOverlay])
+  }, [textInput, textFont, textSize, textColor, setTextOverlay])
 
   // Restore persisted text overlay into local state
   useEffect(() => {
@@ -94,6 +106,7 @@ export function CreatorPage() {
       setTextInput(config.textOverlay.text)
       setTextFont(config.textOverlay.font)
       setTextSize(config.textOverlay.size)
+      setTextColor(config.textOverlay.color)
     }
   }, [])
 
@@ -114,6 +127,7 @@ export function CreatorPage() {
     setTextInput('')
     setTextFont('Fredoka')
     setTextSize(1)
+    setTextColor('#3D2B4F')
   }
 
   function handlePlaceOrder() {
@@ -235,6 +249,41 @@ export function CreatorPage() {
                           <span className="text-[11px] font-nunito">{s.label}</span>
                         </button>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Text color */}
+                  <div>
+                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                      Text Color
+                    </label>
+                    <div className="flex gap-2 flex-wrap items-center">
+                      {TEXT_COLORS.map((c) => (
+                        <button
+                          key={c.value}
+                          onClick={() => setTextColor(c.value)}
+                          className={`
+                            w-8 h-8 rounded-full transition-all cursor-pointer
+                            ${textColor === c.value
+                              ? 'ring-2 ring-[#FF85A1] ring-offset-2 scale-110'
+                              : 'ring-1 ring-[#E0D0F0] hover:ring-[#C8B0FF]'
+                            }
+                          `}
+                          style={{ backgroundColor: c.value }}
+                          title={c.label}
+                        >
+                          {c.value === '#FFFFFF' && (
+                            <span className="text-[10px] block text-[#B8A0C8] leading-none">✎</span>
+                          )}
+                        </button>
+                      ))}
+                      <input
+                        type="color"
+                        value={textColor}
+                        onChange={(e) => setTextColor(e.target.value)}
+                        className="w-8 h-8 rounded-full cursor-pointer border-0 p-0 bg-transparent [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-full [&::-webkit-color-swatch]:border-none"
+                        title="Custom color"
+                      />
                     </div>
                   </div>
                 </div>

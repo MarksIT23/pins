@@ -8,6 +8,7 @@ export function renderCurvedText(
   text: string,
   font: string,
   sizeLevel: number,
+  color: string,
   canvasWidth: number,
   canvasHeight: number
 ): string {
@@ -22,7 +23,7 @@ export function renderCurvedText(
   const ratio = SIZE_MAP[Math.min(sizeLevel, SIZE_MAP.length - 1)] ?? 0.044
   const fontSize = Math.round(canvasWidth * ratio)
   ctx.font = `bold ${fontSize}px "${font}", sans-serif`
-  ctx.fillStyle = '#3D2B4F'
+  ctx.fillStyle = color
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
 
@@ -35,19 +36,16 @@ export function renderCurvedText(
   }
 
   // Strong downward arc hugging the circular bottom of the pin.
-  // Pin circle center is at 50%/50% with radius ~32% of canvas.
-  // Edges ride up where the circle is wider; center dips following the curve.
+  // Horizontal spread scales with character count so short text isn't too spaced out.
   const centerX = canvasWidth / 2
-  const arcCenterY = canvasHeight * 0.68       // higher so edges are safely inside the circle
-  const arcCurve = canvasHeight * 0.075         // pronounced downward arc
+  const arcCenterY = canvasHeight * 0.68
+  const arcCurve = canvasHeight * 0.075
+  const maxSpread = Math.min(chars.length * 0.05, 0.40)
 
   chars.forEach((char, i) => {
     const t = chars.length > 1 ? i / (chars.length - 1) : 0.5
-    // Horizontal spread kept moderate so center characters stay within circle
-    const x = centerX + (t - 0.5) * canvasWidth * 0.40
-    // Deep downward arc: middle dips low, edges climb up following circle
+    const x = centerX + (t - 0.5) * canvasWidth * maxSpread
     const y = arcCenterY + Math.sin(t * Math.PI) * arcCurve
-    // Rotation follows the steep downward curve
     const rotation = Math.sin((0.5 - t) * Math.PI) * 0.20
 
     ctx.save()

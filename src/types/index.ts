@@ -59,6 +59,7 @@ export interface TextOverlay {
   text: string;     // max 10 chars
   font: string;     // font family name
   size: number;     // font multiplier: 0=small, 1=medium, 2=large
+  color: string;    // hex color, e.g. "#3D2B4F"
 }
 
 // ─── Character Config ─────────────────────────────────────────────────────────
