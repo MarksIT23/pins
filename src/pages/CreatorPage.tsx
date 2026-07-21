@@ -42,6 +42,20 @@ export function CreatorPage() {
     }
   }, [activeCategories, activeCat, setActiveCategory])
 
+  // Set default clothes and background from the first available asset
+  // so the preview shows something immediately, even before clicking those tabs
+  useEffect(() => {
+    if (allAssets.length === 0) return
+    if (!config.clothes) {
+      const first = allAssets.find((a) => a.category?.slug === 'clothes')
+      if (first) setLayer('clothes', first.id)
+    }
+    if (!config.background) {
+      const first = allAssets.find((a) => a.category?.slug === 'background')
+      if (first) setLayer('background', first.id)
+    }
+  }, [allAssets, config.clothes, config.background, setLayer])
+
   // Generate preview on config change
   useEffect(() => {
     if (!stageRef.current) return
