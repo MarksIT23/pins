@@ -65,7 +65,7 @@ export function OrderSuccessPage() {
 
             <p className="text-[#7A5C8A] font-nunito leading-relaxed mb-8">
               Thank you for your order! 💜 We've received your pin design and will be in touch 
-              via your Facebook or contact number once your pin is ready.
+              via your contact number or student ID once your pin is ready.
             </p>
 
             <div className="bg-[#F8F0FF] rounded-2xl p-4 mb-8 text-left border border-[#E8D9FF]">

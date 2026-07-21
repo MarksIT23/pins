@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS orders (
   order_number      TEXT UNIQUE NOT NULL,
   full_name         TEXT NOT NULL,
   facebook_name     TEXT,
-  facebook_link     TEXT,
+  student_id        TEXT,
   contact_number    TEXT NOT NULL,
   quantity          INTEGER NOT NULL DEFAULT 1 CHECK (quantity >= 1),
   notes             TEXT,

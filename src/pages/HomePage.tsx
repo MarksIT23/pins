@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/Button'
 
 const STEPS = [
   { num: '01', title: 'Choose a Base', desc: 'Pick a male or female chibi body.' },
-  { num: '02', title: 'Customize',     desc: 'Add hair, clothes, glasses, accessories & more.' },
-  { num: '03', title: 'Order',         desc: 'Fill in your details and submit your pin request.' },
+  { num: '02', title: 'Customize', desc: 'Add hair, clothes, glasses, accessories & more.' },
+  { num: '03', title: 'Order', desc: 'Fill in your details and submit your pin request.' },
 ]
 
 export function HomePage() {
@@ -41,7 +41,7 @@ export function HomePage() {
           Design Your
           <br />
           <span className="bg-gradient-to-r from-[#FF85A1] via-[#B07FFF] to-[#5BBCFF] bg-clip-text text-transparent">
-            Chibi Pin ✨
+            Chibi Pin!
           </span>
         </motion.h1>
 
@@ -51,7 +51,7 @@ export function HomePage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-lg text-[#7A5C8A] font-nunito text-lg leading-relaxed mb-8"
         >
-          Create your very own custom kawaii character pin! Mix and match adorable parts, 
+          Create your very own custom character pin! Mix and match adorable parts,
           preview your design live, and place your order — all in one place. 🎀
         </motion.p>
 

@@ -257,7 +257,7 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
           {[
             { label: 'Full Name', value: order.full_name },
             { label: 'Contact', value: order.contact_number },
-            { label: 'Facebook', value: order.facebook_name || '—' },
+            { label: 'Student ID', value: order.student_id || '—' },
             { label: 'Quantity', value: order.quantity },
             { label: 'Date Ordered', value: formatDateShort(order.date_ordered) },
             { label: 'Status', value: <StatusBadge status={order.status} /> },

@@ -72,7 +72,7 @@ export function useSubmitOrder() {
           order_number: orderNumber,
           full_name: formData.full_name,
           facebook_name: formData.facebook_name || null,
-          facebook_link: formData.facebook_link || null,
+          student_id: formData.student_id || null,
           contact_number: formData.contact_number,
           quantity: formData.quantity,
           notes: formData.notes || null,

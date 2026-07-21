@@ -120,10 +120,12 @@ export function OrderModal({ isOpen, onClose, stageRef, previewDataUrl }: OrderM
               />
 
               <Input
-                label="Facebook Profile Link"
-                placeholder="https://facebook.com/..."
-                leftIcon={<ExternalLink size={16} />}
-                {...register('facebook_link')}
+                label="Student ID"
+                placeholder="e.g. 23-1037-310"
+                leftIcon={<span className="text-xs font-bold">ID</span>}
+                {...register('student_id', {
+                  pattern: { value: /^\d{2}-\d{4}-\d{3}$/, message: 'Format: YY-NNNN-NNN' },
+                })}
               />
 
               <Input
