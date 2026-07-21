@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { CharacterConfig } from '@/types'
+import { CharacterConfig, TextOverlay } from '@/types'
 import { LAYER_ORDER } from '@/utils/layerOrder'
 
 interface CharacterStore {
@@ -8,6 +8,7 @@ interface CharacterStore {
   activeCategory: string
   setActiveCategory: (slug: string) => void
   setLayer: (categorySlug: string, assetId: string | null) => void
+  setTextOverlay: (overlay: TextOverlay | null) => void
   resetCharacter: () => void
   getSelectedForCategory: (slug: string) => string | null
 }
@@ -20,6 +21,7 @@ const DEFAULT_CONFIG: CharacterConfig = {
   hair: null,
   glasses: null,
   accessories: null,
+  textOverlay: null,
 }
 
 export const useCharacterStore = create<CharacterStore>()(
@@ -35,6 +37,15 @@ export const useCharacterStore = create<CharacterStore>()(
           config: {
             ...state.config,
             [categorySlug]: assetId,
+          },
+        }))
+      },
+
+      setTextOverlay: (overlay) => {
+        set((state) => ({
+          config: {
+            ...state.config,
+            textOverlay: overlay,
           },
         }))
       },
@@ -67,6 +78,7 @@ export function deriveRenderedLayers(
   const layers: { slug: string; assetId: string; fileUrl: string; layerOrder: number }[] = []
 
   for (const [slug, assetId] of Object.entries(config)) {
+    if (slug === 'textOverlay') continue
     if (!assetId) continue
     const asset = assetMap.get(assetId)
     if (!asset) continue

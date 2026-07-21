@@ -54,6 +54,12 @@ export interface Asset {
   updated_at: string;
 }
 
+// ─── Text Overlay ──────────────────────────────────────────────────────────────
+export interface TextOverlay {
+  text: string;   // max 10 chars
+  font: string;   // font family name
+}
+
 // ─── Character Config ─────────────────────────────────────────────────────────
 export interface CharacterConfig {
   background?: string | null;
@@ -63,6 +69,7 @@ export interface CharacterConfig {
   hair?: string | null;
   glasses?: string | null;
   accessories?: string | null;
+  textOverlay?: TextOverlay | null;
 }
 
 // ─── Layer ────────────────────────────────────────────────────────────────────

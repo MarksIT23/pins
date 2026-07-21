@@ -13,6 +13,7 @@ export const LAYER_ORDER: Record<string, number> = {
   hair:        4,
   glasses:     5,
   accessories: 6,
+  text:        7,
 }
 
 /**
@@ -27,10 +28,11 @@ export const CATEGORY_UI: Record<string, { icon: string; label: string }> = {
   hair:        { icon: '💇', label: 'Hair' },
   glasses:     { icon: '🕶️', label: 'Glasses' },
   accessories: { icon: '🎀', label: 'Accessories' },
+  text:        { icon: '✏️', label: 'Text' },
 }
 
-/** Names of the 7 active layer slugs, in render order (bottom→top). */
-export const LAYER_SLUGS = ['background', 'pendants', 'base', 'clothes', 'hair', 'glasses', 'accessories']
+/** Names of the active layer slugs, in render order (bottom→top). */
+export const LAYER_SLUGS = ['background', 'pendants', 'base', 'clothes', 'hair', 'glasses', 'accessories', 'text']
 
 /**
  * Filter API categories to only our 6 active layers, sorted in render order.
