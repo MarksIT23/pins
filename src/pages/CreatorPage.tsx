@@ -44,11 +44,13 @@ export function CreatorPage() {
 
   // Validate persisted activeCategory against loaded categories
   // Fixes stale persisted state after categories are deactivated
+  // Skip validation when 'text' is selected (no DB category, pseudo-category)
   useEffect(() => {
+    if (activeCategory === 'text') return
     if (activeCategories.length > 0 && !activeCat) {
       setActiveCategory(activeCategories[0].slug)
     }
-  }, [activeCategories, activeCat, setActiveCategory])
+  }, [activeCategories, activeCat, activeCategory, setActiveCategory])
 
   // Set default base, clothes, and background from the first available asset
   // so the preview shows something immediately, even before clicking those tabs
