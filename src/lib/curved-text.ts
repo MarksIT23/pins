@@ -14,8 +14,8 @@ export function renderCurvedText(
   const ctx = canvas.getContext('2d')!
   ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
-  // Font size scales with canvas
-  const fontSize = Math.round(canvasWidth * 0.055)
+  // Font size scales with canvas — slightly smaller to ensure fit
+  const fontSize = Math.round(canvasWidth * 0.048)
   ctx.font = `bold ${fontSize}px "${font}", sans-serif`
   ctx.fillStyle = '#3D2B4F'
   ctx.textAlign = 'center'
@@ -25,22 +25,27 @@ export function renderCurvedText(
   if (chars.length === 0) return canvas.toDataURL()
 
   if (chars.length === 1) {
-    ctx.fillText(text, canvasWidth / 2, canvasHeight * 0.82)
+    ctx.fillText(text, canvasWidth / 2, canvasHeight * 0.74)
     return canvas.toDataURL()
   }
 
-  // Gentle upward arc at the bottom of the pin
-  // Characters spread from 15% to 85% of width, following a U-shape
-  const leftX = canvasWidth * 0.15
-  const rightX = canvasWidth * 0.85
-  const baseY = canvasHeight * 0.80
-  const curveHeight = canvasHeight * 0.04 // how much the arc bows upward in the middle
+  // Arc at the lower portion of the pin visible circle.
+  // The background image is a circle centered at 50%/50% with radius ~32% of canvas.
+  // At 73% height the visible width is ~200px on a 500px canvas — enough for 10 chars.
+  const centerX = canvasWidth / 2
+  const centerY = canvasHeight / 2
+  const arcCenterY = canvasHeight * 0.73       // vertical position of the text
+  const arcRadius = canvasWidth * 0.30          // how far from center the text arcs
+  const arcCurve = canvasHeight * 0.025         // gentle upward bow
 
   chars.forEach((char, i) => {
     const t = chars.length > 1 ? i / (chars.length - 1) : 0.5
-    const x = leftX + t * (rightX - leftX)
-    const y = baseY - Math.sin(t * Math.PI) * curveHeight
-    const rotation = -Math.cos(t * Math.PI) * 0.2 // slight rotation to follow curve
+    // Horizontal spread: from 25% to 75% of canvas, staying well inside the circle
+    const x = centerX + (t - 0.5) * canvasWidth * 0.50
+    // Y follows a sine curve: lower at edges, slightly higher in middle (upward arc)
+    const y = arcCenterY - Math.sin(t * Math.PI) * arcCurve
+    // Slight rotation so characters follow the arc tangent
+    const rotation = Math.sin((t - 0.5) * Math.PI) * 0.12
 
     ctx.save()
     ctx.translate(x, y)
