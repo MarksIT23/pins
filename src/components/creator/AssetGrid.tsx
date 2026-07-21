@@ -20,7 +20,7 @@ const ITEM_VARIANTS = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring' as const, stiffness: 300, damping: 20 } },
 } as const
 
-const FORCE_DEFAULT = ['clothes', 'background']
+const FORCE_DEFAULT = ['base', 'clothes', 'background']
 
 export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
   const { config, setLayer, getSelectedForCategory } = useCharacterStore()
