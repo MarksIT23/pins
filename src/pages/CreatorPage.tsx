@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import { RotateCcw, ShoppingBag } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { SparkleBackground } from '@/components/layout/SparkleBackground'
@@ -12,16 +12,24 @@ import { useCategories, useAllAssets } from '@/hooks/useAssets'
 import { useCharacterStore } from '@/store/characterStore'
 import { exportCanvasToDataUrl } from '@/lib/konva-export'
 import { filterActiveCategories } from '@/utils/layerOrder'
-import { Asset } from '@/types'
+import { Asset, TextOverlay } from '@/types'
+
+const TEXT_FONTS = [
+  { value: 'Fredoka', label: 'Fredoka', icon: '🔤' },
+  { value: 'Nunito', label: 'Nunito', icon: '📝' },
+  { value: 'Pacifico', label: 'Pacifico', icon: '✒️' },
+]
 
 export function CreatorPage() {
   const stageRef = useRef<any>(null)
   const [orderModalOpen, setOrderModalOpen] = useState(false)
   const [previewDataUrl, setPreviewDataUrl] = useState<string>()
+  const [textInput, setTextInput] = useState('')
+  const [textFont, setTextFont] = useState('Fredoka')
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
   const { data: allAssets = [] } = useAllAssets()
-  const { config, activeCategory, setActiveCategory, setLayer, resetCharacter } = useCharacterStore()
+  const { config, activeCategory, setActiveCategory, setLayer, setTextOverlay, resetCharacter } = useCharacterStore()
 
   // Filter to our 6 active categories only
   const activeCategories = useMemo(() => filterActiveCategories(categories), [categories])
@@ -60,6 +68,24 @@ export function CreatorPage() {
     }
   }, [allAssets, config.base, config.clothes, config.background, setLayer])
 
+  // Sync text input to store (debounced)
+  useEffect(() => {
+    const trimmed = textInput.trim().slice(0, 10)
+    if (trimmed) {
+      setTextOverlay({ text: trimmed, font: textFont })
+    } else {
+      setTextOverlay(null)
+    }
+  }, [textInput, textFont, setTextOverlay])
+
+  // Restore persisted text overlay into local state
+  useEffect(() => {
+    if (config.textOverlay) {
+      setTextInput(config.textOverlay.text)
+      setTextFont(config.textOverlay.font)
+    }
+  }, [])
+
   // Generate preview on config change
   useEffect(() => {
     if (!stageRef.current) return
@@ -71,6 +97,12 @@ export function CreatorPage() {
     }, 100)
     return () => clearTimeout(timeout)
   }, [JSON.stringify(config)])
+
+  function handleReset() {
+    resetCharacter()
+    setTextInput('')
+    setTextFont('Fredoka')
+  }
 
   function handlePlaceOrder() {
     if (stageRef.current) {
@@ -122,7 +154,53 @@ export function CreatorPage() {
 
             {/* Asset grid — scrolls on desktop, natural flow on mobile */}
             <div className="lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto lg:pr-1">
-              {activeCat ? (
+              {activeCategory === 'text' ? (
+                <div className="bg-white rounded-2xl border border-[#F0E6FF] p-4 space-y-4">
+                  {/* Text input */}
+                  <div>
+                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                      Curved Text
+                    </label>
+                    <input
+                      type="text"
+                      value={textInput}
+                      onChange={(e) => setTextInput(e.target.value.slice(0, 10))}
+                      placeholder="Max 10 characters"
+                      maxLength={10}
+                      className="w-full bg-[#F8F0FF] border border-[#F0E6FF] rounded-2xl px-4 py-2.5 text-sm font-nunito text-[#3D2B4F] placeholder:text-[#C8B0D8] outline-none focus:border-[#B07FFF] focus:bg-white transition-colors"
+                    />
+                    <p className="text-[10px] text-[#B8A0C8] font-nunito mt-1 text-right">
+                      {textInput.length}/10
+                    </p>
+                  </div>
+
+                  {/* Font selector */}
+                  <div>
+                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                      Font Style
+                    </label>
+                    <div className="flex gap-2 flex-wrap">
+                      {TEXT_FONTS.map((f) => (
+                        <button
+                          key={f.value}
+                          onClick={() => setTextFont(f.value)}
+                          className={`
+                            flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold
+                            transition-all cursor-pointer
+                            ${textFont === f.value
+                              ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
+                              : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
+                            }
+                          `}
+                        >
+                          <span>{f.icon}</span>
+                          <span style={{ fontFamily: f.value }}>{f.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : activeCat ? (
                 <AssetGrid
                   categoryId={activeCat.id}
                   categorySlug={activeCat.slug}
@@ -154,7 +232,7 @@ export function CreatorPage() {
                 variant="ghost"
                 size="sm"
                 className="flex-1"
-                onClick={resetCharacter}
+                onClick={handleReset}
                 leftIcon={<RotateCcw size={14} />}
                 disabled={!hasAnySelection}
               >

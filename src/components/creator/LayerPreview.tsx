@@ -11,6 +11,7 @@ interface LayerPreviewProps {
 
 export function LayerPreview({ assetMap }: LayerPreviewProps) {
   const config = useCharacterStore((s) => s.config)
+  const textOverlay = config.textOverlay ?? null
 
   const assetInfoMap = useMemo(() => {
     const m = new Map<string, { file_url: string; category_slug: string }>()
@@ -22,7 +23,7 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
 
   const selectedLayers = useMemo(() => deriveRenderedLayers(config, assetInfoMap), [config, assetInfoMap])
   const selectedMap = useMemo(() => new Map(selectedLayers.map((l) => [l.slug, l])), [selectedLayers])
-  const selectedCount = selectedLayers.length
+  const selectedCount = selectedLayers.length + (textOverlay ? 1 : 0)
 
   return (
     <div className="w-full">
@@ -41,8 +42,8 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
       <div className="grid sm:hidden grid-cols-4 gap-1.5">
         {LAYER_SLUGS.map((slug, i) => {
           const ui = CATEGORY_UI[slug]
-          const selected = selectedMap.get(slug)
-          const isFilled = !!selected
+          const isText = slug === 'text'
+          const isFilled = isText ? !!textOverlay : !!selectedMap.get(slug)
 
           return (
             <motion.div
@@ -74,9 +75,9 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
       <div className="hidden sm:grid grid-cols-2 gap-1.5">
         {LAYER_SLUGS.map((slug, i) => {
           const ui = CATEGORY_UI[slug]
-          const selected = selectedMap.get(slug)
-          const asset = selected ? assetMap.get(selected.assetId) : null
-          const isFilled = !!selected
+          const isText = slug === 'text'
+          const isFilled = isText ? !!textOverlay : !!selectedMap.get(slug)
+          const asset = isText ? null : (selectedMap.get(slug) ? assetMap.get(selectedMap.get(slug)!.assetId) : null)
 
           return (
             <motion.div
@@ -95,7 +96,12 @@ export function LayerPreview({ assetMap }: LayerPreviewProps) {
                 <p className="text-[10px] font-fredoka font-semibold text-[#3D2B4F] truncate leading-tight">
                   {ui?.label ?? slug}
                 </p>
-                {asset && (
+                {isText && textOverlay && (
+                  <p className="text-[8px] font-nunito text-[#B8A0C8] truncate leading-tight">
+                    "{textOverlay.text}"
+                  </p>
+                )}
+                {!isText && asset && (
                   <p className="text-[8px] font-nunito text-[#B8A0C8] truncate leading-tight">
                     {asset.name}
                   </p>
