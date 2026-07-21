@@ -56,8 +56,9 @@ export interface Asset {
 
 // ─── Text Overlay ──────────────────────────────────────────────────────────────
 export interface TextOverlay {
-  text: string;   // max 10 chars
-  font: string;   // font family name
+  text: string;     // max 10 chars
+  font: string;     // font family name
+  size: number;     // font multiplier: 0=small, 1=medium, 2=large
 }
 
 // ─── Character Config ─────────────────────────────────────────────────────────

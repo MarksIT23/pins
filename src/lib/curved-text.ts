@@ -1,10 +1,13 @@
 /**
- * Renders curved text along a gentle upward arc at the bottom of a pin canvas.
+ * Renders curved text along a downward arc at the bottom of a pin canvas.
  * Returns a data URL that can be used as a Konva Image source.
+ *
+ * @param sizeLevel 0=tiny, 1=small, 2=medium, 3=large
  */
 export function renderCurvedText(
   text: string,
   font: string,
+  sizeLevel: number,
   canvasWidth: number,
   canvasHeight: number
 ): string {
@@ -14,8 +17,10 @@ export function renderCurvedText(
   const ctx = canvas.getContext('2d')!
   ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
-  // Font size scales with canvas
-  const fontSize = Math.round(canvasWidth * 0.044)
+  // Font size scales with canvas and size level
+  const SIZE_MAP = [0.036, 0.044, 0.054, 0.065]
+  const ratio = SIZE_MAP[Math.min(sizeLevel, SIZE_MAP.length - 1)] ?? 0.044
+  const fontSize = Math.round(canvasWidth * ratio)
   ctx.font = `bold ${fontSize}px "${font}", sans-serif`
   ctx.fillStyle = '#3D2B4F'
   ctx.textAlign = 'center'

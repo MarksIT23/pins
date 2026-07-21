@@ -20,12 +20,20 @@ const TEXT_FONTS = [
   { value: 'Pacifico', label: 'Pacifico', icon: '✒️' },
 ]
 
+const TEXT_SIZES = [
+  { value: 0, label: 'Tiny', icon: 'A' },
+  { value: 1, label: 'Small', icon: 'A' },
+  { value: 2, label: 'Medium', icon: 'A' },
+  { value: 3, label: 'Large', icon: 'A' },
+]
+
 export function CreatorPage() {
   const stageRef = useRef<any>(null)
   const [orderModalOpen, setOrderModalOpen] = useState(false)
   const [previewDataUrl, setPreviewDataUrl] = useState<string>()
   const [textInput, setTextInput] = useState('')
   const [textFont, setTextFont] = useState('Fredoka')
+  const [textSize, setTextSize] = useState(1)
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
   const { data: allAssets = [] } = useAllAssets()
@@ -74,17 +82,18 @@ export function CreatorPage() {
   useEffect(() => {
     const trimmed = textInput.trim().slice(0, 10)
     if (trimmed) {
-      setTextOverlay({ text: trimmed, font: textFont })
+      setTextOverlay({ text: trimmed, font: textFont, size: textSize })
     } else {
       setTextOverlay(null)
     }
-  }, [textInput, textFont, setTextOverlay])
+  }, [textInput, textFont, textSize, setTextOverlay])
 
   // Restore persisted text overlay into local state
   useEffect(() => {
     if (config.textOverlay) {
       setTextInput(config.textOverlay.text)
       setTextFont(config.textOverlay.font)
+      setTextSize(config.textOverlay.size)
     }
   }, [])
 
@@ -104,6 +113,7 @@ export function CreatorPage() {
     resetCharacter()
     setTextInput('')
     setTextFont('Fredoka')
+    setTextSize(1)
   }
 
   function handlePlaceOrder() {
@@ -197,6 +207,32 @@ export function CreatorPage() {
                         >
                           <span>{f.icon}</span>
                           <span style={{ fontFamily: f.value }}>{f.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Font size */}
+                  <div>
+                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                      Font Size
+                    </label>
+                    <div className="flex gap-2">
+                      {TEXT_SIZES.map((s) => (
+                        <button
+                          key={s.value}
+                          onClick={() => setTextSize(s.value)}
+                          className={`
+                            flex items-center justify-center gap-1 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold
+                            transition-all cursor-pointer
+                            ${textSize === s.value
+                              ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
+                              : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
+                            }
+                          `}
+                        >
+                          <span className={s.value === 0 ? 'text-xs' : s.value === 1 ? 'text-sm' : s.value === 2 ? 'text-base' : 'text-lg'} style={{ fontFamily: textFont }}>A</span>
+                          <span className="text-[11px] font-nunito">{s.label}</span>
                         </button>
                       ))}
                     </div>
