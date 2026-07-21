@@ -39,7 +39,7 @@ export function AssetUploader() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'image/png': ['.png'], 'image/svg+xml': ['.svg'] },
+    accept: { 'image/png': ['.png'] },
     multiple: true,
     maxSize: 5 * 1024 * 1024, // 5MB
   })
