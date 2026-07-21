@@ -211,16 +211,16 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
     img.crossOrigin = 'anonymous'
     img.onload = () => {
       const canvas = document.createElement('canvas')
-      canvas.width = 500
-      canvas.height = 500
+      canvas.width = 1000
+      canvas.height = 1000
       const ctx = canvas.getContext('2d')!
       // White background (in case of transparency)
       ctx.fillStyle = '#FFFFFF'
-      ctx.fillRect(0, 0, 500, 500)
-      // Draw image centered, containing within 500x500
-      const scale = Math.min(500 / img.width, 500 / img.height)
-      const x = (500 - img.width * scale) / 2
-      const y = (500 - img.height * scale) / 2
+      ctx.fillRect(0, 0, 1000, 1000)
+      // Draw image centered, containing within 1000x1000
+      const scale = Math.min(1000 / img.width, 1000 / img.height)
+      const x = (1000 - img.width * scale) / 2
+      const y = (1000 - img.height * scale) / 2
       ctx.drawImage(img, x, y, img.width * scale, img.height * scale)
       // Trigger download
       const a = document.createElement('a')
@@ -247,7 +247,7 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
               onClick={() => downloadPng(order.preview_image_url!, `${order.order_number}.png`)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#B07FFF] hover:bg-[#9a6aff] text-white text-xs font-fredoka font-semibold transition-colors"
             >
-              <Download size={12} /> 500×500 PNG
+              <Download size={12} /> 1000×1000 PNG
             </button>
           </div>
         )}
