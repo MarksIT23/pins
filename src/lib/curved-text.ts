@@ -47,9 +47,12 @@ export function renderCurvedText(
 
   // Strong downward arc hugging the circular bottom of the pin.
   // Horizontal spread scales with character count so short text isn't too spaced out.
+  // Arc curve scales too — short text gets a flatter curve so it doesn't look exaggerated.
   const centerX = canvasWidth / 2
   const arcCenterY = canvasHeight * 0.70
-  const arcCurve = canvasHeight * 0.075
+  const curveFactor = Math.min(chars.length / 6, 1)
+  const arcCurve = canvasHeight * 0.075 * curveFactor
+  const maxRotation = 0.20 * curveFactor
   const maxSpread = Math.min(chars.length * 0.05, 0.40)
 
   if (hasOutline) {
@@ -63,7 +66,7 @@ export function renderCurvedText(
     const t = chars.length > 1 ? i / (chars.length - 1) : 0.5
     const x = centerX + (t - 0.5) * canvasWidth * maxSpread
     const y = arcCenterY + Math.sin(t * Math.PI) * arcCurve
-    const rotation = Math.sin((0.5 - t) * Math.PI) * 0.20
+    const rotation = Math.sin((0.5 - t) * Math.PI) * maxRotation
 
     ctx.save()
     ctx.translate(x, y)

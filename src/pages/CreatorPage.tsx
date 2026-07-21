@@ -93,7 +93,7 @@ export function CreatorPage() {
 
   // Sync text input to store (debounced)
   useEffect(() => {
-    const trimmed = textInput.trim().slice(0, 10)
+    const trimmed = textInput.trim().slice(0, 12)
     if (trimmed) {
       setTextOverlay({ text: trimmed, font: textFont, size: textSize, color: textColor, outline: textOutline })
     } else {
@@ -193,13 +193,13 @@ export function CreatorPage() {
                     <input
                       type="text"
                       value={textInput}
-                      onChange={(e) => setTextInput(e.target.value.slice(0, 10))}
-                      placeholder="Max 10 characters"
-                      maxLength={10}
+                      onChange={(e) => setTextInput(e.target.value.slice(0, 12))}
+                      placeholder="Max 12 characters"
+                      maxLength={12}
                       className="w-full bg-[#F8F0FF] border border-[#F0E6FF] rounded-2xl px-4 py-2.5 text-sm font-nunito text-[#3D2B4F] placeholder:text-[#C8B0D8] outline-none focus:border-[#B07FFF] focus:bg-white transition-colors"
                     />
                     <p className="text-[10px] text-[#B8A0C8] font-nunito mt-1 text-right">
-                      {textInput.length}/10
+                      {textInput.length}/12
                     </p>
                   </div>
 
