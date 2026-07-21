@@ -66,6 +66,11 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
   const layers = deriveRenderedLayers(config, assetInfoMap())
   const hasContent = layers.length > 0 || !!config.textOverlay
 
+  // Find the split point: text should render between background and pendant
+  // If no pendant layer, render text after background (index 0)
+  const textInsertIndex = layers.findIndex((l) => l.slug === 'pendants')
+  const textSplitAt = textInsertIndex >= 0 ? textInsertIndex : layers.length
+
   // Render curved text overlay to an image
   const textOverlay: TextOverlay | null = config.textOverlay ?? null
   const [textImageUrl, setTextImageUrl] = useState<string | null>(null)
@@ -129,8 +134,8 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
           {/* White fill background — always underneath */}
           <Rect x={0} y={0} width={canvasSize} height={canvasSize} fill="white" />
 
-          {/* Render all selected layers in layer order */}
-          {layers.map((layer) => {
+          {/* Render background → pendant layers (below text) */}
+          {layers.slice(0, textSplitAt).map((layer) => {
             const img = loadedImages.get(layer.fileUrl)
             if (!img) return null
             return (
@@ -146,7 +151,7 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
             )
           })}
 
-          {/* Curved text overlay — rendered on top of all assets */}
+          {/* Curved text overlay — between background and pendant */}
           {textImg && (
             <KonvaImage
               image={textImg}
@@ -157,6 +162,23 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
               listening={false}
             />
           )}
+
+          {/* Render pendant + remaining layers on top of text */}
+          {layers.slice(textSplitAt).map((layer) => {
+            const img = loadedImages.get(layer.fileUrl)
+            if (!img) return null
+            return (
+              <KonvaImage
+                key={layer.slug}
+                image={img}
+                x={0}
+                y={0}
+                width={canvasSize}
+                height={canvasSize}
+                listening={false}
+              />
+            )
+          })}
         </Layer>
       </Stage>
 
