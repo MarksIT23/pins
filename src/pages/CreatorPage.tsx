@@ -21,7 +21,7 @@ export function CreatorPage() {
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
   const { data: allAssets = [] } = useAllAssets()
-  const { config, activeCategory, setActiveCategory, resetCharacter } = useCharacterStore()
+  const { config, activeCategory, setActiveCategory, setLayer, resetCharacter } = useCharacterStore()
 
   // Filter to our 6 active categories only
   const activeCategories = useMemo(() => filterActiveCategories(categories), [categories])
