@@ -3,9 +3,6 @@ import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 
 export function Header() {
-  const location = useLocation()
-  const isAdmin = location.pathname.startsWith('/admin')
-
   return (
     <header className="sticky top-0 z-30 backdrop-blur-md bg-white/70 border-b border-[#FFD6E8]/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -26,27 +23,8 @@ export function Header() {
 
         {/* Nav */}
         <nav className="flex items-center gap-1 sm:gap-2">
-          {!isAdmin && (
-            <>
-              <NavLink to="/" label="Home" />
-              <NavLink to="/create" label="✨ Create" highlight />
-            </>
-          )}
-          {isAdmin && (
-            <>
-              <NavLink to="/admin" label="Dashboard" />
-              <NavLink to="/admin/orders" label="Orders" />
-              <NavLink to="/admin/assets" label="Assets" />
-            </>
-          )}
-          {!isAdmin && (
-            <Link
-              to="/admin/login"
-              className="ml-2 text-xs font-nunito text-[#B8A0C8] hover:text-[#7A5C8A] transition-colors"
-            >
-              Admin
-            </Link>
-          )}
+          <NavLink to="/" label="Home" />
+          <NavLink to="/create" label="✨ Create" highlight />
         </nav>
       </div>
     </header>

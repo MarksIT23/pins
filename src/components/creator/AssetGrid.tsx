@@ -57,7 +57,7 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
       <div className="flex flex-col items-center py-6 text-center">
         <span className="text-3xl mb-2">📂</span>
         <p className="font-fredoka text-sm text-[#B8A0C8]">No assets uploaded yet</p>
-        <p className="text-[10px] text-[#D0C0E0] font-nunito mt-0.5">Upload via admin panel</p>
+        
       </div>
     )
   }

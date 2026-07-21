@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, Eye } from 'lucide-react'
+import { ChevronDown, Eye, Download } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { Order, OrderStatus, ORDER_STATUS_LABELS, ORDER_STATUS_COLORS } from '@/types'
 import { StatusBadge } from '@/components/ui/Badge'
 import { useUpdateOrderStatus } from '@/hooks/useOrders'
@@ -205,17 +206,49 @@ function StatusDropdown({
 function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void }) {
   const { mutate: updateStatus } = useUpdateOrderStatus()
 
+  const downloadPng = (url: string, filename: string) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = 500
+      canvas.height = 500
+      const ctx = canvas.getContext('2d')!
+      // White background (in case of transparency)
+      ctx.fillStyle = '#FFFFFF'
+      ctx.fillRect(0, 0, 500, 500)
+      // Draw image centered, containing within 500x500
+      const scale = Math.min(500 / img.width, 500 / img.height)
+      const x = (500 - img.width * scale) / 2
+      const y = (500 - img.height * scale) / 2
+      ctx.drawImage(img, x, y, img.width * scale, img.height * scale)
+      // Trigger download
+      const a = document.createElement('a')
+      a.href = canvas.toDataURL('image/png')
+      a.download = filename
+      a.click()
+    }
+    img.onerror = () => toast.error('Failed to load preview image')
+    img.src = url
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Preview */}
         {order.preview_image_url && (
-          <div className="flex-shrink-0 flex justify-center">
+          <div className="flex-shrink-0 flex flex-col items-center gap-2">
             <img
               src={order.preview_image_url}
               alt="Character preview"
               className="w-40 h-40 rounded-2xl object-contain bg-white border-2 border-[#FFD6E8]"
             />
+            <button
+              onClick={() => downloadPng(order.preview_image_url!, `${order.order_number}.png`)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#B07FFF] hover:bg-[#9a6aff] text-white text-xs font-fredoka font-semibold transition-colors"
+            >
+              <Download size={12} /> 500×500 PNG
+            </button>
           </div>
         )}
 

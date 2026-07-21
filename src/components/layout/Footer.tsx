@@ -16,7 +16,6 @@ export function Footer() {
         <div className="flex items-center gap-4 font-nunito text-[#7A5C8A]">
           <Link to="/" className="hover:text-[#FF85A1] transition-colors">Home</Link>
           <Link to="/create" className="hover:text-[#FF85A1] transition-colors">Create</Link>
-          <Link to="/admin/login" className="hover:text-[#FF85A1] transition-colors">Admin</Link>
         </div>
 
         <p className="flex items-center gap-1 text-[#B8A0C8] font-nunito text-xs">

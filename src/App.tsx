@@ -7,13 +7,13 @@ import { Toaster } from 'react-hot-toast'
 import { HomePage } from '@/pages/HomePage'
 import { CreatorPage } from '@/pages/CreatorPage'
 import { OrderSuccessPage } from '@/pages/OrderSuccessPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
+
+// Admin (hidden — URL-accessible only, no public links)
 import { AdminLoginPage } from '@/pages/admin/AdminLoginPage'
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
 import { AdminOrdersPage } from '@/pages/admin/AdminOrdersPage'
 import { AdminAssetsPage } from '@/pages/admin/AdminAssetsPage'
-import { NotFoundPage } from '@/pages/NotFoundPage'
-
-// Admin auth guard + layout
 import { RequireAuth } from '@/components/admin/AdminLayout'
 
 const queryClient = new QueryClient({
@@ -52,10 +52,8 @@ export default function App() {
           <Route path="/create" element={<CreatorPage />} />
           <Route path="/order-success" element={<OrderSuccessPage />} />
 
-          {/* Admin auth */}
+          {/* Admin (URL-accessible only) */}
           <Route path="/admin/login" element={<AdminLoginPage />} />
-
-          {/* Protected admin routes */}
           <Route element={<RequireAuth />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/orders" element={<AdminOrdersPage />} />

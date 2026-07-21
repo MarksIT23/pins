@@ -70,14 +70,11 @@ CREATE TABLE IF NOT EXISTS order_items (
 -- ─── 5. Seed Default Asset Categories ────────────────────────────────────────
 INSERT INTO asset_categories (name, slug, layer_order, icon) VALUES
   ('Base',        'base',        0, '🧸'),
-  ('Eyes',        'eyes',        1, '👁️'),
-  ('Eyebrows',    'eyebrows',    2, '〰️'),
-  ('Mouth',       'mouth',       3, '👄'),
-  ('Hair',        'hair',        4, '💇'),
-  ('Clothes',     'clothes',     5, '👗'),
-  ('Glasses',     'glasses',     6, '🕶️'),
-  ('Accessories', 'accessories', 7, '🎀'),
-  ('Pendants',    'pendants',    8, '✨')
+  ('Hair',        'hair',        1, '💇'),
+  ('Clothes',     'clothes',     2, '👗'),
+  ('Glasses',     'glasses',     3, '🕶️'),
+  ('Accessories', 'accessories', 4, '🎀'),
+  ('Pendants',    'pendants',    5, '✨')
 ON CONFLICT (slug) DO NOTHING;
 
 -- ─── 6. Storage Buckets (run in Dashboard > Storage or via CLI) ────────────
