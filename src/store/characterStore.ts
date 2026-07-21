@@ -54,10 +54,13 @@ export const useCharacterStore = create<CharacterStore>()(
         set({ config: { ...DEFAULT_CONFIG } })
       },
 
-      getSelectedForCategory: (slug) => {
+      getSelectedForCategory: (slug): string | null => {
         const config = get().config
         const val = config[slug as keyof CharacterConfig]
-        return val ?? null
+        // val can be string | TextOverlay | null | undefined
+        // Asset categories always hold string IDs, so narrow the type
+        if (typeof val !== 'string') return null
+        return val
       },
     }),
     {
