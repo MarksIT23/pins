@@ -64,18 +64,16 @@ export function OrderSuccessPage() {
             )}
 
             <p className="text-[#7A5C8A] font-nunito leading-relaxed mb-8">
-              Thank you for your order! 💜 We've received your pin design and will be in touch 
-              via your contact number or student ID once your pin is ready.
+              Thank you for your order! 💜 We've received your pin design and will be in touch.
             </p>
 
             <div className="bg-[#F8F0FF] rounded-2xl p-4 mb-8 text-left border border-[#E8D9FF]">
               <h3 className="font-fredoka font-semibold text-[#3D2B4F] mb-2 text-sm">What's next?</h3>
               <ul className="space-y-1.5">
                 {[
-                  '📩 We\'ll review your order within 1–2 business days',
-                  '💬 You\'ll be contacted via Facebook or phone',
-                  '🎨 Your pin will go into production once confirmed',
-                  '📦 Pick up at the Wesleyan Campus',
+                  '📩 We\'ll review your order once payment has been done in the WU-P SSC Office',
+                  '🎨 Your pin will go into production once payment has been confirmed',
+                  '📦 Pick up at the Wesleyan SSC Office',
                 ].map((item) => (
                   <li key={item} className="text-sm text-[#7A5C8A] font-nunito flex items-start gap-2">
                     <span className="flex-shrink-0">{item.slice(0, 2)}</span>

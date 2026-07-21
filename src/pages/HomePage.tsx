@@ -52,7 +52,7 @@ export function HomePage() {
           className="max-w-lg text-[#7A5C8A] font-nunito text-lg leading-relaxed mb-8"
         >
           Create your very own custom character pin! Mix and match adorable parts,
-          preview your design live, and place your order — all in one place. 🎀
+          preview your design live, and place your order — all in one place.
         </motion.p>
 
         <motion.div
