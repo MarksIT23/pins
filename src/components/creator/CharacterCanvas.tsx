@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Stage, Layer, Image as KonvaImage, Rect } from 'react-konva'
 import { useCharacterStore, deriveRenderedLayers } from '@/store/characterStore'
-import { Asset } from '@/types'
+import { renderCurvedText } from '@/lib/curved-text'
+import { Asset, TextOverlay } from '@/types'
 
 /** Max canvas size — scales down to fit container on smaller screens. */
 const MAX_CANVAS_SIZE = 500
@@ -63,6 +64,25 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
   }, [assetMap])
 
   const layers = deriveRenderedLayers(config, assetInfoMap())
+  const hasContent = layers.length > 0 || !!config.textOverlay
+
+  // Render curved text overlay to an image
+  const textOverlay: TextOverlay | null = config.textOverlay ?? null
+  const [textImageUrl, setTextImageUrl] = useState<string | null>(null)
+  const [textImg, setTextImg] = useState<HTMLImageElement | null>(null)
+
+  useEffect(() => {
+    if (!textOverlay) {
+      setTextImageUrl(null)
+      setTextImg(null)
+      return
+    }
+    const url = renderCurvedText(textOverlay.text, textOverlay.font, canvasSize, canvasSize)
+    setTextImageUrl(url)
+    const img = new window.Image()
+    img.onload = () => setTextImg(img)
+    img.src = url
+  }, [textOverlay, canvasSize])
 
   // Load images whenever layers change
   useEffect(() => {
@@ -125,6 +145,18 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
               />
             )
           })}
+
+          {/* Curved text overlay — rendered on top of all assets */}
+          {textImg && (
+            <KonvaImage
+              image={textImg}
+              x={0}
+              y={0}
+              width={canvasSize}
+              height={canvasSize}
+              listening={false}
+            />
+          )}
         </Layer>
       </Stage>
 
@@ -135,8 +167,8 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
         </div>
       )}
 
-      {/* Empty state */}
-      {layers.length === 0 && !isLoading && (
+      {/* Empty state (only when no assets AND no text overlay) */}
+      {!hasContent && !isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
           <span className="text-5xl mb-3 animate-bounce-soft block">🧸</span>
           <p className="font-fredoka text-[#B8A0C8] text-sm">
@@ -146,7 +178,7 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
       )}
 
       {/* Watermark shown on UI preview */}
-      {layers.length > 0 && (
+      {hasContent && (
         <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center pb-2 pointer-events-none">
           <span className="text-[9px] font-fredoka text-[#3D2B4F]/40 bg-white/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
             Wesleyan Supreme Student Council
