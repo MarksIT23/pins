@@ -18,9 +18,14 @@ export function Footer() {
           <Link to="/create" className="hover:text-[#FF85A1] transition-colors">Create</Link>
         </div>
 
-        <p className="flex items-center gap-1 text-[#B8A0C8] font-nunito text-xs">
-          Made with <Heart size={12} className="text-[#FF85A1] fill-[#FF85A1]" /> & <Sparkles size={12} className="text-[#B07FFF]" />
-        </p>
+        <div className="flex flex-col items-end gap-0.5">
+          <p className="flex items-center gap-1 text-[#B8A0C8] font-nunito text-xs">
+            Website made by: <span className="font-semibold text-[#7A5C8A]">Mark</span>
+          </p>
+          <p className="flex items-center gap-1 text-[#B8A0C8] font-nunito text-xs">
+            Assets drawn by: <span className="font-semibold text-[#7A5C8A]">Stephanie</span>
+          </p>
+        </div>
       </div>
     </footer>
   )
