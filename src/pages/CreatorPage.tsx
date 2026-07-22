@@ -15,12 +15,12 @@ import { filterActiveCategories } from '@/utils/layerOrder'
 import { Asset, TextOverlay } from '@/types'
 
 const TEXT_FONTS = [
-  { value: 'Fredoka', label: 'Fredoka', icon: '🔤' },
-  { value: 'Nunito', label: 'Nunito', icon: '📝' },
-  { value: 'Pacifico', label: 'Pacifico', icon: '✒️' },
-  { value: 'Chewy', label: 'Chewy', icon: '🎪' },
-  { value: 'Lobster', label: 'Lobster', icon: '🦞' },
-  { value: 'Righteous', label: 'Righteous', icon: '⚡' },
+  { value: 'Fredoka', label: 'Fredoka' },
+  { value: 'Nunito', label: 'Nunito' },
+  { value: 'Pacifico', label: 'Pacifico' },
+  { value: 'Chewy', label: 'Chewy' },
+  { value: 'Lobster', label: 'Lobster' },
+  { value: 'Righteous', label: 'Righteous' },
 ]
 
 const TEXT_SIZES = [
@@ -225,7 +225,6 @@ export function CreatorPage() {
                             }
                           `}
                         >
-                          <span>{f.icon}</span>
                           <span style={{ fontFamily: f.value }}>{f.label}</span>
                         </button>
                       ))}
