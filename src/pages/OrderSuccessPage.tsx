@@ -57,9 +57,10 @@ export function OrderSuccessPage() {
             </h1>
 
             {orderNumber && (
-              <div className="bg-white rounded-2xl border border-[#FFD6E8] px-5 py-3 mb-4 inline-block">
+              <div className="bg-white rounded-2xl border-2 border-[#FF85A1] px-6 py-4 mb-4 inline-block shadow-[0_4px_24px_rgba(255,133,161,0.3)]">
                 <p className="text-xs text-[#B8A0C8] font-nunito mb-1">Your Order Number</p>
-                <p className="font-fredoka text-xl font-bold text-[#FF85A1]">{orderNumber}</p>
+                <p className="font-fredoka text-3xl font-bold text-[#FF85A1] tracking-wider">{orderNumber}</p>
+                <p className="text-xs text-[#FF85A1] font-fredoka font-semibold mt-2">📌 Please save this order number for reviewing</p>
               </div>
             )}
 
