@@ -67,7 +67,7 @@ export function CreatorPage() {
   // Fixes stale persisted state after categories are deactivated
   // Skip validation when 'text' is selected (no DB category, pseudo-category)
   useEffect(() => {
-    if (activeCategory === 'text') return
+    if (activeCategory === 'text' || activeCategory === 'pendant-bg') return
     if (activeCategories.length > 0 && !activeCat) {
       setActiveCategory(activeCategories[0].slug)
     }
@@ -311,6 +311,23 @@ export function CreatorPage() {
                     </button>
                   </div>
                 </div>
+              ) : activeCategory === 'pendant-bg' ? (
+                activeCat ? (
+                  <AssetGrid
+                    categoryId={activeCat.id}
+                    categorySlug={activeCat.slug}
+                  />
+                ) : (
+                  <div className="bg-white rounded-2xl border border-[#F0E6FF] p-6 text-center">
+                    <span className="text-3xl mb-2 block">🖼️</span>
+                    <p className="font-fredoka text-sm font-semibold text-[#3D2B4F]">
+                      Pendant BG
+                    </p>
+                    <p className="text-[#B8A0C8] font-nunito text-xs mt-1">
+                      Add a "Pendant BG" category in Supabase to start assigning assets.
+                    </p>
+                  </div>
+                )
               ) : activeCat ? (
                 <AssetGrid
                   categoryId={activeCat.id}

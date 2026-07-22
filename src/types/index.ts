@@ -67,6 +67,7 @@ export interface TextOverlay {
 export interface CharacterConfig {
   background?: string | null;
   pendants?: string | null;
+  'pendant-bg'?: string | null;
   base?: string | null;
   clothes?: string | null;
   hair?: string | null;

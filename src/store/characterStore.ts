@@ -16,6 +16,7 @@ interface CharacterStore {
 const DEFAULT_CONFIG: CharacterConfig = {
   background: null,
   pendants: null,
+  'pendant-bg': null,
   base: null,
   clothes: null,
   hair: null,
