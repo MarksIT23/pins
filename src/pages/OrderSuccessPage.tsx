@@ -64,11 +64,7 @@ export function OrderSuccessPage() {
               </div>
             )}
 
-            <p className="text-[#7A5C8A] font-nunito leading-relaxed mb-8">
-              Thank you for your order! 💜 We've received your pin design and will be in touch.
-            </p>
-
-            <div className="bg-[#F8F0FF] rounded-2xl p-4 mb-8 text-left border border-[#E8D9FF]">
+            <div className="bg-[#F8F0FF] rounded-2xl p-4 mb-4 text-left border border-[#E8D9FF]">
               <h3 className="font-fredoka font-semibold text-[#3D2B4F] mb-2 text-sm">What's Next?</h3>
               <ul className="space-y-3">
                 <li className="text-sm text-[#7A5C8A] font-nunito flex items-start gap-3">
@@ -109,6 +105,10 @@ export function OrderSuccessPage() {
                 </div>
               </div>
             </div>
+
+            <p className="text-[#7A5C8A] font-nunito leading-relaxed mb-6">
+              Thank you for your order! 💜 We've received your pin design and will be in touch.
+            </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/">
