@@ -68,19 +68,45 @@ export function OrderSuccessPage() {
             </p>
 
             <div className="bg-[#F8F0FF] rounded-2xl p-4 mb-8 text-left border border-[#E8D9FF]">
-              <h3 className="font-fredoka font-semibold text-[#3D2B4F] mb-2 text-sm">What's next?</h3>
-              <ul className="space-y-1.5">
-                {[
-                  '📩 We\'ll review your order once payment has been done in the WU-P SSC Office',
-                  '🎨 Your pin will go into production once payment has been confirmed',
-                  '📦 Pick up at the Wesleyan SSC Office',
-                ].map((item) => (
-                  <li key={item} className="text-sm text-[#7A5C8A] font-nunito flex items-start gap-2">
-                    <span className="flex-shrink-0">{item.slice(0, 2)}</span>
-                    <span>{item.slice(3)}</span>
-                  </li>
-                ))}
+              <h3 className="font-fredoka font-semibold text-[#3D2B4F] mb-2 text-sm">What's Next?</h3>
+              <ul className="space-y-2">
+                <li className="text-sm text-[#7A5C8A] font-nunito flex items-start gap-2">
+                  <span className="flex-shrink-0 mt-0.5">1️⃣</span>
+                  <span>Kindly visit the <strong>WU-P SSC Office</strong> located at the <strong>1st Floor of ComSci Building</strong> to review and pay for your order.</span>
+                </li>
+                <li className="text-sm text-[#7A5C8A] font-nunito flex items-start gap-2">
+                  <span className="flex-shrink-0 mt-0.5">2️⃣</span>
+                  <span>After your order has been reviewed, confirmed, and paid, it will go into production.</span>
+                </li>
+                <li className="text-sm text-[#7A5C8A] font-nunito flex items-start gap-2">
+                  <span className="flex-shrink-0 mt-0.5">3️⃣</span>
+                  <span>Pick up at the <strong>WU-P SSC Office</strong> once an announcement has been posted.</span>
+                </li>
               </ul>
+
+              <div className="mt-4 pt-3 border-t border-[#E8D9FF]">
+                <p className="text-xs text-[#B8A0C8] font-nunito mb-2">Follow us for updates:</p>
+                <div className="flex gap-3">
+                  <a
+                    href="https://web.facebook.com/WUPSSCOfficial"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1877F2] text-white text-xs font-fredoka font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    <span>f</span>
+                    <span>Facebook</span>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/wupssc.official/?hl=en"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white text-xs font-fredoka font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    <span>📸</span>
+                    <span>Instagram</span>
+                  </a>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
