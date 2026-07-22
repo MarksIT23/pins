@@ -4,8 +4,8 @@ import { CATEGORY_UI, BUTTON_ORDER } from '@/utils/layerOrder'
 import { useCharacterStore } from '@/store/characterStore'
 
 const PSEUDO_CATEGORIES = [
-  { slug: 'text', icon: '✏️', label: 'Text' },
-  { slug: 'pendant-bg', icon: '🖼️', label: 'Pendant BG' },
+  { slug: 'text', label: 'Text' },
+  { slug: 'pendant-bg', label: 'Pendant BG' },
 ]
 
 interface CategoryPanelProps {
@@ -25,9 +25,8 @@ export function CategoryPanel({ categories }: CategoryPanelProps) {
       <p className="font-fredoka text-sm font-semibold text-[#B8A0C8] mb-2 px-1">Customize</p>
       <div className="flex gap-2 flex-wrap">
         {allButtons.map((cat) => {
-          const isPseudo = !!(cat as any).id !== !cat.id
           const key = cat.slug
-          const ui = CATEGORY_UI[cat.slug] ?? { icon: '🎀', label: (cat as any).name ?? cat.slug }
+          const label = CATEGORY_UI?.[cat.slug]?.label ?? (cat as any).name ?? cat.slug
           const isActive = activeCategory === cat.slug
 
           return (
@@ -36,7 +35,7 @@ export function CategoryPanel({ categories }: CategoryPanelProps) {
               onClick={() => setActiveCategory(cat.slug)}
               whileTap={{ scale: 0.93 }}
               className={`
-                relative flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-fredoka
+                relative flex items-center px-3 py-2 rounded-2xl text-sm font-fredoka
                 font-semibold transition-all duration-200 select-none cursor-pointer
                 ${isActive
                   ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
@@ -44,8 +43,7 @@ export function CategoryPanel({ categories }: CategoryPanelProps) {
                 }
               `}
             >
-              <span>{ui.icon}</span>
-              <span className="inline">{ui.label}</span>
+              <span>{label}</span>
 
               {/* Active indicator dot */}
               {isActive && (
