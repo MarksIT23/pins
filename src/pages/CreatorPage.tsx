@@ -240,7 +240,7 @@ export function CreatorPage() {
                           key={s.value}
                           onClick={() => setTextSize(s.value)}
                           className={`
-                            flex items-center justify-center gap-1 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold
+                            flex items-center justify-center gap-1 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold
                             transition-all cursor-pointer
                             ${textSize === s.value
                               ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
@@ -249,7 +249,7 @@ export function CreatorPage() {
                           `}
                         >
                           <span className={s.value === 0 ? 'text-xs' : s.value === 1 ? 'text-sm' : s.value === 2 ? 'text-base' : 'text-lg'} style={{ fontFamily: textFont }}>A</span>
-                          <span className="text-[11px] font-nunito">{s.label}</span>
+                          <span className="text-[11px] font-nunito hidden sm:inline">{s.label}</span>
                         </button>
                       ))}
                     </div>
