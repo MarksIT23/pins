@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trash2, Eye, EyeOff } from 'lucide-react'
+import { Trash2, Eye, EyeOff, Pencil } from 'lucide-react'
 import { Asset, AssetCategory } from '@/types'
-import { useDeleteAsset, useToggleAssetActive } from '@/hooks/useAdmin'
-import { ConfirmDialog } from '@/components/ui/Modal'
+import { useDeleteAsset, useToggleAssetActive, useUpdateAsset } from '@/hooks/useAdmin'
+import { Modal, ConfirmDialog } from '@/components/ui/Modal'
 import { Badge } from '@/components/ui/Badge'
 
 interface AssetManagerProps {
@@ -15,7 +15,11 @@ interface AssetManagerProps {
 export function AssetManager({ assets, categories, selectedCategory }: AssetManagerProps) {
   const { mutate: deleteAsset, isPending: isDeleting } = useDeleteAsset()
   const { mutate: toggleActive } = useToggleAssetActive()
+  const { mutate: updateAsset, isPending: isUpdating } = useUpdateAsset()
   const [confirmDelete, setConfirmDelete] = useState<Asset | null>(null)
+  const [editingAsset, setEditingAsset] = useState<Asset | null>(null)
+  const [editName, setEditName] = useState('')
+  const [editCategoryId, setEditCategoryId] = useState('')
 
   const filtered = selectedCategory === 'all'
     ? assets
@@ -23,6 +27,23 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
         const cat = categories.find((c) => c.id === a.category_id)
         return cat?.slug === selectedCategory
       })
+
+  function openEdit(asset: Asset) {
+    setEditingAsset(asset)
+    setEditName(asset.name)
+    setEditCategoryId(asset.category_id)
+  }
+
+  function saveEdit() {
+    if (!editingAsset || !editName.trim()) return
+    updateAsset({
+      id: editingAsset.id,
+      name: editName.trim(),
+      category_id: editCategoryId,
+    }, {
+      onSuccess: () => setEditingAsset(null),
+    })
+  }
 
   if (filtered.length === 0) {
     return (
@@ -74,6 +95,13 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
                   {/* Hover action overlay */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                     <button
+                      onClick={() => openEdit(asset)}
+                      className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[#7A5C8A] hover:text-[#B07FFF] transition-colors"
+                      title="Edit"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                    <button
                       onClick={() => toggleActive({ id: asset.id, is_active: !asset.is_active })}
                       className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[#7A5C8A] hover:text-[#B07FFF] transition-colors"
                       title={asset.is_active ? 'Hide' : 'Show'}
@@ -111,6 +139,63 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
           })}
         </AnimatePresence>
       </div>
+
+      {/* Edit modal */}
+      <Modal
+        isOpen={!!editingAsset}
+        onClose={() => setEditingAsset(null)}
+        title={`Edit: ${editingAsset?.name ?? ''}`}
+        size="sm"
+      >
+        <div className="space-y-4">
+          {/* Asset name */}
+          <div>
+            <label className="font-nunito font-semibold text-sm text-[#3D2B4F] block mb-1.5">
+              Asset Name
+            </label>
+            <input
+              type="text"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              placeholder="Asset name"
+              className="w-full bg-white border-2 border-[#F0E6FF] rounded-2xl px-3 py-2.5 font-nunito text-[#3D2B4F] text-sm outline-none focus:border-[#B07FFF] transition-colors"
+            />
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="font-nunito font-semibold text-sm text-[#3D2B4F] block mb-1.5">
+              Category
+            </label>
+            <select
+              value={editCategoryId}
+              onChange={(e) => setEditCategoryId(e.target.value)}
+              className="w-full bg-white border-2 border-[#F0E6FF] rounded-2xl px-3 py-2.5 font-nunito text-[#3D2B4F] text-sm outline-none focus:border-[#B07FFF] transition-colors"
+            >
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3 justify-end pt-2">
+            <button
+              onClick={() => setEditingAsset(null)}
+              className="px-5 py-2 rounded-2xl bg-[#F0E6FF] text-[#7A5C8A] font-fredoka hover:bg-[#E8D9FF] transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={saveEdit}
+              disabled={isUpdating || !editName.trim()}
+              className="px-5 py-2 rounded-2xl bg-gradient-to-r from-[#B07FFF] to-[#FF85A1] text-white font-fredoka hover:opacity-90 transition-all disabled:opacity-50"
+            >
+              {isUpdating ? 'Saving…' : 'Save'}
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Confirm delete dialog */}
       <ConfirmDialog

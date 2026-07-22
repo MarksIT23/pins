@@ -101,6 +101,38 @@ export function useUpdateAssetOrder() {
   })
 }
 
+/** Update asset name and category */
+export function useUpdateAsset() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id, name, category_id }: { id: string; name: string; category_id: string }) => {
+      const slug = name
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '')
+
+      const { error } = await supabase
+        .from('assets')
+        .update({
+          name,
+          slug: `${slug}-${Date.now()}`,
+          category_id,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['assets'] })
+      toast.success('Asset updated! ✨')
+    },
+    onError: (err: Error) => {
+      toast.error(`Update failed: ${err.message}`)
+    },
+  })
+}
+
 /** Admin sign in */
 export function useAdminSignIn() {
   return useMutation({
