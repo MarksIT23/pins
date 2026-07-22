@@ -18,6 +18,9 @@ const TEXT_FONTS = [
   { value: 'Fredoka', label: 'Fredoka', icon: '🔤' },
   { value: 'Nunito', label: 'Nunito', icon: '📝' },
   { value: 'Pacifico', label: 'Pacifico', icon: '✒️' },
+  { value: 'Chewy', label: 'Chewy', icon: '🎪' },
+  { value: 'Lobster', label: 'Lobster', icon: '🦞' },
+  { value: 'Righteous', label: 'Righteous', icon: '⚡' },
 ]
 
 const TEXT_SIZES = [
