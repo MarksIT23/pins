@@ -5,7 +5,6 @@ import { useCharacterStore } from '@/store/characterStore'
 
 const PSEUDO_CATEGORIES = [
   { slug: 'text', label: 'Text' },
-  { slug: 'pendant-bg', label: 'Pendant BG' },
 ]
 
 interface CategoryPanelProps {
