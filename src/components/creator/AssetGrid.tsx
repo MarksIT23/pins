@@ -132,7 +132,7 @@ function AssetCard({
       onClick={() => onSelect(asset.id)}
       title={asset.name}
       className={`
-        aspect-square rounded-xl overflow-hidden relative cursor-pointer
+        rounded-xl overflow-hidden relative cursor-pointer
         border-2 transition-all duration-200
         ${isSelected
           ? 'border-[#FF85A1] shadow-[0_0_0_3px_rgba(255,133,161,0.25),0_4px_16px_rgba(255,133,161,0.3)]'
@@ -140,46 +140,51 @@ function AssetCard({
         }
       `}
     >
-      {/* Checkerboard for transparency */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: 'repeating-conic-gradient(#f5f5f5 0% 25%, white 0% 50%)',
-          backgroundSize: '16px 16px',
-        }}
-      />
-
-      {imgError ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#F8F0FF]">
-          <span className="text-2xl">🖼️</span>
-        </div>
-      ) : (
-        <img
-          src={asset.thumbnail_url || asset.file_url}
-          alt={asset.name}
-          className="absolute inset-0 w-full h-full object-contain p-1"
-          onError={() => setImgError(true)}
-          loading="lazy"
+      {/* Image area */}
+      <div className="aspect-square relative">
+        {/* Checkerboard for transparency */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'repeating-conic-gradient(#f5f5f5 0% 25%, white 0% 50%)',
+            backgroundSize: '16px 16px',
+          }}
         />
-      )}
 
-      {/* Selected overlay */}
-      <AnimatePresence>
-        {isSelected && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.7 }}
-            className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#FF85A1] rounded-full flex items-center justify-center shadow-sm"
-          >
-            <Check size={11} className="text-white" strokeWidth={3} />
-          </motion.div>
+        {imgError ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#F8F0FF]">
+            <span className="text-2xl">🖼️</span>
+          </div>
+        ) : (
+          <img
+            src={asset.thumbnail_url || asset.file_url}
+            alt={asset.name}
+            className="absolute inset-0 w-full h-full object-contain p-1"
+            onError={() => setImgError(true)}
+            loading="lazy"
+          />
         )}
-      </AnimatePresence>
 
-      {/* Name tooltip on hover */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/30 to-transparent px-1.5 pb-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <p className="text-[9px] text-white font-nunito truncate">{asset.name}</p>
+        {/* Selected overlay */}
+        <AnimatePresence>
+          {isSelected && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.7 }}
+              className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#FF85A1] rounded-full flex items-center justify-center shadow-sm"
+            >
+              <Check size={11} className="text-white" strokeWidth={3} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Asset name — always visible */}
+      <div className="bg-white border-t border-[#F0E6FF] px-1.5 py-1">
+        <p className="text-[10px] font-nunito text-[#3D2B4F] truncate text-center leading-tight">
+          {asset.name}
+        </p>
       </div>
     </motion.button>
   )
