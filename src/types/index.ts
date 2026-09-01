@@ -72,6 +72,7 @@ export interface CharacterConfig {
   clothes?: string | null;
   hair?: string | null;
   glasses?: string | null;
+  college?: string | null;
   accessories?: string | null;
   textOverlay?: TextOverlay | null;
 }

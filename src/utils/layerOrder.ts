@@ -12,8 +12,9 @@ export const LAYER_ORDER: Record<string, number> = {
   clothes:      4,
   hair:         5,
   glasses:      6,
-  accessories:  7,
-  text:         8,
+  college:      7,
+  accessories:  8,
+  text:         9,
 }
 
 /**
@@ -27,6 +28,7 @@ export const CATEGORY_UI: Record<string, { icon: string; label: string }> = {
   clothes:      { icon: '👗', label: 'Clothes' },
   hair:         { icon: '💇', label: 'Hair' },
   glasses:      { icon: '🕶️', label: 'Glasses' },
+  college:      { icon: '🎓', label: 'College' },
   accessories:  { icon: '🎀', label: 'Accessories' },
   text:         { icon: '✏️', label: 'Text' },
 }
@@ -40,6 +42,7 @@ export const LAYER_SLUGS = [
   'clothes',
   'hair',
   'glasses',
+  'college',
   'accessories',
   'text',
 ]
@@ -53,6 +56,7 @@ export const BUTTON_ORDER = [
   'clothes',
   'hair',
   'glasses',
+  'college',
   'accessories',
   'text',
 ]

@@ -47,7 +47,7 @@ export function HomePage() {
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate ={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-lg text-[#7A5C8A] font-nunito text-lg leading-relaxed mb-8"
         >

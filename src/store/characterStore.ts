@@ -21,6 +21,7 @@ const DEFAULT_CONFIG: CharacterConfig = {
   clothes: null,
   hair: null,
   glasses: null,
+  college: null,
   accessories: null,
   textOverlay: null,
 }
