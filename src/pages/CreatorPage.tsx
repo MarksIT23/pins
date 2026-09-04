@@ -28,7 +28,6 @@ const TEXT_COLORS = [
   { value: '#FF85A1', label: 'Pink' },
   { value: '#B07FFF', label: 'Violet' },
   { value: '#2D2D2D', label: 'Black' },
-  { value: '#FFFFFF', label: 'White' },
   { value: '#FF6B6B', label: 'Red' },
   { value: '#4ECDC4', label: 'Teal' },
   { value: '#FFD93D', label: 'Yellow' },
@@ -253,9 +252,6 @@ export function CreatorPage() {
                           style={{ backgroundColor: c.value }}
                           title={c.label}
                         >
-                          {c.value === '#FFFFFF' && (
-                            <span className="text-[10px] block text-[#B8A0C8] leading-none">✎</span>
-                          )}
                         </button>
                       ))}
                       <label className="flex items-center gap-2 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF] cursor-pointer transition-all">
