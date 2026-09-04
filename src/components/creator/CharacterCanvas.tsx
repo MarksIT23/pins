@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Stage, Layer, Image as KonvaImage, Rect } from 'react-konva'
+import { Stage, Layer, Image as KonvaImage } from 'react-konva'
 import { useCharacterStore, deriveRenderedLayers } from '@/store/characterStore'
 import { renderCurvedText } from '@/lib/curved-text'
 import { Asset, TextOverlay } from '@/types'
@@ -126,9 +126,6 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
         style={{ borderRadius: '1.5rem', overflow: 'hidden' }}
       >
         <Layer>
-          {/* White fill background — always underneath */}
-          <Rect x={0} y={0} width={canvasSize} height={canvasSize} fill="white" />
-
           {/* All character layers */}
           {layers.map((layer) => {
             const img = loadedImages.get(layer.fileUrl)
