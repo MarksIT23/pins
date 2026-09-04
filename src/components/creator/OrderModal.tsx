@@ -8,7 +8,7 @@ import { useSubmitOrder } from '@/hooks/useOrders'
 import { useCharacterStore } from '@/store/characterStore'
 import { exportCanvasToPng } from '@/lib/konva-export'
 import { OrderFormData } from '@/types'
-import { ShoppingBag, User, Phone, Hash, MessageSquare, ExternalLink } from 'lucide-react'
+import { ShoppingBag, User, Hash, MessageSquare, ExternalLink } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
@@ -113,29 +113,11 @@ export function OrderModal({ isOpen, onClose, stageRef, previewDataUrl }: OrderM
               />
 
               <Input
-                label="Facebook Name"
-                placeholder="e.g. Maria S."
-                leftIcon={<span className="text-xs font-bold">fb</span>}
-                {...register('facebook_name')}
-              />
-
-              <Input
                 label="Student ID"
                 placeholder="e.g. 23-1037-310"
                 leftIcon={<span className="text-xs font-bold">ID</span>}
                 {...register('student_id', {
                   pattern: { value: /^\d{2}-\d{4}-\d{3}$/, message: 'Format: YY-NNNN-NNN' },
-                })}
-              />
-
-              <Input
-                label="Contact Number *"
-                placeholder="e.g. 09XX XXX XXXX"
-                leftIcon={<Phone size={16} />}
-                error={errors.contact_number?.message}
-                {...register('contact_number', {
-                  required: 'Contact number is required',
-                  pattern: { value: /^[\d\s\-+()]{7,15}$/, message: 'Invalid contact number' },
                 })}
               />
 

@@ -65,10 +65,9 @@ export function OrderTable({ orders }: OrderTableProps) {
                   <td className="px-4 py-3">
                     <div>
                       <p className="font-nunito font-semibold text-sm text-[#3D2B4F]">{order.full_name}</p>
-                      {order.facebook_name && (
-                        <p className="text-xs text-[#B8A0C8]">{order.facebook_name}</p>
+                      {order.student_id && (
+                        <p className="text-xs text-[#B8A0C8]">{order.student_id}</p>
                       )}
-                      <p className="text-xs text-[#B8A0C8]">{order.contact_number}</p>
                     </div>
                   </td>
 
@@ -256,7 +255,6 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
         <div className="flex-1 grid grid-cols-2 gap-3">
           {[
             { label: 'Full Name', value: order.full_name },
-            { label: 'Contact', value: order.contact_number },
             { label: 'Student ID', value: order.student_id || '—' },
             { label: 'Quantity', value: order.quantity },
             { label: 'Date Ordered', value: formatDateShort(order.date_ordered) },

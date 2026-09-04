@@ -92,7 +92,7 @@ export interface Order {
   full_name: string;
   facebook_name?: string | null;
   student_id?: string | null;
-  contact_number: string;
+  contact_number?: string | null;
   quantity: number;
   notes?: string | null;
   status: OrderStatus;
@@ -104,9 +104,7 @@ export interface Order {
 
 export interface OrderFormData {
   full_name: string;
-  facebook_name: string;
   student_id: string;
-  contact_number: string;
   quantity: number;
   notes: string;
 }

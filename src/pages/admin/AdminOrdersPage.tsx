@@ -23,7 +23,7 @@ export function AdminOrdersPage() {
     if (!searchQuery.trim()) return orders
     const q = searchQuery.toLowerCase()
     return orders.filter((o) =>
-      [o.order_number, o.full_name, o.facebook_name, o.contact_number, o.student_id]
+      [o.order_number, o.full_name, o.student_id]
         .some((field) => field?.toLowerCase().includes(q))
     )
   }, [orders, searchQuery])
@@ -66,7 +66,7 @@ export function AdminOrdersPage() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by order number, name, contact, or student ID..."
+          placeholder="Search by order number, name, or student ID..."
           className="w-full bg-white border border-[#F0E6FF] rounded-2xl pl-10 pr-4 py-2.5 text-sm font-nunito text-[#3D2B4F] placeholder:text-[#C8B0D8] outline-none focus:border-[#B07FFF] transition-colors"
         />
       </div>
