@@ -1,5 +1,9 @@
 -- Remove facebook_name and contact_number from submit_order
 -- The columns remain in the table for historical orders, but new orders no longer collect them.
+-- contact_number must be made nullable since new orders no longer provide it.
+ALTER TABLE public.orders
+  ALTER COLUMN contact_number DROP NOT NULL;
+
 CREATE OR REPLACE FUNCTION public.submit_order(
   p_id UUID,
   p_order_number TEXT,
