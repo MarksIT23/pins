@@ -51,7 +51,7 @@ export function useAssetsByCategory(categoryId: string | undefined, gender?: str
         .select('*, category:asset_categories(id,name,slug,layer_order,icon,is_active,created_at)')
         .eq('category_id', categoryId)
         .eq('is_active', true)
-        .order('sort_order', { ascending: true })
+        .order('name', { ascending: true })
 
       if (gender && gender !== 'all') {
         query = query.in('gender', [gender, 'unisex'])
