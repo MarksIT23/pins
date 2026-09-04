@@ -23,13 +23,6 @@ const TEXT_FONTS = [
   { value: 'Righteous', label: 'Righteous' },
 ]
 
-const TEXT_SIZES = [
-  { value: 0, label: 'Tiny', icon: 'A' },
-  { value: 1, label: 'Small', icon: 'A' },
-  { value: 2, label: 'Medium', icon: 'A' },
-  { value: 3, label: 'Large', icon: 'A' },
-]
-
 const TEXT_COLORS = [
   { value: '#3D2B4F', label: 'Purple' },
   { value: '#FF85A1', label: 'Pink' },
@@ -41,15 +34,24 @@ const TEXT_COLORS = [
   { value: '#FFD93D', label: 'Yellow' },
 ]
 
+// Largest size retained — size picker removed
+const TEXT_SIZE = 3
+
+const OUTLINE_OPTIONS: { value: 'none' | 'white' | 'black'; label: string }[] = [
+  { value: 'none', label: 'None' },
+  { value: 'white', label: 'White' },
+  { value: 'black', label: 'Black' },
+]
+
 export function CreatorPage() {
   const stageRef = useRef<any>(null)
   const [orderModalOpen, setOrderModalOpen] = useState(false)
   const [previewDataUrl, setPreviewDataUrl] = useState<string>()
   const [textInput, setTextInput] = useState('')
   const [textFont, setTextFont] = useState('Fredoka')
-  const [textSize, setTextSize] = useState(1)
+  const [textSize, setTextSize] = useState(TEXT_SIZE)
   const [textColor, setTextColor] = useState('#3D2B4F')
-  const [textOutline, setTextOutline] = useState(false)
+  const [textOutline, setTextOutline] = useState<'none' | 'white' | 'black'>('none')
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
   const { data: allAssets = [] } = useAllAssets()
@@ -131,9 +133,9 @@ export function CreatorPage() {
     resetCharacter()
     setTextInput('')
     setTextFont('Fredoka')
-    setTextSize(1)
+    setTextSize(TEXT_SIZE)
     setTextColor('#3D2B4F')
-    setTextOutline(false)
+    setTextOutline('none')
   }
 
   function handlePlaceOrder() {
@@ -231,32 +233,6 @@ export function CreatorPage() {
                     </div>
                   </div>
 
-                  {/* Font size */}
-                  <div>
-                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
-                      Font Size
-                    </label>
-                    <div className="flex gap-2">
-                      {TEXT_SIZES.map((s) => (
-                        <button
-                          key={s.value}
-                          onClick={() => setTextSize(s.value)}
-                          className={`
-                            flex items-center justify-center gap-1 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold
-                            transition-all cursor-pointer
-                            ${textSize === s.value
-                              ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
-                              : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
-                            }
-                          `}
-                        >
-                          <span className={s.value === 0 ? 'text-xs' : s.value === 1 ? 'text-sm' : s.value === 2 ? 'text-base' : 'text-lg'} style={{ fontFamily: textFont }}>A</span>
-                          <span className="text-[11px] font-nunito hidden sm:inline">{s.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
                   {/* Text color */}
                   <div>
                     <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
@@ -282,35 +258,45 @@ export function CreatorPage() {
                           )}
                         </button>
                       ))}
-                      <input
-                        type="color"
-                        value={textColor}
-                        onChange={(e) => setTextColor(e.target.value)}
-                        className="w-8 h-8 rounded-full cursor-pointer border-0 p-0 bg-transparent [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-full [&::-webkit-color-swatch]:border-none"
-                        title="Custom color"
-                      />
+                      <label className="flex items-center gap-2 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF] cursor-pointer transition-all">
+                        <input
+                          type="color"
+                          value={textColor}
+                          onChange={(e) => setTextColor(e.target.value)}
+                          className="w-6 h-6 rounded-full cursor-pointer border-0 p-0 bg-transparent [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-full [&::-webkit-color-swatch]:border-none"
+                          title="Choose custom color"
+                        />
+                        <span>Choose custom color</span>
+                      </label>
                     </div>
                   </div>
 
-                  {/* Outline toggle */}
+                  {/* Outline selector */}
                   <div>
                     <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
                       Outline
                     </label>
-                    <button
-                      onClick={() => setTextOutline(!textOutline)}
-                      className={`
-                        flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold
-                        transition-all cursor-pointer
-                        ${textOutline
-                          ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
-                          : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
-                        }
-                      `}
-                    >
-                      <span className="text-base">{textOutline ? '☑' : '☐'}</span>
-                      <span>White outline</span>
-                    </button>
+                    <div className="flex gap-2">
+                      {OUTLINE_OPTIONS.map((o) => (
+                        <button
+                          key={o.value}
+                          onClick={() => setTextOutline(o.value)}
+                          className={`
+                            flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold
+                            transition-all cursor-pointer
+                            ${textOutline === o.value
+                              ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
+                              : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
+                            }
+                          `}
+                        >
+                          {o.value === 'white' && <span className="w-3 h-3 rounded-full border border-[#E0D0F0] bg-white inline-block" />}
+                          {o.value === 'black' && <span className="w-3 h-3 rounded-full bg-black inline-block" />}
+                          {o.value === 'none' && <span className="w-3 h-3 rounded-full border border-[#C8B0D8] inline-block" />}
+                          <span>{o.label}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : activeCategory === 'pendant-bg' ? (

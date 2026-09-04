@@ -9,7 +9,7 @@ export function renderCurvedText(
   font: string,
   sizeLevel: number,
   color: string,
-  outline: boolean,
+  outline: 'none' | 'white' | 'black',
   canvasWidth: number,
   canvasHeight: number
 ): string {
@@ -27,7 +27,8 @@ export function renderCurvedText(
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
 
-  const hasOutline = outline && color !== '#FFFFFF'
+  const hasOutline = outline !== 'none' && color !== '#FFFFFF'
+  const outlineColor = outline === 'black' ? '#000000' : '#FFFFFF'
   const outlineWidth = Math.max(2, Math.round(fontSize * 0.1))
 
   const chars = text.split('')
@@ -35,7 +36,7 @@ export function renderCurvedText(
 
   if (chars.length === 1) {
     if (hasOutline) {
-      ctx.strokeStyle = '#FFFFFF'
+      ctx.strokeStyle = outlineColor
       ctx.lineWidth = outlineWidth
       ctx.lineJoin = 'round'
       ctx.strokeText(text, canvasWidth / 2, canvasHeight * 0.70)
@@ -56,7 +57,7 @@ export function renderCurvedText(
   const maxSpread = Math.min(chars.length * 0.05, 0.40)
 
   if (hasOutline) {
-    ctx.strokeStyle = '#FFFFFF'
+    ctx.strokeStyle = outlineColor
     ctx.lineWidth = outlineWidth
     ctx.lineJoin = 'round'
   }
