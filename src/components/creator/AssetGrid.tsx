@@ -47,7 +47,7 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
+      <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-2">
         {Array.from({ length: 10 }).map((_, i) => (
           <div key={i} className="aspect-square rounded-2xl shimmer" />
         ))}
@@ -80,7 +80,7 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
       variants={CONTAINER_VARIANTS}
       initial="hidden"
       animate="visible"
-      className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-2.5"
+      className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-2"
     >
       {/* None / Remove option — hidden for categories that require a default */}
       {!FORCE_DEFAULT.includes(categorySlug) && (
