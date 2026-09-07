@@ -10,6 +10,7 @@ const STATUS_TABS: Array<{ value: OrderStatus | 'all'; label: string; icon: stri
   { value: 'all',              label: 'All',             icon: '📋' },
   { value: 'pending',          label: 'Pending',         icon: '⏳' },
   { value: 'accepted',         label: 'Accepted',        icon: '✅' },
+  { value: 'in_production',    label: 'In Production',   icon: '🎨' },
   { value: 'ready_for_pickup', label: 'Ready',           icon: '📦' },
   { value: 'completed',        label: 'Completed',       icon: '🎉' },
   { value: 'cancelled',        label: 'Cancelled',       icon: '❌' },

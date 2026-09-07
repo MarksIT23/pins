@@ -42,6 +42,7 @@ export function getNextStatus(current: OrderStatus): OrderStatus | null {
   const pipeline: OrderStatus[] = [
     'pending',
     'accepted',
+    'in_production',
     'ready_for_pickup',
     'completed',
   ]

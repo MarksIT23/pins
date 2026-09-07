@@ -13,7 +13,7 @@ interface OrderStatusBadgeProps {
 }
 
 const ALL_STATUSES: OrderStatus[] = [
-  'pending', 'accepted', 'ready_for_pickup', 'completed', 'cancelled',
+  'pending', 'accepted', 'in_production', 'ready_for_pickup', 'completed', 'cancelled',
 ]
 
 /**

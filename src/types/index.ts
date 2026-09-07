@@ -2,6 +2,7 @@
 export type OrderStatus =
   | 'pending'
   | 'accepted'
+  | 'in_production'
   | 'ready_for_pickup'
   | 'completed'
   | 'cancelled';
@@ -9,6 +10,7 @@ export type OrderStatus =
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   pending: 'Pending',
   accepted: 'Accepted',
+  in_production: 'In Production',
   ready_for_pickup: 'Ready for Pickup',
   completed: 'Completed',
   cancelled: 'Cancelled',
@@ -17,6 +19,7 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
 export const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
   pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   accepted: 'bg-blue-100 text-blue-800 border-blue-200',
+  in_production: 'bg-purple-100 text-purple-800 border-purple-200',
   ready_for_pickup: 'bg-green-100 text-green-800 border-green-200',
   completed: 'bg-emerald-100 text-emerald-800 border-emerald-200',
   cancelled: 'bg-red-100 text-red-800 border-red-200',
@@ -119,7 +122,7 @@ export interface AssetUploadPayload {
 export interface DashboardStats {
   total_orders: number;
   pending_orders: number;
-  ready_orders: number;
+  in_production_orders: number;
   completed_orders: number;
   total_assets: number;
 }
