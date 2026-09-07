@@ -9,7 +9,7 @@ import { formatDateShort } from '@/utils/formatters'
 import { Modal } from '@/components/ui/Modal'
 
 const ALL_STATUSES: OrderStatus[] = [
-  'pending', 'accepted', 'in_production', 'ready_for_pickup', 'completed', 'cancelled',
+  'pending', 'accepted', 'ready_for_pickup', 'completed', 'cancelled',
 ]
 
 interface OrderTableProps {

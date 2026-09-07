@@ -125,7 +125,7 @@ export function useDashboardStats() {
       return {
         total_orders: orders.length,
         pending_orders: orders.filter((o) => o.status === 'pending').length,
-        in_production_orders: orders.filter((o) => o.status === 'in_production').length,
+        ready_orders: orders.filter((o) => o.status === 'ready_for_pickup').length,
         completed_orders: orders.filter((o) => o.status === 'completed').length,
       }
     },

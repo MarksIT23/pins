@@ -23,7 +23,7 @@ export function AdminDashboardPage() {
           <>
             <StatCard label="Total Orders"    value={stats?.total_orders ?? 0}       icon="📦" color="bg-[#FFD6E8]" />
             <StatCard label="Pending"         value={stats?.pending_orders ?? 0}     icon="⏳" color="bg-[#FFF3CD]" />
-            <StatCard label="In Production"   value={stats?.in_production_orders ?? 0} icon="🎨" color="bg-[#E8D9FF]" />
+            <StatCard label="Ready"           value={stats?.ready_orders ?? 0}       icon="🛍️" color="bg-[#D8F3DC]" />
             <StatCard label="Completed"       value={stats?.completed_orders ?? 0}   icon="✅" color="bg-[#D8F3DC]" />
           </>
         )}
