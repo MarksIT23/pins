@@ -56,6 +56,7 @@ export function AdminOrdersPage() {
   const pageOrders = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
   const rangeStart = filtered.length === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1
   const rangeEnd = Math.min(safePage * PAGE_SIZE, filtered.length)
+  const totalQuantity = filtered.reduce((sum, o) => sum + o.quantity, 0)
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -64,6 +65,8 @@ export function AdminOrdersPage() {
         <p className="text-[#B8A0C8] font-nunito text-sm mt-1">
           {filtered.length} order{filtered.length !== 1 ? 's' : ''} found
           {searchQuery && orders.length !== filtered.length && ` (filtered from ${orders.length})`}
+          <span className="mx-1.5">·</span>
+          {totalQuantity.toLocaleString()} total qty
         </p>
       </div>
 
