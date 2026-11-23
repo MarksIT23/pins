@@ -8,11 +8,11 @@ interface BadgeProps {
 }
 
 const badgeVariants: Record<string, string> = {
-  pink:    'bg-[#FFD6E8] text-[#d63f6e] border-[#FFB3CC]',
-  purple:  'bg-[#E8D9FF] text-[#7A5C8A] border-[#C8B0FF]',
-  blue:    'bg-[#D8EEFF] text-[#2d7ab8] border-[#A8D0FF]',
-  mint:    'bg-[#D8F3DC] text-[#2d8a4e] border-[#A8E0B5]',
-  peach:   'bg-[#FFE8D2] text-[#a0541c] border-[#FFCCA0]',
+  pink:    'bg-[#FFD9DE] text-[#C41C33] border-[#FFB8C2]',
+  purple:  'bg-[#CDEBD8] text-[#3E6B57] border-[#9FD6B4]',
+  blue:    'bg-[#DDF1FC] text-[#2F6478] border-[#B9D2DC]',
+  mint:    'bg-[#D3F2DD] text-[#2d8a4e] border-[#A8E0B5]',
+  peach:   'bg-[#FFF1CC] text-[#9A6400] border-[#FFD872]',
   neutral: 'bg-gray-100 text-gray-600 border-gray-200',
 }
 
@@ -57,13 +57,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="font-nunito font-semibold text-sm text-[#3D2B4F]">
+          <label htmlFor={inputId} className="font-nunito font-semibold text-sm text-[#0F3B2C]">
             {label}
           </label>
         )}
         <div className="relative">
           {leftIcon && (
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B8A0C8]">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8A9F96]">
               {leftIcon}
             </span>
           )}
@@ -71,12 +71,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={`
-              w-full bg-white border-2 rounded-2xl px-4 py-3 font-nunito text-[#3D2B4F]
-              placeholder:text-[#C8B0D8] outline-none transition-all
+              w-full bg-white border-2 rounded-2xl px-4 py-3 font-nunito text-[#0F3B2C]
+              placeholder:text-[#A9BAB2] outline-none transition-all
               ${leftIcon ? 'pl-10' : ''}
               ${error
                 ? 'border-red-300 focus:border-red-400'
-                : 'border-[#F0E6FF] focus:border-[#B07FFF]'
+                : 'border-[#DDEFE3] focus:border-[#14904F]'
               }
               ${className}
             `}
@@ -102,7 +102,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={textareaId} className="font-nunito font-semibold text-sm text-[#3D2B4F]">
+          <label htmlFor={textareaId} className="font-nunito font-semibold text-sm text-[#0F3B2C]">
             {label}
           </label>
         )}
@@ -111,11 +111,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={textareaId}
           rows={3}
           className={`
-            w-full bg-white border-2 rounded-2xl px-4 py-3 font-nunito text-[#3D2B4F]
-            placeholder:text-[#C8B0D8] outline-none transition-all resize-none
+            w-full bg-white border-2 rounded-2xl px-4 py-3 font-nunito text-[#0F3B2C]
+            placeholder:text-[#A9BAB2] outline-none transition-all resize-none
             ${error
               ? 'border-red-300 focus:border-red-400'
-              : 'border-[#F0E6FF] focus:border-[#B07FFF]'
+              : 'border-[#DDEFE3] focus:border-[#14904F]'
             }
             ${className}
           `}

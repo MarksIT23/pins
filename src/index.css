@@ -1,35 +1,39 @@
-/* ─── Google Fonts ─────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Baloo+2:wght@400;500;600;700;800&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Pacifico&family=Chewy&family=Lobster&family=Righteous&display=swap');
+/* ─── Fonts ────────────────────────────────────────────────────────────────────
+   UI: Fraunces, soft + wonky (display, a storybook/Christmas-card feel) + Figtree (body).
+   Pin text options: Fredoka, Nunito, Pacifico, Chewy, Lobster, Righteous,
+   Mountains of Christmas (loaded so the canvas can render them). */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..900,0..100,0..1&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&family=Pacifico&family=Chewy&family=Lobster&family=Righteous&family=Mountains+of+Christmas:wght@700&display=swap');
 
 @import "tailwindcss";
 
-/* ─── CSS Custom Properties ────────────────────────────────────────────────── */
+/* ─── Palette ──────────────────────────────────────────────────────────────────
+   pine    #0F3B2C  ink + night sections
+   holly   #E3263F  primary action
+   spruce  #14904F  secondary / admin accent
+   gold    #FFC23A  foil highlights, stars
+   frost   #DDEFE3  borders, quiet fills
+   snow    #FBFDF9  page background                                            */
 :root {
-  --pastel-pink: #FFD6E8;
-  --pastel-purple: #E8D9FF;
-  --pastel-blue: #D8EEFF;
-  --pastel-mint: #D8F3DC;
-  --pastel-cream: #FFF8F0;
+  --pine: #0F3B2C;
+  --pine-deep: #0E2621;
+  --holly: #E3263F;
+  --holly-dark: #C41C33;
+  --spruce: #14904F;
+  --gold: #FFC23A;
+  --gold-soft: #FFE8A3;
+  --frost: #DDEFE3;
+  --snow: #FBFDF9;
 
-  --accent-rose: #FF85A1;
-  --accent-violet: #B07FFF;
-  --accent-sky: #5BBCFF;
-  --accent-sage: #52B788;
-  --accent-peach: #FFAB76;
+  --text-primary: #0F3B2C;
+  --text-secondary: #3E6B57;
+  --text-muted: #8A9F96;
 
-  --text-primary: #3D2B4F;
-  --text-secondary: #7A5C8A;
-  --text-muted: #B8A0C8;
-
-  --shadow-kawaii: 0 4px 24px rgba(255, 133, 161, 0.25);
-  --shadow-card: 0 2px 16px rgba(176, 127, 255, 0.15);
-  --shadow-soft: 0 8px 32px rgba(61, 43, 79, 0.08);
+  --shadow-kawaii: 0 6px 24px rgba(227, 38, 63, 0.18);
+  --shadow-card: 0 2px 14px rgba(15, 59, 44, 0.08);
+  --shadow-soft: 0 10px 32px rgba(15, 59, 44, 0.10);
 }
 
-/* ─── Base Reset ───────────────────────────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
@@ -38,135 +42,211 @@ html {
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
-  background-color: var(--pastel-cream);
+  font-family: 'Figtree', system-ui, sans-serif;
+  background-color: var(--snow);
   color: var(--text-primary);
   min-height: 100vh;
   margin: 0;
 }
 
-/* ─── Tailwind Theme Extension ─────────────────────────────────────────────── */
+/* ─── Tailwind theme ───────────────────────────────────────────────────────── */
 @theme {
-  --color-pastel-pink: #FFD6E8;
-  --color-pastel-purple: #E8D9FF;
-  --color-pastel-blue: #D8EEFF;
-  --color-pastel-mint: #D8F3DC;
-  --color-pastel-cream: #FFF8F0;
+  --color-pine: #0F3B2C;
+  --color-holly: #E3263F;
+  --color-spruce: #14904F;
+  --color-gold: #FFC23A;
+  --color-frost: #DDEFE3;
+  --color-snow: #FBFDF9;
 
-  --color-accent-rose: #FF85A1;
-  --color-accent-violet: #B07FFF;
-  --color-accent-sky: #5BBCFF;
-  --color-accent-sage: #52B788;
-  --color-accent-peach: #FFAB76;
-
-  --font-fredoka: 'Fredoka', sans-serif;
-  --font-baloo: 'Baloo 2', sans-serif;
-  --font-nunito: 'Nunito', sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Figtree', system-ui, sans-serif;
 
   --radius-4xl: 2rem;
   --radius-5xl: 2.5rem;
 
-  --shadow-kawaii: 0 4px 24px rgba(255, 133, 161, 0.25);
-  --shadow-card: 0 2px 16px rgba(176, 127, 255, 0.15);
-  --shadow-soft: 0 8px 32px rgba(61, 43, 79, 0.08);
-
-  --animate-float: float 3s ease-in-out infinite;
-  --animate-sparkle: sparkle 2s ease-in-out infinite;
-  --animate-wiggle: wiggle 0.4s ease-in-out;
-  --animate-fade-up: fadeUp 0.4s ease-out;
-  --animate-bounce-soft: bounceSoft 2s ease-in-out infinite;
+  --shadow-kawaii: 0 6px 24px rgba(227, 38, 63, 0.18);
+  --shadow-card: 0 2px 14px rgba(15, 59, 44, 0.08);
+  --shadow-soft: 0 10px 32px rgba(15, 59, 44, 0.10);
 }
+
+/* Legacy utility names, kept so every component picks up the new type. */
+.font-fredoka, .font-baloo {
+  font-family: 'Fraunces', Georgia, serif;
+  /* Fully soft, rounded terminals + the playful "wonky" italic-ish forms: festive, not costume-y. */
+  font-variation-settings: 'SOFT' 100, 'WONK' 1;
+  letter-spacing: -0.005em;
+}
+.font-nunito { font-family: 'Figtree', system-ui, sans-serif; }
+
+h1, h2, h3 { text-wrap: balance; }
 
 /* ─── Keyframes ────────────────────────────────────────────────────────────── */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
-
-@keyframes sparkle {
-  0%, 100% { opacity: 0.2; transform: scale(0.8) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
 }
-
 @keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-8deg); }
-  75% { transform: rotate(8deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
 }
-
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes bounceSoft {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-6px) scale(1.02); }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.02); }
 }
-
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 8px rgba(255, 133, 161, 0.4); }
-  50% { box-shadow: 0 0 24px rgba(255, 133, 161, 0.8); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 194, 58, 0.0); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 194, 58, 0.25); }
 }
-
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+/* Ornament swing — pivots from the top of the string */
+@keyframes swing {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+/* Foil sheen sweeping across the pin face */
+@keyframes sheen {
+  0%, 60% { transform: translateX(-130%) rotate(20deg); }
+  100% { transform: translateX(230%) rotate(20deg); }
+}
+/* String-light bulbs */
+@keyframes bulb {
+  0%, 100% { opacity: 1; filter: brightness(1.15); }
+  50% { opacity: 0.45; filter: brightness(0.8); }
+}
 
-/* ─── Global Utilities ─────────────────────────────────────────────────────── */
-.font-fredoka { font-family: 'Fredoka', sans-serif; }
-.font-baloo { font-family: 'Baloo 2', sans-serif; }
-.font-nunito { font-family: 'Nunito', sans-serif; }
-
-.animate-float { animation: float 3s ease-in-out infinite; }
-.animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
+.animate-float { animation: float 3.5s ease-in-out infinite; }
+.animate-sparkle { animation: twinkle 2.4s ease-in-out infinite; }
 .animate-wiggle { animation: wiggle 0.4s ease-in-out; }
-.animate-fade-up { animation: fadeUp 0.4s ease-out; }
-.animate-bounce-soft { animation: bounceSoft 2s ease-in-out infinite; }
-.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-fade-up { animation: fadeUp 0.45s ease-out; }
+.animate-bounce-soft { animation: bounceSoft 2.4s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
+.animate-swing { animation: swing 4.5s ease-in-out infinite; transform-origin: 50% 0; }
 
-/* ─── Shimmer Skeleton ─────────────────────────────────────────────────────── */
+/* Opening animation: components/layout/IntroSplash.tsx. Design page unwrap: components/creator/UnwrapTransition.tsx. Tree pins + opening quick cuts: src/assets/pins-balls. Order confirmation: pages/OrderSuccessPage.tsx. Order tracking: pages/TrackOrderPage.tsx. Pin Shop: pages/ShopPage.tsx + pages/admin/AdminShopPage.tsx */
+
+/* ─── Hero tree ────────────────────────────────────────────────────────────── */
+@keyframes pinPop {
+  0% { opacity: 0; transform: translateY(-40px) scale(.4); }
+  60% { opacity: 1; transform: translateY(4px) scale(1.08); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes starGlow {
+  0%, 100% { opacity: .2; transform: scale(.85); }
+  50% { opacity: .55; transform: scale(1.25); }
+}
+@keyframes starSpin {
+  0% { transform: scale(0) rotate(-180deg); }
+  70% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.tree-pin-pop { animation: pinPop .7s cubic-bezier(.3,1.4,.5,1) both; transform-box: fill-box; transform-origin: 50% 0; }
+.tree-pin-sway { animation: swing 4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 0; }
+.tree-star { animation: starSpin .9s cubic-bezier(.3,1.4,.5,1) .3s both; transform-box: fill-box; transform-origin: center; }
+.tree-star-glow { animation: starGlow 2.6s ease-in-out 1.2s infinite; transform-box: fill-box; transform-origin: center; }
+
+/* Gift tag used above the hero headline */
+.gift-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .4rem 1rem .4rem 1.6rem;
+  background: #FFF;
+  color: #E3263F;
+  border-radius: 6px 999px 999px 6px;
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
+  transform: rotate(-3deg);
+}
+.gift-tag::before {
+  content: '';
+  position: absolute;
+  left: 12px; top: 50%;
+  width: 7px; height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: #E3263F;
+}
+
+/* ─── String lights (header garland) ───────────────────────────────────────── */
+.string-lights {
+  position: absolute;
+  left: 0; right: 0; bottom: -9px;
+  height: 18px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px;
+  pointer-events: none;
+  overflow: hidden;
+}
+.string-lights::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 6px;
+  border-bottom: 1.5px solid rgba(15, 59, 44, 0.35);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+.string-lights span {
+  width: 7px; height: 10px;
+  margin-top: 4px;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  animation: bulb 2.6s ease-in-out infinite;
+}
+.string-lights span:nth-child(4n+1) { background: #E3263F; animation-delay: 0s; }
+.string-lights span:nth-child(4n+2) { background: #FFC23A; animation-delay: .65s; }
+.string-lights span:nth-child(4n+3) { background: #16A05A; animation-delay: 1.3s; }
+.string-lights span:nth-child(4n+4) { background: #2E9BD6; animation-delay: 1.95s; }
+
+/* ─── Shimmer skeleton ─────────────────────────────────────────────────────── */
 .shimmer {
-  background: linear-gradient(90deg, #f0e6f6 25%, #f8f0ff 50%, #f0e6f6 75%);
+  background: linear-gradient(90deg, #E6EEE9 25%, #F1F5F2 50%, #E6EEE9 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
 
-/* ─── Kawaii Scrollbar ─────────────────────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--pastel-cream);
-  border-radius: 10px;
-}
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--snow); }
 ::-webkit-scrollbar-thumb {
-  background: var(--pastel-pink);
+  background: #BFDCCB;
   border-radius: 10px;
-  border: 2px solid var(--pastel-cream);
+  border: 2px solid var(--snow);
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-rose);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--spruce); }
 
-/* ─── Focus Styles ─────────────────────────────────────────────────────────── */
+/* ─── Focus + selection ────────────────────────────────────────────────────── */
 *:focus-visible {
-  outline: 2px solid var(--accent-violet);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
   border-radius: 8px;
 }
-
-/* ─── Selection ────────────────────────────────────────────────────────────── */
-::selection {
-  background: var(--pastel-purple);
-  color: var(--text-primary);
-}
+::selection { background: var(--gold-soft); color: var(--pine); }
 
 /* ─── Canvas container ─────────────────────────────────────────────────────── */
 .character-canvas-wrapper {
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: var(--shadow-kawaii);
+}
+
+/* ─── Reduced motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

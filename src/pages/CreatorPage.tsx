@@ -1,6 +1,10 @@
+import { ImageOff } from 'lucide-react'
+import { CATEGORY_UI, FALLBACK_ICON } from '@/utils/layerOrder'
 import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import { RotateCcw, ShoppingBag } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
+import { motion, useReducedMotion } from 'framer-motion'
+import { UnwrapTransition } from '@/components/creator/UnwrapTransition'
 import { SparkleBackground } from '@/components/layout/SparkleBackground'
 import { CharacterCanvas } from '@/components/creator/CharacterCanvas'
 import { CategoryPanel } from '@/components/creator/CategoryPanel'
@@ -21,16 +25,17 @@ const TEXT_FONTS = [
   { value: 'Chewy', label: 'Chewy' },
   { value: 'Lobster', label: 'Lobster' },
   { value: 'Righteous', label: 'Righteous' },
+  { value: 'Mountains of Christmas', label: 'Mountains of Christmas' },
 ]
 
 const TEXT_COLORS = [
-  { value: '#3D2B4F', label: 'Purple' },
-  { value: '#FF85A1', label: 'Pink' },
-  { value: '#B07FFF', label: 'Violet' },
+  { value: '#E3263F', label: 'Holly red' },
+  { value: '#14904F', label: 'Spruce green' },
+  { value: '#FFC23A', label: 'Gold' },
+  { value: '#FFFFFF', label: 'Snow white' },
+  { value: '#0F3B2C', label: 'Pine' },
   { value: '#2D2D2D', label: 'Black' },
-  { value: '#FF6B6B', label: 'Red' },
-  { value: '#4ECDC4', label: 'Teal' },
-  { value: '#FFD93D', label: 'Yellow' },
+  { value: '#2E9BD6', label: 'Ice blue' },
 ]
 
 // Largest size retained — size picker removed
@@ -49,7 +54,7 @@ export function CreatorPage() {
   const [textInput, setTextInput] = useState('')
   const [textFont, setTextFont] = useState('Fredoka')
   const [textSize, setTextSize] = useState(TEXT_SIZE)
-  const [textColor, setTextColor] = useState('#3D2B4F')
+  const [textColor, setTextColor] = useState('#0F3B2C')
   const [textOutline, setTextOutline] = useState<'none' | 'white' | 'black'>('none')
 
   const { data: categories = [], isLoading: catsLoading } = useCategories()
@@ -133,7 +138,7 @@ export function CreatorPage() {
     setTextInput('')
     setTextFont('Fredoka')
     setTextSize(TEXT_SIZE)
-    setTextColor('#3D2B4F')
+    setTextColor('#0F3B2C')
     setTextOutline('none')
   }
 
@@ -146,20 +151,30 @@ export function CreatorPage() {
   }
 
   const hasAnySelection = Object.values(config).some((v) => v != null)
+  const reduceMotion = useReducedMotion()
+  // The editor rises into place as the wrapping paper tears open.
+  const [revealed, setRevealed] = useState(false)
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF8F0] relative">
+    <div className="min-h-screen flex flex-col bg-[#FBFDF9] relative">
       <SparkleBackground />
       <Header />
 
-      <main className="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-5 py-3 sm:py-4">
+      <UnwrapTransition onOpen={() => setRevealed(true)} />
+
+      <motion.main
+        className="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-5 py-3 sm:py-4"
+        initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
+        animate={revealed ? { opacity: 1, y: 0, scale: 1 } : reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
+        transition={{ duration: 0.6, delay: 0.1, ease: [0.2, 0.8, 0.3, 1] }}
+      >
         <div className="flex gap-4 lg:gap-6 flex-col lg:flex-row">
 
           {/* ─── CATEGORIES + ASSET GRID — first on mobile, right on desktop ── */}
           <div className="lg:order-2 lg:flex-1 min-w-0">
             {/* Page title */}
-            <h1 className="font-fredoka text-xl sm:text-2xl font-bold text-[#3D2B4F] mb-2">
-              ✨ Character Creator
+            <h1 className="font-fredoka text-xl sm:text-2xl font-bold text-[#0F3B2C] mb-2">
+              Design your pin
             </h1>
 
             {/* Category pills */}
@@ -178,8 +193,8 @@ export function CreatorPage() {
             {/* Active category label */}
             {activeCat && (
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">{(activeCat as any).icon ?? '🎀'}</span>
-                <h2 className="font-fredoka text-base font-semibold text-[#3D2B4F]">
+                {(() => { const I = CATEGORY_UI[activeCat.slug]?.icon ?? FALLBACK_ICON; return <I size={18} className="text-[#E3263F]" /> })()}
+                <h2 className="font-fredoka text-base font-semibold text-[#0F3B2C]">
                   {activeCat.name}
                 </h2>
               </div>
@@ -188,10 +203,10 @@ export function CreatorPage() {
             {/* Asset grid — scrolls on desktop, natural flow on mobile */}
             <div className="lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto lg:pr-1">
               {activeCategory === 'text' ? (
-                <div className="bg-white rounded-2xl border border-[#F0E6FF] p-4 space-y-4">
+                <div className="bg-white rounded-2xl border border-[#DDEFE3] p-4 space-y-4">
                   {/* Text input */}
                   <div>
-                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                    <label className="font-fredoka text-sm font-semibold text-[#0F3B2C] mb-1.5 block">
                       Curved Text
                     </label>
                     <input
@@ -200,16 +215,16 @@ export function CreatorPage() {
                       onChange={(e) => setTextInput(e.target.value.slice(0, 12))}
                       placeholder="Max 12 characters"
                       maxLength={12}
-                      className="w-full bg-[#F8F0FF] border border-[#F0E6FF] rounded-2xl px-4 py-2.5 text-sm font-nunito text-[#3D2B4F] placeholder:text-[#C8B0D8] outline-none focus:border-[#B07FFF] focus:bg-white transition-colors"
+                      className="w-full bg-[#EEF8F1] border border-[#DDEFE3] rounded-2xl px-4 py-2.5 text-sm font-nunito text-[#0F3B2C] placeholder:text-[#A9BAB2] outline-none focus:border-[#14904F] focus:bg-white transition-colors"
                     />
-                    <p className="text-[10px] text-[#B8A0C8] font-nunito mt-1 text-right">
+                    <p className="text-[10px] text-[#8A9F96] font-nunito mt-1 text-right">
                       {textInput.length}/12
                     </p>
                   </div>
 
                   {/* Font selector */}
                   <div>
-                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                    <label className="font-fredoka text-sm font-semibold text-[#0F3B2C] mb-1.5 block">
                       Font Style
                     </label>
                     <div className="flex gap-2 flex-wrap">
@@ -221,8 +236,8 @@ export function CreatorPage() {
                             flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold
                             transition-all cursor-pointer
                             ${textFont === f.value
-                              ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
-                              : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
+                              ? 'bg-[#E3263F] text-white shadow-[0_4px_14px_rgba(227,38,63,0.4)]'
+                              : 'bg-white text-[#3E6B57] border border-[#DDEFE3] hover:border-[#9FD6B4]'
                             }
                           `}
                         >
@@ -234,7 +249,7 @@ export function CreatorPage() {
 
                   {/* Text color */}
                   <div>
-                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                    <label className="font-fredoka text-sm font-semibold text-[#0F3B2C] mb-1.5 block">
                       Text Color
                     </label>
                     <div className="flex gap-2 flex-wrap items-center">
@@ -245,8 +260,8 @@ export function CreatorPage() {
                           className={`
                             w-8 h-8 rounded-full transition-all cursor-pointer
                             ${textColor === c.value
-                              ? 'ring-2 ring-[#FF85A1] ring-offset-2 scale-110'
-                              : 'ring-1 ring-[#E0D0F0] hover:ring-[#C8B0FF]'
+                              ? 'ring-2 ring-[#E3263F] ring-offset-2 scale-110'
+                              : 'ring-1 ring-[#C9E8D4] hover:ring-[#9FD6B4]'
                             }
                           `}
                           style={{ backgroundColor: c.value }}
@@ -254,7 +269,7 @@ export function CreatorPage() {
                         >
                         </button>
                       ))}
-                      <label className="flex items-center gap-2 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF] cursor-pointer transition-all">
+                      <label className="flex items-center gap-2 px-3 py-2 rounded-2xl text-sm font-fredoka font-semibold bg-white text-[#3E6B57] border border-[#DDEFE3] hover:border-[#9FD6B4] cursor-pointer transition-all">
                         <input
                           type="color"
                           value={textColor}
@@ -269,7 +284,7 @@ export function CreatorPage() {
 
                   {/* Outline selector */}
                   <div>
-                    <label className="font-fredoka text-sm font-semibold text-[#3D2B4F] mb-1.5 block">
+                    <label className="font-fredoka text-sm font-semibold text-[#0F3B2C] mb-1.5 block">
                       Outline
                     </label>
                     <div className="flex gap-2">
@@ -281,14 +296,14 @@ export function CreatorPage() {
                             flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold
                             transition-all cursor-pointer
                             ${textOutline === o.value
-                              ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
-                              : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF]'
+                              ? 'bg-[#E3263F] text-white shadow-[0_4px_14px_rgba(227,38,63,0.4)]'
+                              : 'bg-white text-[#3E6B57] border border-[#DDEFE3] hover:border-[#9FD6B4]'
                             }
                           `}
                         >
-                          {o.value === 'white' && <span className="w-3 h-3 rounded-full border border-[#E0D0F0] bg-white inline-block" />}
+                          {o.value === 'white' && <span className="w-3 h-3 rounded-full border border-[#C9E8D4] bg-white inline-block" />}
                           {o.value === 'black' && <span className="w-3 h-3 rounded-full bg-black inline-block" />}
-                          {o.value === 'none' && <span className="w-3 h-3 rounded-full border border-[#C8B0D8] inline-block" />}
+                          {o.value === 'none' && <span className="w-3 h-3 rounded-full border border-[#A9BAB2] inline-block" />}
                           <span>{o.label}</span>
                         </button>
                       ))}
@@ -302,12 +317,12 @@ export function CreatorPage() {
                     categorySlug={activeCat.slug}
                   />
                 ) : (
-                  <div className="bg-white rounded-2xl border border-[#F0E6FF] p-6 text-center">
-                    <span className="text-3xl mb-2 block">🖼️</span>
-                    <p className="font-fredoka text-sm font-semibold text-[#3D2B4F]">
+                  <div className="bg-white rounded-2xl border border-[#DDEFE3] p-6 text-center">
+                    <ImageOff size={28} className="mx-auto mb-2 text-[#8A9F96]" />
+                    <p className="font-fredoka text-sm font-semibold text-[#0F3B2C]">
                       Pendant BG
                     </p>
-                    <p className="text-[#B8A0C8] font-nunito text-xs mt-1">
+                    <p className="text-[#8A9F96] font-nunito text-xs mt-1">
                       Add a "Pendant BG" category in Supabase to start assigning assets.
                     </p>
                   </div>
@@ -319,7 +334,7 @@ export function CreatorPage() {
                 />
               ) : (
                 <div className="py-8 text-center">
-                  <p className="text-[#B8A0C8] font-nunito text-sm">Select a category above!</p>
+                  <p className="text-[#8A9F96] font-nunito text-sm">Choose a category above to start.</p>
                 </div>
               )}
             </div>
@@ -334,7 +349,7 @@ export function CreatorPage() {
             />
 
             {/* Layer stack — 7 fixed slots */}
-            <div className="w-full max-w-[300px] bg-white/80 backdrop-blur-sm rounded-2xl border border-[#F0E6FF] p-2.5 shadow-[0_2px_12px_rgba(176,127,255,0.08)]">
+            <div className="w-full max-w-[300px] bg-white/80 backdrop-blur-sm rounded-2xl border border-[#DDEFE3] p-2.5 shadow-[0_2px_12px_rgba(20,144,79,0.08)]">
               <LayerPreview assetMap={assetMap} />
             </div>
 
@@ -362,7 +377,7 @@ export function CreatorPage() {
             </div>
           </div>
         </div>
-      </main>
+      </motion.main>
 
       {/* No Footer — saves vertical space */}
 

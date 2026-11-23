@@ -1,3 +1,4 @@
+import { CloudOff, PackageOpen, ImageOff } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, X } from 'lucide-react'
@@ -58,8 +59,8 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
   if (error) {
     return (
       <div className="flex flex-col items-center py-8 text-center">
-        <span className="text-3xl mb-2">😿</span>
-        <p className="text-sm text-[#B8A0C8] font-nunito">Failed to load assets</p>
+        <CloudOff size={28} className="mb-2 text-[#8A9F96]" />
+        <p className="text-sm text-[#8A9F96] font-nunito">Couldn't load these items. Check your connection and reload the page.</p>
       </div>
     )
   }
@@ -67,8 +68,8 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
   if (!assets || assets.length === 0) {
     return (
       <div className="flex flex-col items-center py-6 text-center">
-        <span className="text-3xl mb-2">📂</span>
-        <p className="font-fredoka text-sm text-[#B8A0C8]">No assets uploaded yet</p>
+        <PackageOpen size={28} className="mb-2 text-[#8A9F96]" />
+        <p className="font-fredoka text-sm text-[#8A9F96]">Nothing in this category yet</p>
         
       </div>
     )
@@ -91,8 +92,8 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
             aspect-square rounded-xl flex flex-col items-center justify-center gap-1
             border-2 transition-all cursor-pointer text-xs font-nunito
             ${!selected
-              ? 'border-[#FF85A1] bg-[#FFD6E8] text-[#FF85A1]'
-              : 'border-dashed border-[#E8D9FF] bg-white text-[#C8B0D8] hover:border-[#C8B0FF]'
+              ? 'border-[#E3263F] bg-[#FFD9DE] text-[#E3263F]'
+              : 'border-dashed border-[#CDEBD8] bg-white text-[#A9BAB2] hover:border-[#9FD6B4]'
             }
           `}
         >
@@ -135,8 +136,8 @@ function AssetCard({
         rounded-xl overflow-hidden relative cursor-pointer
         border-2 transition-all duration-200
         ${isSelected
-          ? 'border-[#FF85A1] shadow-[0_0_0_3px_rgba(255,133,161,0.25),0_4px_16px_rgba(255,133,161,0.3)]'
-          : 'border-transparent hover:border-[#E8D9FF] hover:shadow-[0_4px_16px_rgba(176,127,255,0.15)]'
+          ? 'border-[#E3263F] shadow-[0_0_0_3px_rgba(227,38,63,0.25),0_4px_16px_rgba(227,38,63,0.3)]'
+          : 'border-transparent hover:border-[#CDEBD8] hover:shadow-[0_4px_16px_rgba(20,144,79,0.15)]'
         }
       `}
     >
@@ -152,8 +153,8 @@ function AssetCard({
         />
 
         {imgError ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#F8F0FF]">
-            <span className="text-2xl">🖼️</span>
+          <div className="absolute inset-0 flex items-center justify-center bg-[#EEF8F1]">
+            <ImageOff size={22} className="text-[#8A9F96]" />
           </div>
         ) : (
           <img
@@ -172,7 +173,7 @@ function AssetCard({
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.7 }}
-              className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#FF85A1] rounded-full flex items-center justify-center shadow-sm"
+              className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#E3263F] rounded-full flex items-center justify-center shadow-sm"
             >
               <Check size={11} className="text-white" strokeWidth={3} />
             </motion.div>
@@ -181,8 +182,8 @@ function AssetCard({
       </div>
 
       {/* Asset name — always visible */}
-      <div className="bg-white border-t border-[#F0E6FF] px-1.5 py-1">
-        <p className="text-[10px] font-nunito text-[#3D2B4F] truncate text-center leading-tight">
+      <div className="bg-white border-t border-[#DDEFE3] px-1.5 py-1">
+        <p className="text-[10px] font-nunito text-[#0F3B2C] truncate text-center leading-tight">
           {asset.name}
         </p>
       </div>

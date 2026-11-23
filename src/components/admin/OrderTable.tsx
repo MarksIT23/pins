@@ -1,3 +1,4 @@
+import { Inbox, ImageOff } from 'lucide-react'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Eye, Download } from 'lucide-react'
@@ -24,21 +25,21 @@ export function OrderTable({ orders }: OrderTableProps) {
   if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center py-16 text-center">
-        <span className="text-5xl mb-3">📭</span>
-        <p className="font-fredoka text-[#B8A0C8] text-lg">No orders yet</p>
-        <p className="text-sm text-[#D0C0E0] font-nunito mt-1">Orders will appear here once customers submit them</p>
+        <Inbox size={44} strokeWidth={1.6} className="mb-3 text-[#8A9F96]" />
+        <p className="font-fredoka text-[#8A9F96] text-lg">No orders yet</p>
+        <p className="text-sm text-[#BFDCCB] font-nunito mt-1">Orders will appear here once customers submit them</p>
       </div>
     )
   }
 
   return (
     <>
-      <div className="overflow-x-auto rounded-3xl border border-[#F0E6FF] bg-white shadow-[0_2px_16px_rgba(176,127,255,0.08)]">
+      <div className="overflow-x-auto rounded-3xl border border-[#DDEFE3] bg-white shadow-[0_2px_16px_rgba(20,144,79,0.08)]">
         <table className="w-full min-w-[700px]">
           <thead>
-            <tr className="border-b border-[#F0E6FF]">
+            <tr className="border-b border-[#DDEFE3]">
               {['Order ID', 'Customer', 'Preview', 'Qty', 'Date', 'Status', 'Actions'].map((h) => (
-                <th key={h} className="px-4 py-4 text-left text-xs font-fredoka font-semibold text-[#B8A0C8] uppercase tracking-wide">
+                <th key={h} className="px-4 py-4 text-left text-xs font-fredoka font-semibold text-[#8A9F96] uppercase tracking-wide">
                   {h}
                 </th>
               ))}
@@ -52,21 +53,22 @@ export function OrderTable({ orders }: OrderTableProps) {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="border-b border-[#F8F0FF] hover:bg-[#FDF8FF] transition-colors"
+                  className="border-b border-[#EEF8F1] hover:bg-[#F6FCF8] transition-colors"
                 >
                   {/* Order ID */}
                   <td className="px-4 py-3">
-                    <span className="font-fredoka text-sm font-semibold text-[#B07FFF]">
+                    <span className="font-fredoka text-sm font-semibold text-[#14904F]">
                       {order.order_number}
                     </span>
+                    <OrderTypeTag order={order} />
                   </td>
 
                   {/* Customer */}
                   <td className="px-4 py-3">
                     <div>
-                      <p className="font-nunito font-semibold text-sm text-[#3D2B4F]">{order.full_name}</p>
+                      <p className="font-nunito font-semibold text-sm text-[#0F3B2C]">{order.full_name}</p>
                       {order.student_id && (
-                        <p className="text-xs text-[#B8A0C8]">{order.student_id}</p>
+                        <p className="text-xs text-[#8A9F96]">{order.student_id}</p>
                       )}
                     </div>
                   </td>
@@ -77,26 +79,26 @@ export function OrderTable({ orders }: OrderTableProps) {
                       <img
                         src={order.preview_image_url}
                         alt="Character preview"
-                        className="w-12 h-12 rounded-xl object-contain bg-white border border-[#FFD6E8] cursor-pointer hover:scale-110 transition-transform"
+                        className="w-12 h-12 rounded-xl object-contain bg-white border border-[#FFD9DE] cursor-pointer hover:scale-110 transition-transform"
                         onClick={() => setViewOrder(order)}
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-xl bg-[#F0E6FF] flex items-center justify-center text-xl">
-                        🧸
+                      <div className="w-12 h-12 rounded-xl bg-[#DDEFE3] flex items-center justify-center text-[#8A9F96]">
+                        <ImageOff size={18} />
                       </div>
                     )}
                   </td>
 
                   {/* Quantity */}
                   <td className="px-4 py-3">
-                    <span className="font-fredoka font-bold text-[#3D2B4F] text-lg">
+                    <span className="font-fredoka font-bold text-[#0F3B2C] text-lg">
                       {order.quantity}
                     </span>
                   </td>
 
                   {/* Date */}
                   <td className="px-4 py-3">
-                    <span className="text-xs font-nunito text-[#7A5C8A]">
+                    <span className="text-xs font-nunito text-[#3E6B57]">
                       {formatDateShort(order.date_ordered)}
                     </span>
                   </td>
@@ -112,7 +114,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                       {/* View details */}
                       <button
                         onClick={() => setViewOrder(order)}
-                        className="p-1.5 rounded-xl bg-[#F0E6FF] hover:bg-[#E8D9FF] text-[#B07FFF] transition-colors"
+                        className="p-1.5 rounded-xl bg-[#DDEFE3] hover:bg-[#CDEBD8] text-[#14904F] transition-colors"
                         title="View details"
                       >
                         <Eye size={14} />
@@ -163,7 +165,7 @@ function StatusDropdown({
       <button
         onClick={() => setOpen((o) => !o)}
         disabled={isUpdating}
-        className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#F8F0FF] hover:bg-[#F0E6FF] text-[#7A5C8A] text-xs font-fredoka font-semibold transition-colors"
+        className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#EEF8F1] hover:bg-[#DDEFE3] text-[#3E6B57] text-xs font-fredoka font-semibold transition-colors"
       >
         Update <ChevronDown size={12} />
       </button>
@@ -174,7 +176,7 @@ function StatusDropdown({
             initial={{ opacity: 0, y: 4, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.97 }}
-            className="absolute right-0 top-full mt-1 w-48 bg-white rounded-2xl shadow-[0_8px_32px_rgba(61,43,79,0.15)] border border-[#F0E6FF] z-10 overflow-hidden"
+            className="absolute right-0 top-full mt-1 w-48 bg-white rounded-2xl shadow-[0_8px_32px_rgba(15,59,44,0.15)] border border-[#DDEFE3] z-10 overflow-hidden"
           >
             {ALL_STATUSES.map((status) => (
               <button
@@ -185,8 +187,8 @@ function StatusDropdown({
                   w-full text-left px-4 py-2.5 text-xs font-nunito font-semibold
                   flex items-center gap-2 transition-colors
                   ${order.status === status
-                    ? 'bg-[#F8F0FF] text-[#B8A0C8] cursor-default'
-                    : 'hover:bg-[#F8F0FF] text-[#3D2B4F]'
+                    ? 'bg-[#EEF8F1] text-[#8A9F96] cursor-default'
+                    : 'hover:bg-[#EEF8F1] text-[#0F3B2C]'
                   }
                 `}
               >
@@ -240,11 +242,11 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
             <img
               src={order.preview_image_url}
               alt="Character preview"
-              className="w-40 h-40 rounded-2xl object-contain bg-white border-2 border-[#FFD6E8]"
+              className="w-40 h-40 rounded-2xl object-contain bg-white border-2 border-[#FFD9DE]"
             />
             <button
               onClick={() => downloadPng(order.preview_image_url!, `${order.order_number}.png`)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#B07FFF] hover:bg-[#9a6aff] text-white text-xs font-fredoka font-semibold transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#14904F] hover:bg-[#0F7A42] text-white text-xs font-fredoka font-semibold transition-colors"
             >
               <Download size={12} /> 1000×1000 PNG
             </button>
@@ -261,23 +263,23 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
             { label: 'Status', value: <StatusBadge status={order.status} /> },
           ].map(({ label, value }) => (
             <div key={label}>
-              <p className="text-xs text-[#B8A0C8] font-nunito mb-0.5">{label}</p>
-              <div className="font-nunito font-semibold text-sm text-[#3D2B4F]">{value as any}</div>
+              <p className="text-xs text-[#8A9F96] font-nunito mb-0.5">{label}</p>
+              <div className="font-nunito font-semibold text-sm text-[#0F3B2C]">{value as any}</div>
             </div>
           ))}
         </div>
       </div>
 
       {order.notes && (
-        <div className="bg-[#F8F0FF] rounded-2xl p-3 border border-[#F0E6FF]">
-          <p className="text-xs text-[#B8A0C8] font-nunito mb-1">Notes</p>
-          <p className="text-sm text-[#3D2B4F] font-nunito">{order.notes}</p>
+        <div className="bg-[#EEF8F1] rounded-2xl p-3 border border-[#DDEFE3]">
+          <p className="text-xs text-[#8A9F96] font-nunito mb-1">Notes</p>
+          <p className="text-sm text-[#0F3B2C] font-nunito">{order.notes}</p>
         </div>
       )}
 
       {/* Status update */}
       <div>
-        <p className="text-xs text-[#B8A0C8] font-nunito mb-2">Update Status</p>
+        <p className="text-xs text-[#8A9F96] font-nunito mb-2">Update Status</p>
         <div className="flex flex-wrap gap-2">
           {ALL_STATUSES.map((s) => (
             <button
@@ -287,7 +289,7 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
                 px-3 py-1.5 rounded-full text-xs font-fredoka font-semibold border transition-all
                 ${order.status === s
                   ? ORDER_STATUS_COLORS[s] + ' scale-105'
-                  : 'bg-white text-[#7A5C8A] border-[#F0E6FF] hover:border-[#C8B0FF]'
+                  : 'bg-white text-[#3E6B57] border-[#DDEFE3] hover:border-[#9FD6B4]'
                 }
               `}
             >
@@ -297,5 +299,21 @@ function OrderDetailView({ order, onClose }: { order: Order; onClose: () => void
         </div>
       </div>
     </div>
+  )
+}
+
+/** Small tag telling custom builds and Pin Shop orders apart. */
+function OrderTypeTag({ order }: { order: Order }) {
+  const shop = order.order_type === 'shop'
+  const name = order.character_config?.shopItem?.name
+  return (
+    <span
+      className={`mt-1 flex w-fit items-center rounded-full px-2 py-0.5 text-[11px] font-nunito font-bold ${
+        shop ? 'bg-[#FFF1CC] text-[#9A6400]' : 'bg-[#EEF8F1] text-[#3E6B57]'
+      }`}
+      title={shop && name ? `Pin Shop: ${name}` : undefined}
+    >
+      {shop ? `Pin Shop${name ? ` · ${name}` : ''}` : 'Custom'}
+    </span>
   )
 }

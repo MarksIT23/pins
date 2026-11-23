@@ -42,8 +42,8 @@ export function AdminAssetsPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-6">
-        <h1 className="font-fredoka text-3xl font-bold text-[#3D2B4F]">Assets 🖼️</h1>
-        <p className="text-[#B8A0C8] font-nunito text-sm mt-1">
+        <h1 className="font-fredoka text-3xl font-bold text-[#0F3B2C]">Assets</h1>
+        <p className="text-[#8A9F96] font-nunito text-sm mt-1">
           {filteredAssets.length} asset{filteredAssets.length !== 1 ? 's' : ''}
           {searchQuery && filteredAssets.length !== assets.length && ` (filtered from ${assets.length})`}
           {' • '}{categories.length} categories
@@ -51,7 +51,7 @@ export function AdminAssetsPage() {
       </div>
 
       {/* Tab switcher */}
-      <div className="flex gap-2 p-1 bg-white rounded-2xl border border-[#F0E6FF] w-fit mb-6">
+      <div className="flex gap-2 p-1 bg-white rounded-2xl border border-[#DDEFE3] w-fit mb-6">
         {TABS.map(({ id, label, icon }) => (
           <button
             key={id}
@@ -59,8 +59,8 @@ export function AdminAssetsPage() {
             className={`
               flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-fredoka font-semibold transition-all
               ${activeTab === id
-                ? 'bg-gradient-to-r from-[#B07FFF] to-[#FF85A1] text-white shadow-[0_4px_14px_rgba(176,127,255,0.3)]'
-                : 'text-[#7A5C8A] hover:bg-[#F8F0FF]'
+                ? 'bg-[#14904F] text-white shadow-[0_4px_14px_rgba(20,144,79,0.3)]'
+                : 'text-[#3E6B57] hover:bg-[#EEF8F1]'
               }
             `}
           >
@@ -71,14 +71,14 @@ export function AdminAssetsPage() {
 
       {/* Upload Tab */}
       {activeTab === 'upload' && (
-        <div className="bg-white rounded-3xl border border-[#F0E6FF] p-5 sm:p-6 shadow-[0_2px_16px_rgba(176,127,255,0.08)]">
+        <div className="bg-white rounded-3xl border border-[#DDEFE3] p-5 sm:p-6 shadow-[0_2px_16px_rgba(20,144,79,0.08)]">
           <AssetUploader />
         </div>
       )}
 
       {/* Manage Tab */}
       {activeTab === 'manage' && (
-        <div className="bg-white rounded-3xl border border-[#F0E6FF] p-5 sm:p-6 shadow-[0_2px_16px_rgba(176,127,255,0.08)]">
+        <div className="bg-white rounded-3xl border border-[#DDEFE3] p-5 sm:p-6 shadow-[0_2px_16px_rgba(20,144,79,0.08)]">
           {/* Category filter */}
           <div className="flex gap-2 flex-wrap mb-4">
             <button
@@ -86,8 +86,8 @@ export function AdminAssetsPage() {
               className={`
                 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold transition-all
                 ${categoryFilter === 'all'
-                  ? 'bg-[#B07FFF] text-white'
-                  : 'bg-[#F0E6FF] text-[#7A5C8A] hover:bg-[#E8D9FF]'
+                  ? 'bg-[#14904F] text-white'
+                  : 'bg-[#DDEFE3] text-[#3E6B57] hover:bg-[#CDEBD8]'
                 }
               `}
             >
@@ -102,12 +102,12 @@ export function AdminAssetsPage() {
                   className={`
                     px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold transition-all
                     ${categoryFilter === cat.slug
-                      ? 'bg-[#B07FFF] text-white'
-                      : 'bg-[#F0E6FF] text-[#7A5C8A] hover:bg-[#E8D9FF]'
+                      ? 'bg-[#14904F] text-white'
+                      : 'bg-[#DDEFE3] text-[#3E6B57] hover:bg-[#CDEBD8]'
                     }
                   `}
                 >
-                  {cat.icon ?? '🎀'} {cat.name} ({count})
+                  {cat.name} ({count})
                 </button>
               )
             })}
@@ -115,13 +115,13 @@ export function AdminAssetsPage() {
 
           {/* Search bar */}
           <div className="relative mb-5">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#B8A0C8]" />
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A9F96]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, category, or tags..."
-              className="w-full bg-[#F8F0FF] border border-[#F0E6FF] rounded-2xl pl-10 pr-4 py-2.5 text-sm font-nunito text-[#3D2B4F] placeholder:text-[#C8B0D8] outline-none focus:border-[#B07FFF] focus:bg-white transition-colors"
+              className="w-full bg-[#EEF8F1] border border-[#DDEFE3] rounded-2xl pl-10 pr-4 py-2.5 text-sm font-nunito text-[#0F3B2C] placeholder:text-[#A9BAB2] outline-none focus:border-[#14904F] focus:bg-white transition-colors"
             />
           </div>
 

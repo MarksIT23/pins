@@ -1,3 +1,4 @@
+import { Package, Hourglass, Paintbrush, CheckCircle2, ClipboardList, Image as ImageIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useDashboardStats } from '@/hooks/useOrders'
 import { StatCard } from '@/components/ui/Card'
@@ -9,8 +10,8 @@ export function AdminDashboardPage() {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="mb-6">
-        <h1 className="font-fredoka text-3xl font-bold text-[#3D2B4F]">Dashboard 🎀</h1>
-        <p className="text-[#B8A0C8] font-nunito text-sm mt-1">Overview of your pin orders and assets</p>
+        <h1 className="font-fredoka text-3xl font-bold text-[#0F3B2C]">Dashboard</h1>
+        <p className="text-[#8A9F96] font-nunito text-sm mt-1">Overview of your pin orders and assets</p>
       </div>
 
       {/* Stats grid */}
@@ -21,10 +22,10 @@ export function AdminDashboardPage() {
           ))
         ) : (
           <>
-            <StatCard label="Total Orders"    value={stats?.total_orders ?? 0}       icon="📦" color="bg-[#FFD6E8]" />
-            <StatCard label="Pending"         value={stats?.pending_orders ?? 0}     icon="⏳" color="bg-[#FFF3CD]" />
-            <StatCard label="In Production"   value={stats?.in_production_orders ?? 0} icon="🎨" color="bg-[#E8D9FF]" />
-            <StatCard label="Completed"       value={stats?.completed_orders ?? 0}   icon="✅" color="bg-[#D8F3DC]" />
+            <StatCard label="Total Orders"    value={stats?.total_orders ?? 0}       icon={<Package size={22} />} color="bg-[#FFD9DE]" />
+            <StatCard label="Pending"         value={stats?.pending_orders ?? 0}     icon={<Hourglass size={22} />} color="bg-[#FFF1CC]" />
+            <StatCard label="In Production"   value={stats?.in_production_orders ?? 0} icon={<Paintbrush size={22} />} color="bg-[#CDEBD8]" />
+            <StatCard label="Completed"       value={stats?.completed_orders ?? 0}   icon={<CheckCircle2 size={22} />} color="bg-[#D3F2DD]" />
           </>
         )}
       </div>
@@ -32,18 +33,18 @@ export function AdminDashboardPage() {
       {/* Quick links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
-          { to: '/admin/orders', icon: '📋', title: 'Manage Orders', desc: 'View and update order statuses', color: 'from-[#FFD6E8] to-[#E8D9FF]' },
-          { to: '/admin/assets', icon: '🖼️', title: 'Manage Assets', desc: 'Upload, edit, and delete character assets', color: 'from-[#D8EEFF] to-[#D8F3DC]' },
+          { to: '/admin/orders', icon: <ClipboardList size={26} />, title: 'Manage Orders', desc: 'View and update order statuses', color: 'from-[#FFD9DE] to-[#CDEBD8]' },
+          { to: '/admin/assets', icon: <ImageIcon size={26} />, title: 'Manage Assets', desc: 'Upload, edit, and delete character assets', color: 'from-[#DDF1FC] to-[#D3F2DD]' },
         ].map(({ to, icon, title, desc, color }) => (
           <Link key={to} to={to}>
             <motion.div
               whileHover={{ y: -4, scale: 1.01 }}
               transition={{ type: 'spring', stiffness: 300 }}
-              className={`bg-gradient-to-br ${color} rounded-3xl p-6 border border-white/80 shadow-[0_4px_20px_rgba(176,127,255,0.12)] cursor-pointer`}
+              className={`bg-gradient-to-br ${color} rounded-3xl p-6 border border-white/80 shadow-[0_4px_20px_rgba(20,144,79,0.12)] cursor-pointer`}
             >
-              <div className="text-4xl mb-3">{icon}</div>
-              <h3 className="font-fredoka text-lg font-bold text-[#3D2B4F]">{title}</h3>
-              <p className="text-sm text-[#7A5C8A] font-nunito mt-1">{desc}</p>
+              <div className="mb-3 text-[#14904F]">{icon}</div>
+              <h3 className="font-fredoka text-lg font-bold text-[#0F3B2C]">{title}</h3>
+              <p className="text-sm text-[#3E6B57] font-nunito mt-1">{desc}</p>
             </motion.div>
           </Link>
         ))}

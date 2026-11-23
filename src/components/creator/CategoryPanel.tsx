@@ -21,7 +21,7 @@ export function CategoryPanel({ categories }: CategoryPanelProps) {
 
   return (
     <div className="w-full">
-      <p className="font-fredoka text-sm font-semibold text-[#B8A0C8] mb-2 px-1">Customize</p>
+      <p className="font-fredoka text-sm font-semibold text-[#8A9F96] mb-2 px-1">Customize</p>
       <div className="flex gap-2 flex-wrap">
         {allButtons.map((cat) => {
           const key = cat.slug
@@ -37,8 +37,8 @@ export function CategoryPanel({ categories }: CategoryPanelProps) {
                 relative flex items-center px-3 py-2 rounded-2xl text-sm font-fredoka
                 font-semibold transition-all duration-200 select-none cursor-pointer
                 ${isActive
-                  ? 'bg-gradient-to-r from-[#FF85A1] to-[#B07FFF] text-white shadow-[0_4px_14px_rgba(255,133,161,0.4)]'
-                  : 'bg-white text-[#7A5C8A] border border-[#F0E6FF] hover:border-[#C8B0FF] hover:bg-[#F8F0FF]'
+                  ? 'bg-[#E3263F] text-white shadow-[0_4px_14px_rgba(227,38,63,0.4)]'
+                  : 'bg-white text-[#3E6B57] border border-[#DDEFE3] hover:border-[#9FD6B4] hover:bg-[#EEF8F1]'
                 }
               `}
             >
@@ -48,7 +48,7 @@ export function CategoryPanel({ categories }: CategoryPanelProps) {
               {isActive && (
                 <motion.span
                   layoutId="cat-active"
-                  className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#FFAB76] rounded-full border-2 border-white"
+                  className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#FFC23A] rounded-full border-2 border-white"
                 />
               )}
             </motion.button>

@@ -10,12 +10,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<string, string> = {
-  primary:   'bg-[#FF85A1] hover:bg-[#ff6b90] text-white shadow-[0_4px_20px_rgba(255,133,161,0.4)] hover:shadow-[0_6px_28px_rgba(255,133,161,0.55)]',
-  secondary: 'bg-[#E8D9FF] hover:bg-[#d4c2ff] text-[#7A5C8A] shadow-[0_2px_12px_rgba(176,127,255,0.2)]',
-  ghost:     'border-2 border-[#FF85A1] text-[#FF85A1] hover:bg-[#FFD6E8] bg-transparent',
+  primary:   'bg-[#E3263F] hover:bg-[#C41C33] text-white shadow-[0_4px_20px_rgba(227,38,63,0.4)] hover:shadow-[0_6px_28px_rgba(227,38,63,0.55)]',
+  secondary: 'bg-[#CDEBD8] hover:bg-[#B5E2C6] text-[#3E6B57] shadow-[0_2px_12px_rgba(20,144,79,0.2)]',
+  ghost:     'border-2 border-[#E3263F] text-[#E3263F] hover:bg-[#FFD9DE] bg-transparent',
   danger:    'bg-red-400 hover:bg-red-500 text-white shadow-[0_4px_20px_rgba(248,113,113,0.35)]',
-  admin:     'bg-[#B07FFF] hover:bg-[#9a6aff] text-white shadow-[0_4px_20px_rgba(176,127,255,0.4)]',
-  soft:      'bg-[#FFF8F0] hover:bg-[#FFD6E8] text-[#3D2B4F] border border-[#FFD6E8]',
+  admin:     'bg-[#14904F] hover:bg-[#0F7A42] text-white shadow-[0_4px_20px_rgba(20,144,79,0.4)]',
+  soft:      'bg-[#FBFDF9] hover:bg-[#FFD9DE] text-[#0F3B2C] border border-[#FFD9DE]',
 }
 
 const sizeClasses: Record<string, string> = {
@@ -29,7 +29,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <motion.button
         ref={ref}
-        whileHover={{ scale: disabled || isLoading ? 1 : 1.04 }}
+        whileHover={{ scale: disabled || isLoading ? 1 : 1.02 }}
         whileTap={{ scale: disabled || isLoading ? 1 : 0.97 }}
         className={`
           inline-flex items-center justify-center font-fredoka font-semibold

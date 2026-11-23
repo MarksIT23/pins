@@ -41,19 +41,19 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
               exit={{ opacity: 0, y: 40, scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
               className={`
-                bg-[#FFF8F0] rounded-4xl shadow-[0_24px_80px_rgba(61,43,79,0.2)]
-                border border-[#FFD6E8] w-full ${sizeClasses[size]}
+                bg-[#FBFDF9] rounded-4xl shadow-[0_24px_80px_rgba(15,59,44,0.2)]
+                border border-[#FFD9DE] w-full ${sizeClasses[size]}
                 max-h-[90dvh] overflow-y-auto
               `}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
               {title && (
-                <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#FFD6E8]">
-                  <h2 className="font-fredoka text-xl font-semibold text-[#3D2B4F]">{title}</h2>
+                <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#FFD9DE]">
+                  <h2 className="font-fredoka text-xl font-semibold text-[#0F3B2C]">{title}</h2>
                   <button
                     onClick={onClose}
-                    className="w-8 h-8 rounded-full bg-[#FFD6E8] hover:bg-[#FF85A1] text-[#3D2B4F] hover:text-white transition-all flex items-center justify-center"
+                    className="w-8 h-8 rounded-full bg-[#FFD9DE] hover:bg-[#E3263F] text-[#0F3B2C] hover:text-white transition-all flex items-center justify-center"
                     aria-label="Close modal"
                   >
                     <X size={16} />
@@ -87,11 +87,11 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
-      <p className="text-[#7A5C8A] font-nunito mb-6">{message}</p>
+      <p className="text-[#3E6B57] font-nunito mb-6">{message}</p>
       <div className="flex gap-3 justify-end">
         <button
           onClick={onClose}
-          className="px-5 py-2 rounded-2xl bg-[#F0E6FF] text-[#7A5C8A] font-fredoka hover:bg-[#E8D9FF] transition-colors"
+          className="px-5 py-2 rounded-2xl bg-[#DDEFE3] text-[#3E6B57] font-fredoka hover:bg-[#CDEBD8] transition-colors"
         >
           Cancel
         </button>

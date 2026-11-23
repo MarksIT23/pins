@@ -1,3 +1,4 @@
+import { Mountain, Star, Image as ImageIcon, User, Shirt, Scissors, Glasses, GraduationCap, Gift, Type, type LucideIcon } from 'lucide-react'
 import { AssetCategory } from '@/types'
 
 /**
@@ -20,18 +21,20 @@ export const LAYER_ORDER: Record<string, number> = {
 /**
  * Category display config: icon and label.
  */
-export const CATEGORY_UI: Record<string, { icon: string; label: string }> = {
-  background:   { icon: '🌈', label: 'Background' },
-  pendants:     { icon: '✨', label: 'Pendant' },
-  'pendant-bg': { icon: '🖼️', label: 'Pendant BG' },
-  base:         { icon: '🧸', label: 'Base' },
-  clothes:      { icon: '👗', label: 'Clothes' },
-  hair:         { icon: '💇', label: 'Hair' },
-  glasses:      { icon: '🕶️', label: 'Glasses' },
-  college:      { icon: '🎓', label: 'College' },
-  accessories:  { icon: '🎀', label: 'Accessories' },
-  text:         { icon: '✏️', label: 'Text' },
+export const CATEGORY_UI: Record<string, { icon: LucideIcon; label: string }> = {
+  background:   { icon: Mountain,       label: 'Background' },
+  pendants:     { icon: Star,           label: 'Pendant' },
+  'pendant-bg': { icon: ImageIcon,      label: 'Pendant BG' },
+  base:         { icon: User,           label: 'Base' },
+  clothes:      { icon: Shirt,          label: 'Clothes' },
+  hair:         { icon: Scissors,       label: 'Hair' },
+  glasses:      { icon: Glasses,        label: 'Glasses' },
+  college:      { icon: GraduationCap,  label: 'College' },
+  accessories:  { icon: Gift,           label: 'Accessories' },
+  text:         { icon: Type,           label: 'Text' },
 }
+
+export const FALLBACK_ICON: LucideIcon = Star
 
 /** Names of the active layer slugs, in render order (bottom→top). */
 export const LAYER_SLUGS = [

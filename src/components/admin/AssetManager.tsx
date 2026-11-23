@@ -1,3 +1,4 @@
+import { FolderOpen } from 'lucide-react'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Trash2, Eye, EyeOff, Pencil } from 'lucide-react'
@@ -48,9 +49,9 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
   if (filtered.length === 0) {
     return (
       <div className="flex flex-col items-center py-16 text-center">
-        <span className="text-5xl mb-3">🗂️</span>
-        <p className="font-fredoka text-[#B8A0C8] text-lg">No assets in this category</p>
-        <p className="text-xs text-[#D0C0E0] font-nunito mt-1">Upload new assets using the uploader above</p>
+        <FolderOpen size={44} strokeWidth={1.6} className="mb-3 text-[#8A9F96]" />
+        <p className="font-fredoka text-[#8A9F96] text-lg">No assets in this category</p>
+        <p className="text-xs text-[#BFDCCB] font-nunito mt-1">Upload new assets using the uploader above</p>
       </div>
     )
   }
@@ -71,17 +72,17 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
                 transition={{ delay: i * 0.02 }}
                 className={`
                   bg-white rounded-2xl border overflow-hidden group
-                  ${asset.is_active ? 'border-[#F0E6FF]' : 'border-[#FFD6E8] opacity-60'}
-                  shadow-[0_2px_8px_rgba(176,127,255,0.08)] hover:shadow-[0_4px_16px_rgba(176,127,255,0.15)] transition-all
+                  ${asset.is_active ? 'border-[#DDEFE3]' : 'border-[#FFD9DE] opacity-60'}
+                  shadow-[0_2px_8px_rgba(20,144,79,0.08)] hover:shadow-[0_4px_16px_rgba(20,144,79,0.15)] transition-all
                 `}
               >
                 {/* Image */}
-                <div className="relative aspect-square bg-[#F8F0FF]">
+                <div className="relative aspect-square bg-[#EEF8F1]">
                   {/* Checkerboard for transparency */}
                   <div
                     className="absolute inset-0"
                     style={{
-                      backgroundImage: 'repeating-conic-gradient(#f0e8f8 0% 25%, white 0% 50%)',
+                      backgroundImage: 'repeating-conic-gradient(#EAF0EC 0% 25%, white 0% 50%)',
                       backgroundSize: '12px 12px',
                     }}
                   />
@@ -96,14 +97,14 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                     <button
                       onClick={() => openEdit(asset)}
-                      className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[#7A5C8A] hover:text-[#B07FFF] transition-colors"
+                      className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[#3E6B57] hover:text-[#14904F] transition-colors"
                       title="Edit"
                     >
                       <Pencil size={14} />
                     </button>
                     <button
                       onClick={() => toggleActive({ id: asset.id, is_active: !asset.is_active })}
-                      className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[#7A5C8A] hover:text-[#B07FFF] transition-colors"
+                      className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[#3E6B57] hover:text-[#14904F] transition-colors"
                       title={asset.is_active ? 'Hide' : 'Show'}
                     >
                       {asset.is_active ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -120,7 +121,7 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
 
                 {/* Info */}
                 <div className="p-2">
-                  <p className="font-nunito text-xs font-semibold text-[#3D2B4F] truncate">{asset.name}</p>
+                  <p className="font-nunito text-xs font-semibold text-[#0F3B2C] truncate">{asset.name}</p>
                   <div className="flex items-center gap-1 mt-1 flex-wrap">
                     {cat && (
                       <Badge variant="purple" className="text-[9px] px-1.5 py-0">
@@ -150,7 +151,7 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
         <div className="space-y-4">
           {/* Asset name */}
           <div>
-            <label className="font-nunito font-semibold text-sm text-[#3D2B4F] block mb-1.5">
+            <label className="font-nunito font-semibold text-sm text-[#0F3B2C] block mb-1.5">
               Asset Name
             </label>
             <input
@@ -158,19 +159,19 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
               placeholder="Asset name"
-              className="w-full bg-white border-2 border-[#F0E6FF] rounded-2xl px-3 py-2.5 font-nunito text-[#3D2B4F] text-sm outline-none focus:border-[#B07FFF] transition-colors"
+              className="w-full bg-white border-2 border-[#DDEFE3] rounded-2xl px-3 py-2.5 font-nunito text-[#0F3B2C] text-sm outline-none focus:border-[#14904F] transition-colors"
             />
           </div>
 
           {/* Category */}
           <div>
-            <label className="font-nunito font-semibold text-sm text-[#3D2B4F] block mb-1.5">
+            <label className="font-nunito font-semibold text-sm text-[#0F3B2C] block mb-1.5">
               Category
             </label>
             <select
               value={editCategoryId}
               onChange={(e) => setEditCategoryId(e.target.value)}
-              className="w-full bg-white border-2 border-[#F0E6FF] rounded-2xl px-3 py-2.5 font-nunito text-[#3D2B4F] text-sm outline-none focus:border-[#B07FFF] transition-colors"
+              className="w-full bg-white border-2 border-[#DDEFE3] rounded-2xl px-3 py-2.5 font-nunito text-[#0F3B2C] text-sm outline-none focus:border-[#14904F] transition-colors"
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
@@ -182,14 +183,14 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
           <div className="flex gap-3 justify-end pt-2">
             <button
               onClick={() => setEditingAsset(null)}
-              className="px-5 py-2 rounded-2xl bg-[#F0E6FF] text-[#7A5C8A] font-fredoka hover:bg-[#E8D9FF] transition-colors"
+              className="px-5 py-2 rounded-2xl bg-[#DDEFE3] text-[#3E6B57] font-fredoka hover:bg-[#CDEBD8] transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={saveEdit}
               disabled={isUpdating || !editName.trim()}
-              className="px-5 py-2 rounded-2xl bg-gradient-to-r from-[#B07FFF] to-[#FF85A1] text-white font-fredoka hover:opacity-90 transition-all disabled:opacity-50"
+              className="px-5 py-2 rounded-2xl bg-[#14904F] text-white font-fredoka hover:opacity-90 transition-all disabled:opacity-50"
             >
               {isUpdating ? 'Saving…' : 'Save'}
             </button>

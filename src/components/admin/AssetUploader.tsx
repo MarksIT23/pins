@@ -92,8 +92,8 @@ export function AssetUploader() {
         className={`
           border-2 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all
           ${isDragActive
-            ? 'border-[#B07FFF] bg-[#F0E6FF] scale-[1.02]'
-            : 'border-[#E8D9FF] hover:border-[#B07FFF] hover:bg-[#F8F0FF] bg-white'
+            ? 'border-[#14904F] bg-[#DDEFE3] scale-[1.02]'
+            : 'border-[#CDEBD8] hover:border-[#14904F] hover:bg-[#EEF8F1] bg-white'
           }
         `}
       >
@@ -102,14 +102,14 @@ export function AssetUploader() {
           animate={isDragActive ? { scale: 1.1 } : { scale: 1 }}
           className="flex flex-col items-center gap-3"
         >
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E8D9FF] to-[#FFD6E8] flex items-center justify-center">
-            <Upload size={24} className="text-[#B07FFF]" />
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#CDEBD8] to-[#FFD9DE] flex items-center justify-center">
+            <Upload size={24} className="text-[#14904F]" />
           </div>
           <div>
-            <p className="font-fredoka font-semibold text-[#3D2B4F]">
-              {isDragActive ? 'Drop your PNGs here! 🎀' : 'Drag & drop PNG/SVG files here'}
+            <p className="font-fredoka font-semibold text-[#0F3B2C]">
+              {isDragActive ? 'Drop your PNGs here' : 'Drag & drop PNG/SVG files here'}
             </p>
-            <p className="text-xs text-[#B8A0C8] font-nunito mt-1">
+            <p className="text-xs text-[#8A9F96] font-nunito mt-1">
               Or click to browse • Max 5MB each • 500×500px recommended
             </p>
           </div>
@@ -126,12 +126,12 @@ export function AssetUploader() {
             exit={{ opacity: 0, x: 20, height: 0 }}
             className={`
               bg-white rounded-2xl border p-4 flex flex-col sm:flex-row gap-4
-              ${pf.done ? 'border-green-200' : pf.error ? 'border-red-200' : 'border-[#F0E6FF]'}
+              ${pf.done ? 'border-green-200' : pf.error ? 'border-red-200' : 'border-[#DDEFE3]'}
             `}
           >
             {/* Preview */}
             <div className="flex-shrink-0 flex justify-center">
-              <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#F8F0FF] border border-[#F0E6FF] flex items-center justify-center">
+              <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#EEF8F1] border border-[#DDEFE3] flex items-center justify-center">
                 <img src={pf.preview} alt="Preview" className="w-full h-full object-contain" />
               </div>
             </div>
@@ -148,12 +148,12 @@ export function AssetUploader() {
 
               {/* Category */}
               <div className="flex flex-col gap-1.5">
-                <label className="font-nunito font-semibold text-sm text-[#3D2B4F]">Category</label>
+                <label className="font-nunito font-semibold text-sm text-[#0F3B2C]">Category</label>
                 <select
                   value={pf.categoryId}
                   onChange={(e) => updateFile(i, { categoryId: e.target.value })}
                   disabled={pf.done || pf.uploading}
-                  className="w-full bg-white border-2 border-[#F0E6FF] rounded-2xl px-3 py-3 font-nunito text-[#3D2B4F] text-sm outline-none focus:border-[#B07FFF] transition-colors"
+                  className="w-full bg-white border-2 border-[#DDEFE3] rounded-2xl px-3 py-3 font-nunito text-[#0F3B2C] text-sm outline-none focus:border-[#14904F] transition-colors"
                 >
                   <option value="">Select category…</option>
                   {categories.map((c) => (
@@ -164,12 +164,12 @@ export function AssetUploader() {
 
               {/* Gender */}
               <div className="flex flex-col gap-1.5">
-                <label className="font-nunito font-semibold text-sm text-[#3D2B4F]">Gender Tag</label>
+                <label className="font-nunito font-semibold text-sm text-[#0F3B2C]">Gender Tag</label>
                 <select
                   value={pf.gender}
                   onChange={(e) => updateFile(i, { gender: e.target.value as any })}
                   disabled={pf.done || pf.uploading}
-                  className="w-full bg-white border-2 border-[#F0E6FF] rounded-2xl px-3 py-3 font-nunito text-[#3D2B4F] text-sm outline-none focus:border-[#B07FFF] transition-colors"
+                  className="w-full bg-white border-2 border-[#DDEFE3] rounded-2xl px-3 py-3 font-nunito text-[#0F3B2C] text-sm outline-none focus:border-[#14904F] transition-colors"
                 >
                   <option value="unisex">Unisex</option>
                   <option value="female">Female</option>
@@ -180,7 +180,7 @@ export function AssetUploader() {
 
             {/* Status / Actions */}
             <div className="flex sm:flex-col items-center justify-between sm:justify-center gap-2 flex-shrink-0">
-              <p className="text-[10px] text-[#B8A0C8] font-nunito text-center">
+              <p className="text-[10px] text-[#8A9F96] font-nunito text-center">
                 {formatFileSize(pf.file.size)}
               </p>
 
@@ -189,11 +189,11 @@ export function AssetUploader() {
                   <Check size={16} className="text-green-600" />
                 </div>
               ) : pf.uploading ? (
-                <div className="w-6 h-6 border-2 border-[#B07FFF] border-t-transparent rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-[#14904F] border-t-transparent rounded-full animate-spin" />
               ) : (
                 <button
                   onClick={() => removeFile(i)}
-                  className="w-8 h-8 rounded-full bg-[#FFD6E8] hover:bg-red-100 flex items-center justify-center text-[#FF85A1] hover:text-red-500 transition-colors"
+                  className="w-8 h-8 rounded-full bg-[#FFD9DE] hover:bg-red-100 flex items-center justify-center text-[#E3263F] hover:text-red-500 transition-colors"
                 >
                   <X size={14} />
                 </button>
@@ -235,7 +235,7 @@ export function AssetUploader() {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between bg-green-50 rounded-2xl px-4 py-3 border border-green-200"
         >
-          <p className="font-fredoka text-green-700">All assets uploaded! 🎉</p>
+          <p className="font-fredoka text-green-700">All assets uploaded</p>
           <Button variant="soft" size="sm" onClick={() => setPendingFiles([])}>
             Upload More
           </Button>

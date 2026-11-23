@@ -1,3 +1,4 @@
+import { Gift } from 'lucide-react'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Stage, Layer, Image as KonvaImage } from 'react-konva'
 import { useCharacterStore, deriveRenderedLayers } from '@/store/characterStore'
@@ -116,7 +117,7 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
       {/* White background */}
       <div
         className="absolute inset-0 rounded-[1.5rem] bg-white"
-        style={{ boxShadow: '0 4px 24px rgba(255,133,161,0.18)' }}
+        style={{ boxShadow: '0 4px 24px rgba(227,38,63,0.18)' }}
       />
 
       <Stage
@@ -160,16 +161,16 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
       {/* Loading overlay */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/60 rounded-[1.5rem]">
-          <div className="w-8 h-8 border-3 border-[#FF85A1] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-3 border-[#E3263F] border-t-transparent rounded-full animate-spin" />
         </div>
       )}
 
       {/* Empty state (only when no assets AND no text overlay) */}
       {!hasContent && !isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-          <span className="text-5xl mb-3 animate-bounce-soft block">🧸</span>
-          <p className="font-fredoka text-[#B8A0C8] text-sm">
-            Start by selecting a base character!
+          <span className="mb-3 animate-bounce-soft block text-[#E3263F]"><Gift size={44} strokeWidth={1.6} /></span>
+          <p className="font-fredoka text-[#8A9F96] text-sm">
+            Choose a base character to start your pin.
           </p>
         </div>
       )}
@@ -177,7 +178,7 @@ export function CharacterCanvas({ assetMap, stageRef }: CharacterCanvasProps) {
       {/* Watermark shown on UI preview */}
       {hasContent && (
         <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center pb-2 pointer-events-none">
-          <span className="text-[9px] font-fredoka text-[#3D2B4F]/40 bg-white/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
+          <span className="text-[9px] font-fredoka text-[#0F3B2C]/40 bg-white/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
             Wesleyan Supreme Student Council
           </span>
         </div>

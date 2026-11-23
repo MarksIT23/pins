@@ -18,8 +18,8 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
 
 export const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
   pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  accepted: 'bg-blue-100 text-blue-800 border-blue-200',
-  in_production: 'bg-purple-100 text-purple-800 border-purple-200',
+  accepted: 'bg-sky-50 text-sky-800 border-sky-200',
+  in_production: 'bg-amber-50 text-amber-800 border-amber-200',
   ready_for_pickup: 'bg-green-100 text-green-800 border-green-200',
   completed: 'bg-emerald-100 text-emerald-800 border-emerald-200',
   cancelled: 'bg-red-100 text-red-800 border-red-200',
@@ -59,7 +59,7 @@ export interface TextOverlay {
   text: string;     // max 12 chars
   font: string;     // font family name
   size: number;     // font multiplier: 0=small, 1=medium, 2=large
-  color: string;    // hex color, e.g. "#3D2B4F"
+  color: string;    // hex color, e.g. "#0F3B2C"
   outline: 'none' | 'white' | 'black'; // text outline style
 }
 
@@ -75,6 +75,8 @@ export interface CharacterConfig {
   college?: string | null;
   accessories?: string | null;
   textOverlay?: TextOverlay | null;
+  /** Set for Pin Shop orders (a ready-made design instead of a custom build). */
+  shopItem?: { id: string; name: string } | null;
 }
 
 // ─── Layer ────────────────────────────────────────────────────────────────────
@@ -99,6 +101,26 @@ export interface Order {
   character_config: CharacterConfig;
   preview_image_url?: string | null;
   date_ordered: string;
+  updated_at: string;
+  /** 'custom' = built in the creator, 'shop' = a ready-made Pin Shop design */
+  order_type?: OrderType;
+  shop_item_id?: string | null;
+}
+
+export type OrderType = 'custom' | 'shop';
+
+// ─── Pin Shop ────────────────────────────────────────────────────────────────
+export interface ShopItem {
+  id: string;
+  name: string;
+  description: string | null;
+  image_url: string;
+  storage_path: string | null;
+  price: number | null;
+  tint: string;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
   updated_at: string;
 }
 

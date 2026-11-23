@@ -68,7 +68,7 @@ export function OrderStatusBadge({
             initial={{ opacity: 0, y: 4, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.97 }}
-            className="absolute right-0 top-full mt-1 w-44 bg-white rounded-2xl shadow-[0_8px_32px_rgba(61,43,79,0.15)] border border-[#F0E6FF] z-10 overflow-hidden"
+            className="absolute right-0 top-full mt-1 w-44 bg-white rounded-2xl shadow-[0_8px_32px_rgba(15,59,44,0.15)] border border-[#DDEFE3] z-10 overflow-hidden"
           >
             {ALL_STATUSES.map((s) => (
               <button
@@ -82,8 +82,8 @@ export function OrderStatusBadge({
                   w-full text-left px-4 py-2.5 text-xs font-nunito font-semibold
                   flex items-center gap-2 transition-colors
                   ${status === s
-                    ? 'bg-[#F8F0FF] text-[#B8A0C8] cursor-default'
-                    : 'hover:bg-[#F8F0FF] text-[#3D2B4F] cursor-pointer'
+                    ? 'bg-[#EEF8F1] text-[#8A9F96] cursor-default'
+                    : 'hover:bg-[#EEF8F1] text-[#0F3B2C] cursor-pointer'
                   }
                 `}
               >

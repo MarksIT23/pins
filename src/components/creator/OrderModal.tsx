@@ -8,9 +8,11 @@ import { useSubmitOrder } from '@/hooks/useOrders'
 import { useCharacterStore } from '@/store/characterStore'
 import { exportCanvasToPng } from '@/lib/konva-export'
 import { OrderFormData } from '@/types'
-import { ShoppingBag, User, Hash, MessageSquare, ExternalLink } from 'lucide-react'
+import { ShoppingBag, User, Hash, MessageSquare, ExternalLink, Check } from 'lucide-react'
+import { Confetti } from '@/components/ui/Confetti'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { ALLOW_ORDER_WITHOUT_BASE } from '@/lib/devFlags'
 
 interface OrderModalProps {
   isOpen: boolean
@@ -36,16 +38,20 @@ export function OrderModal({ isOpen, onClose, stageRef, previewDataUrl }: OrderM
 
   async function onSubmit(formData: OrderFormData) {
     // Check if character has at least a base selected
-    if (!config.base) {
-      toast.error('Please select a base character first! 🧸')
+    if (!config.base && !ALLOW_ORDER_WITHOUT_BASE) {
+      toast.error('Choose a base character before ordering.')
       return
     }
 
     try {
       // Export canvas as PNG with watermark
       let previewBlob: Blob
+      let exported: Blob | null = null
       if (stageRef.current) {
-        previewBlob = await exportCanvasToPng(stageRef.current)
+        try { exported = await exportCanvasToPng(stageRef.current) } catch { exported = null }
+      }
+      if (exported) {
+        previewBlob = exported
       } else {
         // Fallback: empty white PNG
         const canvas = document.createElement('canvas')
@@ -64,7 +70,7 @@ export function OrderModal({ isOpen, onClose, stageRef, previewDataUrl }: OrderM
         onClose()
         reset()
         setStep('form')
-        navigate(`/order-success?order=${order.order_number}`)
+        navigate(`/order-success?order=${order.order_number}`, { state: { preview: config.base ? previewDataUrl : undefined } })
       }, 1800)
 
     } catch (err: any) {
@@ -80,7 +86,7 @@ export function OrderModal({ isOpen, onClose, stageRef, previewDataUrl }: OrderM
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="✨ Place Your Order" size="lg">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Place your order" size="lg">
       <AnimatePresence mode="wait">
         {step === 'form' ? (
           <motion.div
@@ -96,9 +102,8 @@ export function OrderModal({ isOpen, onClose, stageRef, previewDataUrl }: OrderM
                   <img
                     src={previewDataUrl}
                     alt="Your character preview"
-                    className="w-28 h-28 rounded-2xl border-4 border-[#FFD6E8] shadow-[0_4px_20px_rgba(255,133,161,0.25)] object-contain bg-white"
+                    className="w-28 h-28 rounded-2xl border-4 border-[#FFD9DE] shadow-[0_4px_20px_rgba(227,38,63,0.25)] object-contain bg-white"
                   />
-                  <span className="absolute -top-2 -right-2 text-lg">🎀</span>
                 </div>
               </div>
             )}
@@ -171,29 +176,19 @@ export function OrderModal({ isOpen, onClose, stageRef, previewDataUrl }: OrderM
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center text-center py-6"
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: [0, 1.2, 1] }}
-              transition={{ type: 'spring', stiffness: 300, delay: 0.1 }}
-              className="text-6xl mb-4"
-            >
-              🎉
-            </motion.div>
-            <h3 className="font-fredoka text-2xl font-bold text-[#3D2B4F] mb-2">Order Placed!</h3>
-            <p className="text-[#7A5C8A] font-nunito text-sm">Redirecting you to your order details…</p>
-            <div className="flex gap-1 mt-4">
-              {['✨', '🎀', '⭐', '🌸', '✨'].map((s, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + i * 0.1 }}
-                  className="text-xl"
-                >
-                  {s}
-                </motion.span>
-              ))}
+            <div className="relative mb-5">
+              <Confetti />
+              <motion.div
+                initial={{ scale: 0, rotate: -30 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 15, delay: 0.05 }}
+                className="w-20 h-20 rounded-full bg-[#14904F] ring-4 ring-[#FFC23A] ring-offset-4 ring-offset-[#FBFDF9] flex items-center justify-center"
+              >
+                <Check size={38} strokeWidth={3} className="text-white" />
+              </motion.div>
             </div>
+            <h3 className="font-fredoka text-2xl font-bold text-[#0F3B2C] mb-2">Order placed</h3>
+            <p className="text-[#3E6B57] font-nunito text-sm">Taking you to your order details…</p>
           </motion.div>
         )}
       </AnimatePresence>

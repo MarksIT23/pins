@@ -1,3 +1,4 @@
+import { OrnamentMark } from '@/components/layout/Header'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -24,7 +25,7 @@ export function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] flex items-center justify-center px-4 relative">
+    <div className="min-h-screen bg-[#FBFDF9] flex items-center justify-center px-4 relative">
       <SparkleBackground />
 
       <motion.div
@@ -33,18 +34,12 @@ export function AdminLoginPage() {
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
         className="relative z-10 w-full max-w-sm"
       >
-        <div className="bg-white rounded-4xl border border-[#FFD6E8] shadow-[0_16px_64px_rgba(255,133,161,0.2)] p-8">
+        <div className="bg-white rounded-4xl border border-[#FFD9DE] shadow-[0_16px_64px_rgba(227,38,63,0.2)] p-8">
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              className="w-16 h-16 rounded-3xl bg-gradient-to-br from-[#FF85A1] to-[#B07FFF] flex items-center justify-center text-white text-3xl shadow-[0_8px_24px_rgba(176,127,255,0.4)] mb-3"
-            >
-              🎀
-            </motion.div>
-            <h1 className="font-fredoka text-2xl font-bold text-[#3D2B4F]">Admin Login</h1>
-            <p className="text-sm text-[#B8A0C8] font-nunito mt-1">PINS • WSSC Dashboard</p>
+            <div className="mb-3 animate-swing origin-top"><OrnamentMark size={64} /></div>
+            <h1 className="font-fredoka text-2xl font-bold text-[#0F3B2C]">Admin Login</h1>
+            <p className="text-sm text-[#8A9F96] font-nunito mt-1">PINS admin for WSSC</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
