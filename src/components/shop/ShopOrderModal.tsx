@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingBag, User, Hash, Check, Minus, Plus } from 'lucide-react'
+import { ShoppingBag, User, Hash, Check, Minus, Plus, ZoomIn } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { Input, Textarea } from '@/components/ui/Badge'
@@ -10,6 +10,7 @@ import { Confetti } from '@/components/ui/Confetti'
 import { useSubmitOrder } from '@/hooks/useOrders'
 import type { OrderFormData } from '@/types'
 import { TrimmedImage } from '@/components/ui/TrimmedImage'
+import { ImageLightbox } from '@/components/ui/ImageLightbox'
 import { formatPeso, type ShopPin } from '@/data/shopPins'
 
 interface ShopOrderModalProps {
@@ -22,6 +23,8 @@ export function ShopOrderModal({ pin, onClose }: ShopOrderModalProps) {
   const { mutateAsync: submitOrder, isPending } = useSubmitOrder()
   const navigate = useNavigate()
   const [step, setStep] = useState<'form' | 'success'>('form')
+  const [zoomed, setZoomed] = useState(false)
+  const closeZoom = useCallback(() => setZoomed(false), [])
 
   const { register, handleSubmit, reset, setValue, getValues, watch, formState: { errors } } = useForm<OrderFormData>({
     defaultValues: { quantity: 1, full_name: '', student_id: '', notes: '' },
@@ -30,6 +33,7 @@ export function ShopOrderModal({ pin, onClose }: ShopOrderModalProps) {
 
   // Fresh form each time a design is opened.
   useEffect(() => {
+    setZoomed(false)
     if (pin) { reset({ quantity: 1, full_name: '', student_id: '', notes: '' }); setStep('form') }
   }, [pin, reset])
 
@@ -67,15 +71,24 @@ export function ShopOrderModal({ pin, onClose }: ShopOrderModalProps) {
           <motion.div key="form" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
             {/* the design */}
             <div className="flex items-center gap-4 mb-5">
-              <motion.div
-                className="relative shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-[0_4px_12px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3]"
-                style={{ background: pin.tint }}
-                initial={{ rotate: -8, scale: 0.8 }}
-                animate={{ rotate: 0, scale: 1 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 14 }}
-              >
-                <TrimmedImage src={pin.image} alt={pin.name} padding={-0.02} />
-              </motion.div>
+              <div className="relative shrink-0">
+                <motion.button
+                  type="button"
+                  onClick={() => setZoomed(true)}
+                  aria-label={`View a larger image of ${pin.name}`}
+                  className="relative block w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white shadow-[0_4px_12px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3] cursor-zoom-in focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#FFC23A]"
+                  style={{ background: pin.tint }}
+                  initial={{ rotate: -8, scale: 0.8 }}
+                  animate={{ rotate: 0, scale: 1 }}
+                  whileHover={{ scale: 1.04 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 14 }}
+                >
+                  <TrimmedImage src={pin.image} alt="" padding={-0.02} />
+                </motion.button>
+                <span className="pointer-events-none absolute bottom-0 right-0 translate-x-[10%] translate-y-[10%] w-8 h-8 rounded-full bg-white text-[#0F3B2C] border-2 border-[#DDEFE3] flex items-center justify-center shadow-sm" aria-hidden="true">
+                  <ZoomIn size={15} />
+                </span>
+              </div>
               <div className="min-w-0">
                 <p className="font-fredoka font-extrabold text-lg text-[#0F3B2C] leading-tight">{pin.name}</p>
                 {pin.description && <p className="text-sm text-[#3E6B57] font-nunito">{pin.description}</p>}
@@ -164,6 +177,13 @@ export function ShopOrderModal({ pin, onClose }: ShopOrderModalProps) {
           </motion.div>
         ) : null}
       </AnimatePresence>
+      <ImageLightbox
+        src={zoomed && pin ? pin.image : null}
+        alt={pin?.name ?? ''}
+        tint={pin?.tint}
+        caption={pin?.name}
+        onClose={closeZoom}
+      />
     </Modal>
   )
 }
