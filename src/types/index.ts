@@ -69,7 +69,11 @@ export interface CharacterConfig {
   pendants?: string | null;
   'pendant-bg'?: string | null;
   base?: string | null;
+  eyes?: string | null;
+  eyebrows?: string | null;
+  lips?: string | null;
   clothes?: string | null;
+  'christmas-outfit'?: string | null;
   hair?: string | null;
   glasses?: string | null;
   college?: string | null;

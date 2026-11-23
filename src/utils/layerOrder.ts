@@ -1,4 +1,4 @@
-import { Mountain, Star, Image as ImageIcon, User, Shirt, Scissors, Glasses, GraduationCap, Gift, Type, type LucideIcon } from 'lucide-react'
+import { Mountain, Star, Image as ImageIcon, User, Shirt, Scissors, Glasses, GraduationCap, Gift, Type, Eye, Smile, Brush, TreePine, type LucideIcon } from 'lucide-react'
 import { AssetCategory } from '@/types'
 
 /**
@@ -10,12 +10,16 @@ export const LAYER_ORDER: Record<string, number> = {
   pendants:     1,
   'pendant-bg': 2,
   base:         3,
-  clothes:      4,
-  hair:         5,
-  glasses:      6,
-  college:      7,
-  accessories:  8,
-  text:         9,
+  eyes:         4,
+  lips:         5,
+  eyebrows:     6,
+  clothes:      7,
+  'christmas-outfit': 8, // over regular clothes, under hair
+  hair:         9,
+  glasses:      10,
+  college:      11,
+  accessories:  12,
+  text:         13,
 }
 
 /**
@@ -26,7 +30,11 @@ export const CATEGORY_UI: Record<string, { icon: LucideIcon; label: string }> = 
   pendants:     { icon: Star,           label: 'Pendant' },
   'pendant-bg': { icon: ImageIcon,      label: 'Pendant BG' },
   base:         { icon: User,           label: 'Base' },
+  eyes:         { icon: Eye,            label: 'Eyes' },
+  lips:         { icon: Smile,          label: 'Lips' },
+  eyebrows:     { icon: Brush,          label: 'Eyebrows' },
   clothes:      { icon: Shirt,          label: 'Clothes' },
+  'christmas-outfit': { icon: TreePine, label: 'Christmas Outfit' },
   hair:         { icon: Scissors,       label: 'Hair' },
   glasses:      { icon: Glasses,        label: 'Glasses' },
   college:      { icon: GraduationCap,  label: 'College' },
@@ -42,7 +50,11 @@ export const LAYER_SLUGS = [
   'pendants',
   'pendant-bg',
   'base',
+  'eyes',
+  'lips',
+  'eyebrows',
   'clothes',
+  'christmas-outfit',
   'hair',
   'glasses',
   'college',
@@ -56,7 +68,11 @@ export const BUTTON_ORDER = [
   'base',
   'pendants',
   'pendant-bg',
+  'eyes',
+  'eyebrows',
+  'lips',
   'clothes',
+  'christmas-outfit',
   'hair',
   'glasses',
   'college',
