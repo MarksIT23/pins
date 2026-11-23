@@ -54,8 +54,6 @@ export interface Asset {
   sort_order: number;
   created_at: string;
   updated_at: string;
-  /** Pin Shop category; null = uncategorised. */
-  category_id?: string | null;
 }
 
 export interface ShopCategory {
@@ -138,6 +136,8 @@ export interface ShopItem {
   sort_order: number;
   created_at: string;
   updated_at: string;
+  /** Pin Shop category; null = uncategorised. */
+  category_id?: string | null;
 }
 
 export interface OrderFormData {
