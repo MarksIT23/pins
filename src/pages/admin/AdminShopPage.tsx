@@ -1,8 +1,9 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Plus, Pencil, Eye, EyeOff, Trash2, ArrowUp, ArrowDown, Store, CircleAlert } from 'lucide-react'
 import { ShopItemForm } from '@/components/admin/ShopItemForm'
+import { ShopCategoryManager } from '@/components/admin/ShopCategoryManager'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
-import { useShopItems, useUpdateShopItem, useDeleteShopItem, useMoveShopItem, ShopNotSetUpError } from '@/hooks/useShop'
+import { useShopItems, useUpdateShopItem, useDeleteShopItem, useMoveShopItem, useShopCategories, ShopNotSetUpError } from '@/hooks/useShop'
 import { useOrders } from '@/hooks/useOrders'
 import type { ShopItem } from '@/types'
 
@@ -17,6 +18,23 @@ export function AdminShopPage() {
   const move = useMoveShopItem()
   const [formTarget, setFormTarget] = useState<ShopItem | 'new' | null>(null)
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  const { data: categories = [] } = useShopCategories()
+  /** 'all', 'none' (uncategorised) or a category id */
+  const [filter, setFilter] = useState<string>('all')
+
+  const catName = useMemo(() => new Map(categories.map((c) => [c.id, c.name])), [categories])
+  const categoryCounts = useMemo(() => {
+    const m = new Map<string, number>()
+    for (const it of items) if (it.category_id) m.set(it.category_id, (m.get(it.category_id) ?? 0) + 1)
+    return m
+  }, [items])
+  // A category deleted elsewhere leaves its designs uncategorised.
+  const isUncategorised = (it: ShopItem) => !it.category_id || !catName.has(it.category_id)
+  const uncategorisedCount = items.filter(isUncategorised).length
+  const activeFilter = filter === 'all' || filter === 'none' || catName.has(filter) ? filter : 'all'
+  const shown = activeFilter === 'all' ? items
+    : activeFilter === 'none' ? items.filter(isUncategorised)
+    : items.filter((it) => it.category_id === activeFilter)
 
   // Orders and pins ordered, per design
   const stats = useMemo(() => {
@@ -48,6 +66,22 @@ export function AdminShopPage() {
         )}
       />
 
+      {!notSetUp && !isLoading && !error && <ShopCategoryManager counts={categoryCounts} />}
+
+      {!notSetUp && items.length > 0 && categories.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-1 mb-4 -mx-1 px-1" role="group" aria-label="Show designs in">
+          <FilterChip active={activeFilter === 'all'} onClick={() => setFilter('all')}>All ({items.length})</FilterChip>
+          {categories.map((c) => (
+            <FilterChip key={c.id} active={activeFilter === c.id} onClick={() => setFilter(c.id)}>
+              {c.name} ({categoryCounts.get(c.id) ?? 0})
+            </FilterChip>
+          ))}
+          {uncategorisedCount > 0 && (
+            <FilterChip active={activeFilter === 'none'} onClick={() => setFilter('none')}>Uncategorised ({uncategorisedCount})</FilterChip>
+          )}
+        </div>
+      )}
+
       {isLoading ? (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-72 rounded-2xl shimmer" />)}
@@ -62,9 +96,13 @@ export function AdminShopPage() {
         <Notice icon={<Store size={26} />} title="No designs yet">
           Add your first ready-made pin. It shows up in the shop straight away.
         </Notice>
+      ) : shown.length === 0 ? (
+        <Notice icon={<Store size={26} />} title="No designs in this category">
+          Edit a design and choose this category to add it here.
+        </Notice>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {items.map((item, i) => {
+          {shown.map((item, i) => {
             const s = stats.get(item.id)
             return (
               <li key={item.id} className={`bg-white rounded-2xl border border-[#DDEFE3] overflow-hidden flex flex-col ${item.is_active ? '' : 'opacity-70'}`}>
@@ -83,6 +121,11 @@ export function AdminShopPage() {
                     <p className="font-fredoka font-bold text-[#0F3B2C] leading-tight">{item.name}</p>
                     <p className="shrink-0 font-nunito font-semibold text-sm text-[#14904F]">{item.price != null ? peso.format(item.price) : 'No price'}</p>
                   </div>
+                  {categories.length > 0 && (
+                    <p className="mt-1 text-xs font-nunito font-semibold text-[#3E6B57]">
+                      {item.category_id && catName.get(item.category_id) ? catName.get(item.category_id) : 'Uncategorised'}
+                    </p>
+                  )}
                   {item.description && <p className="mt-1 text-sm text-[#3E6B57] font-nunito line-clamp-2">{item.description}</p>}
                 </div>
 
@@ -107,8 +150,8 @@ export function AdminShopPage() {
                     >
                       {item.is_active ? <EyeOff size={16} /> : <Eye size={16} />}
                     </IconButton>
-                    <IconButton label="Move up" disabled={i === 0 || move.isPending} onClick={() => move.mutate({ a: item, b: items[i - 1] })}><ArrowUp size={16} /></IconButton>
-                    <IconButton label="Move down" disabled={i === items.length - 1 || move.isPending} onClick={() => move.mutate({ a: item, b: items[i + 1] })}><ArrowDown size={16} /></IconButton>
+                    <IconButton label="Move up" disabled={i === 0 || move.isPending} onClick={() => move.mutate({ a: item, b: shown[i - 1] })}><ArrowUp size={16} /></IconButton>
+                    <IconButton label="Move down" disabled={i === shown.length - 1 || move.isPending} onClick={() => move.mutate({ a: item, b: shown[i + 1] })}><ArrowDown size={16} /></IconButton>
                     <span className="flex-1" />
                     <IconButton label="Delete" tone="danger" onClick={() => setConfirmDelete(item.id)}><Trash2 size={16} /></IconButton>
                   </div>
@@ -119,8 +162,23 @@ export function AdminShopPage() {
         </ul>
       )}
 
-      <ShopItemForm target={formTarget} onClose={() => setFormTarget(null)} />
+      <ShopItemForm target={formTarget} onClose={() => setFormTarget(null)} defaultCategoryId={activeFilter !== 'all' && activeFilter !== 'none' ? activeFilter : null} />
     </div>
+  )
+}
+
+function FilterChip({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-fredoka font-semibold border transition-colors ${
+        active ? 'bg-[#0F3B2C] border-[#0F3B2C] text-white' : 'bg-white border-[#DDEFE3] text-[#3E6B57] hover:border-[#9FD6B4]'
+      }`}
+    >
+      {children}
+    </button>
   )
 }
 

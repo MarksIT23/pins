@@ -12,6 +12,7 @@ export interface ShopPin {
   /** Soft background behind the pin on its card. */
   tint: string
   price: number | null
+  categoryId: string | null
 }
 
 export function toShopPin(item: ShopItem): ShopPin {
@@ -22,6 +23,7 @@ export function toShopPin(item: ShopItem): ShopPin {
     image: item.image_url,
     tint: item.tint,
     price: item.price,
+    categoryId: item.category_id ?? null,
   }
 }
 

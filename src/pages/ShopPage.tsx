@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ShoppingBag, Paintbrush, ArrowRight, Sparkles } from 'lucide-react'
@@ -7,13 +7,31 @@ import { Footer } from '@/components/layout/Footer'
 import { SparkleBackground } from '@/components/layout/SparkleBackground'
 import { ShopOrderModal } from '@/components/shop/ShopOrderModal'
 import { toShopPin, formatPeso, type ShopPin } from '@/data/shopPins'
-import { useShopItems, ShopNotSetUpError } from '@/hooks/useShop'
+import { useShopItems, useShopCategories, ShopNotSetUpError } from '@/hooks/useShop'
 
 /** Pin Shop: ready-made designs ordered as-is (the custom builder lives at /create). */
 export function ShopPage() {
   const [selected, setSelected] = useState<ShopPin | null>(null)
   const { data: items, isLoading, error } = useShopItems()
   const pins = useMemo(() => (items ?? []).map(toShopPin), [items])
+  const { data: categories = [] } = useShopCategories()
+  /** 'all' or the key of one group */
+  const [filter, setFilter] = useState('all')
+
+  // Designs grouped by category in the admin's order. Empty categories are left
+  // out; designs with no category go last, under "More pins".
+  const groups = useMemo(() => {
+    const known = new Set(categories.map((c) => c.id))
+    const out = categories
+      .map((c) => ({ key: c.id, name: c.name, pins: pins.filter((p) => p.categoryId === c.id) }))
+      .filter((g) => g.pins.length > 0)
+    const rest = pins.filter((p) => !p.categoryId || !known.has(p.categoryId))
+    if (rest.length > 0) out.push({ key: 'more', name: out.length > 0 ? 'More pins' : '', pins: rest })
+    return out
+  }, [categories, pins])
+  const grouped = groups.length > 1 || (groups.length === 1 && groups[0].key !== 'more')
+  const activeKey = groups.some((g) => g.key === filter) ? filter : 'all'
+  const shownGroups = activeKey === 'all' ? groups : groups.filter((g) => g.key === activeKey)
   useEffect(() => {
     if (error instanceof ShopNotSetUpError) console.warn('[Pin Shop]', error.message, 'Run supabase/migrations/20261123000000_pin_shop.sql.')
   }, [error])
@@ -78,42 +96,35 @@ export function ShopPage() {
               </p>
             </div>
           ) : (
-          <ul className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
-            {pins.map((pin, i) => (
-              <motion.li
-                key={pin.id}
-                initial={{ opacity: 0, y: -30, rotate: i % 2 ? 4 : -4 }}
-                animate={{ opacity: 1, y: 0, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 180, damping: 13, delay: 0.1 + i * 0.08 }}
-              >
-                <motion.button
-                  type="button"
-                  onClick={() => setSelected(pin)}
-                  whileTap={{ scale: 0.97 }}
-                  className="group w-full text-left bg-white rounded-3xl border border-[#DDEFE3] overflow-hidden focus-visible:ring-4 focus-visible:ring-[#FFC23A]"
-                  aria-label={`Order ${pin.name}`}
-                >
-                  <div className="relative aspect-square flex items-center justify-center overflow-hidden" style={{ background: pin.tint }}>
-                    <img
-                      src={pin.image}
-                      alt=""
-                      loading="lazy"
-                      className="w-full h-full object-contain scale-[1.45] -translate-y-[3%] drop-shadow-[0_6px_8px_rgba(15,59,44,.2)] transition-transform duration-300 group-hover:-translate-y-[6%] group-hover:rotate-[-3deg]"
-                    />
+            <>
+              {grouped && (
+                <div className="sticky top-[66px] sm:top-[74px] z-20 -mx-4 sm:mx-0 px-4 sm:px-0 py-2.5 mb-2 bg-[#FBFDF9]/95 backdrop-blur-sm">
+                  <div className="flex gap-2 overflow-x-auto no-scrollbar" role="group" aria-label="Show pins in">
+                    <CategoryChip active={activeKey === 'all'} onClick={() => setFilter('all')}>All pins</CategoryChip>
+                    {groups.map((g) => (
+                      <CategoryChip key={g.key} active={activeKey === g.key} onClick={() => setFilter(g.key)}>{g.name}</CategoryChip>
+                    ))}
                   </div>
-                  <div className="p-3 sm:p-4 flex items-center gap-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="font-fredoka font-bold text-[15px] sm:text-base text-[#0F3B2C] leading-tight line-clamp-2">{pin.name}</p>
-                      <p className="text-xs text-[#3E6B57] font-nunito">{pin.price != null ? formatPeso(pin.price) : 'Ready to order'}</p>
-                    </div>
-                    <span className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#E3263F] text-white flex items-center justify-center transition-transform group-hover:scale-110" aria-hidden="true">
-                      <ShoppingBag size={16} />
-                    </span>
-                  </div>
-                </motion.button>
-              </motion.li>
-            ))}
-          </ul>
+                </div>
+              )}
+
+              <div className="flex flex-col gap-9">
+                {shownGroups.map((g) => (
+                  <section key={g.key} aria-labelledby={g.name ? `shop-group-${g.key}` : undefined}>
+                    {grouped && (
+                      <div className="flex items-baseline gap-3 mb-3">
+                        <h2 id={`shop-group-${g.key}`} className="font-fredoka font-bold text-xl sm:text-2xl text-[#0F3B2C]">{g.name}</h2>
+                        <span className="text-sm font-nunito text-[#3E6B57]">{g.pins.length} design{g.pins.length === 1 ? '' : 's'}</span>
+                        <span className="flex-1 h-[3px] rounded-full bg-[repeating-linear-gradient(90deg,#E3263F_0_10px,#FFFFFF_10px_14px,#14904F_14px_24px,#FFFFFF_24px_28px)] opacity-60 self-center" aria-hidden="true" />
+                      </div>
+                    )}
+                    <ul key={activeKey} className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
+                      {g.pins.map((pin, i) => <PinCard key={pin.id} pin={pin} index={i} onSelect={setSelected} />)}
+                    </ul>
+                  </section>
+                ))}
+              </div>
+            </>
           )}
 
           {/* custom option */}
@@ -140,5 +151,58 @@ export function ShopPage() {
       <Footer />
       <ShopOrderModal pin={selected} onClose={() => setSelected(null)} />
     </div>
+  )
+}
+
+function CategoryChip({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`shrink-0 rounded-full px-4 py-2 text-sm font-fredoka font-bold border-2 transition-colors ${
+        active
+          ? 'bg-[#E3263F] border-[#E3263F] text-white shadow-[0_3px_10px_rgba(227,38,63,0.3)]'
+          : 'bg-white border-[#DDEFE3] text-[#3E6B57] hover:border-[#9FD6B4]'
+      }`}
+    >
+      {children}
+    </button>
+  )
+}
+
+function PinCard({ pin, index: i, onSelect }: { pin: ShopPin; index: number; onSelect: (p: ShopPin) => void }) {
+  return (
+    <motion.li
+      initial={{ opacity: 0, y: -30, rotate: i % 2 ? 4 : -4 }}
+      animate={{ opacity: 1, y: 0, rotate: 0 }}
+      transition={{ type: 'spring', stiffness: 180, damping: 13, delay: 0.1 + Math.min(i, 8) * 0.08 }}
+    >
+      <motion.button
+        type="button"
+        onClick={() => onSelect(pin)}
+        whileTap={{ scale: 0.97 }}
+        className="group w-full text-left bg-white rounded-3xl border border-[#DDEFE3] overflow-hidden focus-visible:ring-4 focus-visible:ring-[#FFC23A]"
+        aria-label={`Order ${pin.name}`}
+      >
+        <div className="relative aspect-square flex items-center justify-center overflow-hidden" style={{ background: pin.tint }}>
+          <img
+            src={pin.image}
+            alt=""
+            loading="lazy"
+            className="w-full h-full object-contain scale-[1.45] -translate-y-[3%] drop-shadow-[0_6px_8px_rgba(15,59,44,.2)] transition-transform duration-300 group-hover:-translate-y-[6%] group-hover:rotate-[-3deg]"
+          />
+        </div>
+        <div className="p-3 sm:p-4 flex items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <p className="font-fredoka font-bold text-[15px] sm:text-base text-[#0F3B2C] leading-tight line-clamp-2">{pin.name}</p>
+            <p className="text-xs text-[#3E6B57] font-nunito">{pin.price != null ? formatPeso(pin.price) : 'Ready to order'}</p>
+          </div>
+          <span className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#E3263F] text-white flex items-center justify-center transition-transform group-hover:scale-110" aria-hidden="true">
+            <ShoppingBag size={16} />
+          </span>
+        </div>
+      </motion.button>
+    </motion.li>
   )
 }

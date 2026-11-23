@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { ImagePlus, Check } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
-import { useCreateShopItem, useUpdateShopItem, validateShopImage, type ShopItemInput } from '@/hooks/useShop'
+import { useCreateShopItem, useUpdateShopItem, useShopCategories, validateShopImage, type ShopItemInput } from '@/hooks/useShop'
 import type { ShopItem } from '@/types'
 
 const TINTS = ['#FFF1CC', '#DDF1FC', '#FFD9DE', '#D3F2DD', '#EDE4FF', '#FFFFFF']
@@ -11,14 +11,18 @@ interface ShopItemFormProps {
   /** null = closed, 'new' = add a design, ShopItem = edit that design */
   target: ShopItem | 'new' | null
   onClose: () => void
+  /** Category picked in the admin filter, preselected for a new design. */
+  defaultCategoryId?: string | null
 }
 
 /** Add or edit a Pin Shop design (image, name, description, price, card colour). */
-export function ShopItemForm({ target, onClose }: ShopItemFormProps) {
+export function ShopItemForm({ target, onClose, defaultCategoryId = null }: ShopItemFormProps) {
   const editing = target && target !== 'new' ? target : null
   const create = useCreateShopItem()
   const update = useUpdateShopItem()
   const busy = create.isPending || update.isPending
+  const { data: categories, isError: categoriesUnavailable } = useShopCategories()
+  const [categoryId, setCategoryId] = useState<string>('')
 
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -36,7 +40,9 @@ export function ShopItemForm({ target, onClose }: ShopItemFormProps) {
       setValues({ name: editing.name, description: editing.description ?? '', price: editing.price, tint: editing.tint })
       setPriceText(editing.price != null ? String(editing.price) : '')
       setPreview(editing.image_url)
+      setCategoryId(editing.category_id ?? '')
     } else {
+      setCategoryId(defaultCategoryId ?? '')
       setValues({ name: '', description: '', price: null, tint: TINTS[0] })
       setPriceText('')
       setPreview(null)
@@ -61,7 +67,8 @@ export function ShopItemForm({ target, onClose }: ShopItemFormProps) {
     if (!editing && !file) { setError('Add an image of the pin.'); return }
     const price = priceText.trim() === '' ? null : Number(priceText)
     if (price !== null && (Number.isNaN(price) || price < 0)) { setError('Price must be a number, or leave it empty.'); return }
-    const payload = { ...values, price }
+    // Leave the category alone if the categories table isn't set up yet.
+    const payload: ShopItemInput = { ...values, price, category_id: categoriesUnavailable || !categories ? undefined : (categoryId || null) }
     try {
       if (editing) await update.mutateAsync({ item: editing, values: payload, file })
       else await create.mutateAsync({ file: file!, values: payload })
@@ -121,6 +128,20 @@ export function ShopItemForm({ target, onClose }: ShopItemFormProps) {
             className="w-full rounded-2xl border-2 border-[#DDEFE3] px-4 py-2.5 font-nunito text-[#0F3B2C] outline-none focus:border-[#14904F] resize-none"
           />
         </label>
+
+        {categories && categories.length > 0 && (
+          <label className="block">
+            <span className="block text-sm font-semibold text-[#0F3B2C] font-nunito mb-1.5">Category</span>
+            <select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+              className="w-full rounded-2xl border-2 border-[#DDEFE3] bg-white px-4 py-2.5 font-nunito text-[#0F3B2C] outline-none focus:border-[#14904F]"
+            >
+              <option value="">Uncategorised</option>
+              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </label>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           <label className="block">
