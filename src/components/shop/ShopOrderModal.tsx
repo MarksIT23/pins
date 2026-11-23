@@ -9,6 +9,7 @@ import { Input, Textarea } from '@/components/ui/Badge'
 import { Confetti } from '@/components/ui/Confetti'
 import { useSubmitOrder } from '@/hooks/useOrders'
 import type { OrderFormData } from '@/types'
+import { TrimmedImage } from '@/components/ui/TrimmedImage'
 import { formatPeso, type ShopPin } from '@/data/shopPins'
 
 interface ShopOrderModalProps {
@@ -60,20 +61,20 @@ export function ShopOrderModal({ pin, onClose }: ShopOrderModalProps) {
   }
 
   return (
-    <Modal isOpen={!!pin} onClose={isPending ? () => {} : onClose} title={step === 'form' ? 'Order this pin' : undefined} size="md">
+    <Modal isOpen={!!pin} onClose={isPending ? () => {} : onClose} title={step === 'form' ? 'Order this pin' : undefined} size="lg">
       <AnimatePresence mode="wait">
         {pin && step === 'form' ? (
           <motion.div key="form" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
             {/* the design */}
             <div className="flex items-center gap-4 mb-5">
               <motion.div
-                className="shrink-0 w-24 h-24 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-[0_4px_12px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3]"
+                className="relative shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-[0_4px_12px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3]"
                 style={{ background: pin.tint }}
                 initial={{ rotate: -8, scale: 0.8 }}
                 animate={{ rotate: 0, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 14 }}
               >
-                <img src={pin.image} alt={pin.name} className="w-full h-full object-contain scale-[1.12]" />
+                <TrimmedImage src={pin.image} alt={pin.name} padding={0.06} />
               </motion.div>
               <div className="min-w-0">
                 <p className="font-fredoka font-extrabold text-lg text-[#0F3B2C] leading-tight">{pin.name}</p>

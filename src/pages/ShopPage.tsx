@@ -8,6 +8,7 @@ import { SparkleBackground } from '@/components/layout/SparkleBackground'
 import { ShopOrderModal } from '@/components/shop/ShopOrderModal'
 import { toShopPin, formatPeso, type ShopPin } from '@/data/shopPins'
 import { useShopItems, useShopCategories, ShopNotSetUpError } from '@/hooks/useShop'
+import { TrimmedImage } from '@/components/ui/TrimmedImage'
 
 /** Pin Shop: ready-made designs ordered as-is (the custom builder lives at /create). */
 export function ShopPage() {
@@ -189,11 +190,12 @@ function PinCard({ pin, index: i, onSelect }: { pin: ShopPin; index: number; onS
           className="relative w-full max-w-[180px] aspect-square rounded-full overflow-hidden border-4 border-white shadow-[0_6px_18px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3] transition-transform duration-300 group-hover:-translate-y-1"
           style={{ background: pin.tint }}
         >
-          <img
+          <TrimmedImage
             src={pin.image}
             alt=""
-            loading="lazy"
-            className="absolute inset-0 w-full h-full object-contain scale-[1.12] drop-shadow-[0_4px_6px_rgba(15,59,44,.18)] transition-transform duration-300 group-hover:rotate-[-4deg]"
+            padding={0.06}
+            className="transition-transform duration-300 group-hover:rotate-[-4deg]"
+            imgClassName="drop-shadow-[0_4px_6px_rgba(15,59,44,.18)]"
           />
           <span className="absolute bottom-[6%] right-[6%] w-8 h-8 rounded-full bg-[#E3263F] text-white flex items-center justify-center shadow-md transition-transform group-hover:scale-110" aria-hidden="true">
             <ShoppingBag size={14} />
