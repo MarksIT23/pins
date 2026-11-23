@@ -134,7 +134,7 @@ h1, h2, h3 { text-wrap: balance; }
 .animate-pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
 .animate-swing { animation: swing 4.5s ease-in-out infinite; transform-origin: 50% 0; }
 
-/* Opening animation: components/layout/IntroSplash.tsx. Design page unwrap: components/creator/UnwrapTransition.tsx. Tree pins + opening quick cuts: src/assets/pins-balls. Order confirmation: pages/OrderSuccessPage.tsx. Order tracking: pages/TrackOrderPage.tsx. Pin Shop: pages/ShopPage.tsx + pages/admin/AdminShopPage.tsx */
+/* Opening animation: components/layout/IntroSplash.tsx. Design page unwrap: components/creator/UnwrapTransition.tsx. Tree pins + opening quick cuts: src/assets/pins-balls. Order confirmation: pages/OrderSuccessPage.tsx. Order tracking: pages/TrackOrderPage.tsx. Pin Shop: pages/ShopPage.tsx + pages/admin/AdminShopPage.tsx. Header nav: components/layout/Header.tsx */
 
 /* ─── Hero tree ────────────────────────────────────────────────────────────── */
 @keyframes pinPop {

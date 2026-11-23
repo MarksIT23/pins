@@ -38,10 +38,11 @@ export function Header() {
           <NavLink to="/" label="Home" className="hidden sm:block" />
           <NavLink
             to="/track"
-            label={<><PackageSearch size={18} className="sm:hidden" aria-hidden="true" /><span className="sr-only sm:not-sr-only">Track order</span></>}
+            tone="gold"
+            label={<><PackageSearch size={16} strokeWidth={2.4} aria-hidden="true" /><span className="sm:hidden">Track</span><span className="hidden sm:inline">Track order</span></>}
           />
-          <NavLink to="/shop" label="Pin Shop" tone="green" />
-          <NavLink to="/create" label="Create a pin" tone="red" />
+          <NavLink to="/shop" label={<><span className="sm:hidden">Shop</span><span className="hidden sm:inline">Pin Shop</span></>} tone="green" />
+          <NavLink to="/create" label={<><span className="sm:hidden">Create</span><span className="hidden sm:inline">Create a pin</span></>} tone="red" />
         </nav>
       </div>
 
@@ -52,7 +53,7 @@ export function Header() {
   )
 }
 
-function NavLink({ to, label, tone, className = '' }: { to: string; label: React.ReactNode; tone?: 'red' | 'green'; className?: string }) {
+function NavLink({ to, label, tone, className = '' }: { to: string; label: React.ReactNode; tone?: 'red' | 'green' | 'gold'; className?: string }) {
   const location = useLocation()
   const isActive = location.pathname === to
 
@@ -61,11 +62,13 @@ function NavLink({ to, label, tone, className = '' }: { to: string; label: React
       <motion.span
         whileTap={{ scale: 0.96 }}
         className={`
-          inline-flex items-center px-3 sm:px-4 py-2 rounded-full whitespace-nowrap text-sm font-fredoka font-semibold transition-colors
+          inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full whitespace-nowrap text-sm font-fredoka font-semibold transition-colors
           ${tone === 'red'
             ? 'bg-[#E3263F] hover:bg-[#C41C33] text-white'
             : tone === 'green'
               ? 'bg-[#14904F] hover:bg-[#0F7A42] text-white'
+            : tone === 'gold'
+              ? `ring-2 ring-inset ring-[#FFC23A] text-[#0F3B2C] ${isActive ? 'bg-[#FFC23A]' : 'bg-[#FFF1CC] hover:bg-[#FFE8A3]'}`
             : isActive
               ? 'bg-[#DDEFE3] text-[#0F3B2C]'
               : 'text-[#3E6B57] hover:bg-[#EEF8F1]'
