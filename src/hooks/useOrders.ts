@@ -170,16 +170,25 @@ export function useDashboardStats() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('orders')
-        .select('status')
+        .select('*')
+        .order('date_ordered', { ascending: false })
 
       if (error) throw error
 
-      const orders = data ?? []
+      const orders = (data ?? []) as Order[]
+      const count = (st: OrderStatus) => orders.filter((o) => o.status === st).length
+      const since = Date.now() - 7 * 24 * 60 * 60 * 1000
       return {
         total_orders: orders.length,
-        pending_orders: orders.filter((o) => o.status === 'pending').length,
-        in_production_orders: orders.filter((o) => o.status === 'in_production').length,
-        completed_orders: orders.filter((o) => o.status === 'completed').length,
+        total_pins: orders.filter((o) => o.status !== 'cancelled').reduce((n, o) => n + o.quantity, 0),
+        shop_orders: orders.filter((o) => o.order_type === 'shop').length,
+        this_week: orders.filter((o) => new Date(o.date_ordered).getTime() >= since).length,
+        pending_orders: count('pending'),
+        accepted_orders: count('accepted'),
+        in_production_orders: count('in_production'),
+        ready_orders: count('ready_for_pickup'),
+        completed_orders: count('completed'),
+        recent: orders.slice(0, 5),
       }
     },
   })

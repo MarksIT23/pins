@@ -250,3 +250,55 @@ h1, h2, h3 { text-wrap: balance; }
     scroll-behavior: auto !important;
   }
 }
+
+/* ─── Admin: workshop desk ─────────────────────────────────────────────────── */
+/* Faint dotted ledger paper behind admin pages */
+.admin-paper {
+  background-color: #F3F8F4;
+  background-image: radial-gradient(rgba(15, 59, 44, 0.09) 1px, transparent 1.2px);
+  background-size: 18px 18px;
+}
+/* Sidebar nav items shaped like gift tags (notch + punched hole on the left) */
+.admin-nav-tag {
+  position: relative;
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
+  padding-left: 30px;
+}
+.admin-nav-tag::before {
+  content: '';
+  position: absolute;
+  left: 13px; top: 50%;
+  width: 6px; height: 6px; margin-top: -3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .45;
+}
+/* Vertical string lights down the sidebar edge */
+.admin-lights {
+  position: absolute;
+  top: 0; bottom: 0; right: -5px;
+  width: 10px;
+  display: flex; flex-direction: column; justify-content: space-around;
+  pointer-events: none;
+}
+.admin-lights span {
+  width: 8px; height: 11px;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  animation: bulb 2.6s ease-in-out infinite;
+}
+.admin-lights span:nth-child(4n+1) { background: #E3263F; animation-delay: 0s; }
+.admin-lights span:nth-child(4n+2) { background: #FFC23A; animation-delay: .65s; }
+.admin-lights span:nth-child(4n+3) { background: #2BC06C; animation-delay: 1.3s; }
+.admin-lights span:nth-child(4n+4) { background: #2E9BD6; animation-delay: 1.95s; }
+
+@keyframes adminTagDrop {
+  0% { opacity: 0; transform: translateY(-40px); }
+  60% { opacity: 1; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes adminTagSway {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+.admin-tag-drop { animation: adminTagDrop .7s cubic-bezier(.3,1.4,.5,1) both; }
+.admin-tag-sway { animation: adminTagSway 5s ease-in-out infinite; transform-origin: 50% 0; }

@@ -1,3 +1,4 @@
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import { AssetUploader } from '@/components/admin/AssetUploader'
@@ -41,14 +42,15 @@ export function AdminAssetsPage() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-6">
-        <h1 className="font-fredoka text-3xl font-bold text-[#0F3B2C]">Assets</h1>
-        <p className="text-[#8A9F96] font-nunito text-sm mt-1">
-          {filteredAssets.length} asset{filteredAssets.length !== 1 ? 's' : ''}
-          {searchQuery && filteredAssets.length !== assets.length && ` (filtered from ${assets.length})`}
-          {' • '}{categories.length} categories
-        </p>
-      </div>
+      <AdminPageHeader
+        title="Assets"
+        description={
+          <>
+            The parts customers build their pin from. {filteredAssets.length} asset{filteredAssets.length !== 1 ? 's' : ''}
+            {searchQuery && filteredAssets.length !== assets.length && ` (of ${assets.length})`} across {categories.length} categories.
+          </>
+        }
+      />
 
       {/* Tab switcher */}
       <div className="flex gap-2 p-1 bg-white rounded-2xl border border-[#DDEFE3] w-fit mb-6">

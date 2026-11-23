@@ -1,6 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Plus, Pencil, Eye, EyeOff, Trash2, ArrowUp, ArrowDown, Store, CircleAlert } from 'lucide-react'
 import { ShopItemForm } from '@/components/admin/ShopItemForm'
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { useShopItems, useUpdateShopItem, useDeleteShopItem, useMoveShopItem, ShopNotSetUpError } from '@/hooks/useShop'
 import { useOrders } from '@/hooks/useOrders'
 import type { ShopItem } from '@/types'
@@ -34,22 +35,18 @@ export function AdminShopPage() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-end gap-4">
-        <div className="flex-1">
-          <h1 className="font-fredoka text-3xl font-bold text-[#0F3B2C]">Pin Shop</h1>
-          <p className="text-[#8A9F96] font-nunito text-sm mt-1">
-            Ready-made designs customers order as-is. Hidden designs don't appear in the shop.
-          </p>
-        </div>
-        {!notSetUp && (
+      <AdminPageHeader
+        title="Pin Shop"
+        description="Ready-made designs customers order as-is. Hidden designs don't appear in the shop."
+        actions={!notSetUp && (
           <button
             onClick={() => setFormTarget('new')}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#E3263F] hover:bg-[#C41C33] text-white font-fredoka font-bold px-5 py-3 transition-colors"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#E3263F] hover:bg-[#C41C33] text-white font-fredoka font-bold px-5 py-3 shadow-[0_4px_0_#B5142B] active:translate-y-[2px] active:shadow-[0_2px_0_#B5142B] transition"
           >
             <Plus size={18} /> Add design
           </button>
         )}
-      </div>
+      />
 
       {isLoading ? (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

@@ -2,9 +2,7 @@ import { OrnamentMark } from '@/components/layout/Header'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
 import { useAdminSignIn } from '@/hooks/useAdmin'
-import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Badge'
 import { SparkleBackground } from '@/components/layout/SparkleBackground'
 
@@ -25,30 +23,39 @@ export function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBFDF9] flex items-center justify-center px-4 relative">
-      <SparkleBackground />
+    <div className="min-h-screen bg-[#0F3B2C] flex items-start sm:items-center pt-6 sm:pt-0 justify-center px-4 relative overflow-hidden">
+      <SparkleBackground density={0.5} color="255, 255, 255" />
+      <div className="string-lights" style={{ top: 0, bottom: "auto" }} aria-hidden="true">
+        {Array.from({ length: 30 }).map((_, i) => <span key={i} />)}
+      </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        className="relative z-10 w-full max-w-sm"
+        initial={{ y: -500 }}
+        animate={{ y: 0 }}
+        transition={{ type: 'spring', stiffness: 80, damping: 11 }}
+        className="relative z-10 w-full max-w-sm flex flex-col items-center"
       >
-        <div className="bg-white rounded-4xl border border-[#FFD9DE] shadow-[0_16px_64px_rgba(227,38,63,0.2)] p-8">
-          {/* Logo */}
-          <div className="flex flex-col items-center mb-8">
-            <div className="mb-3 animate-swing origin-top"><OrnamentMark size={64} /></div>
-            <h1 className="font-fredoka text-2xl font-bold text-[#0F3B2C]">Admin Login</h1>
-            <p className="text-sm text-[#8A9F96] font-nunito mt-1">PINS admin for WSSC</p>
+        {/* string the tag hangs from */}
+        <div className="w-[2px] h-16 sm:h-24 bg-[#FFC23A]" aria-hidden="true" />
+
+        <div className="relative w-full bg-white rounded-[28px] px-7 pt-12 pb-7 shadow-[0_24px_60px_rgba(0,0,0,.35)]">
+          <span className="absolute left-1/2 -translate-x-1/2 top-4 w-5 h-5 rounded-full border-4 border-[#FFC23A] bg-[#0F3B2C]" aria-hidden="true" />
+          <div className="absolute inset-3 rounded-[20px] border-2 border-dashed border-[#DDEFE3] pointer-events-none" aria-hidden="true" />
+
+          <div className="relative flex flex-col items-center mb-7 text-center">
+            <OrnamentMark size={52} />
+            <h1 className="mt-3 font-fredoka text-[28px] leading-tight font-extrabold text-[#0F3B2C]">PINS Workshop</h1>
+            <p className="text-sm text-[#3E6B57] font-nunito mt-1">Sign in to manage orders and designs.</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="relative space-y-4">
             <Input
               label="Email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@wssc.edu"
+              autoComplete="username"
               required
               id="admin-email"
             />
@@ -58,20 +65,18 @@ export function AdminLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              autoComplete="current-password"
               required
               id="admin-password"
             />
 
-            <Button
+            <button
               type="submit"
-              variant="admin"
-              size="md"
-              className="w-full mt-2"
-              isLoading={isPending}
-              leftIcon={<Sparkles size={18} />}
+              disabled={isPending}
+              className="w-full mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[#E3263F] text-white font-fredoka font-bold text-base py-3.5 shadow-[0_5px_0_#B5142B] active:translate-y-[3px] active:shadow-[0_2px_0_#B5142B] transition-transform disabled:opacity-70"
             >
-              Sign In
-            </Button>
+              {isPending ? 'Signing in…' : 'Sign in'}
+            </button>
           </form>
         </div>
       </motion.div>

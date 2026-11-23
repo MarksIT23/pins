@@ -1,8 +1,7 @@
 import { OrnamentMark } from '@/components/layout/Header'
 import { useState } from 'react'
 import { Navigate, Outlet, Link, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { LayoutDashboard, Package, ShoppingBag, Store, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, Package, ShoppingBag, Store, LogOut, Menu, X, ExternalLink } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAdminSignOut } from '@/hooks/useAdmin'
 
@@ -39,43 +38,49 @@ const NAV_ITEMS = [
   { to: '/admin/shop',   icon: Store,           label: 'Pin Shop' },
 ]
 
+/**
+ * The "workshop desk": a pine-green sidebar with string lights down its edge and
+ * gift-tag shaped nav items, over dotted ledger paper.
+ */
 function AdminLayout() {
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { mutate: signOut } = useAdminSignOut()
+  const current = NAV_ITEMS.find((n) => n.to === location.pathname)?.label ?? 'Admin'
 
   return (
-    <div className="min-h-screen flex bg-[#EEF8F1]">
-      {/* ─── Sidebar ──────────────────────────────────────────────────────── */}
+    <div className="min-h-screen flex admin-paper">
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-20 bg-black/30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 z-20 bg-[#0F3B2C]/40 backdrop-blur-[2px] lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
+      {/* ─── Sidebar ──────────────────────────────────────────────────────── */}
       <aside
         className={`
-          fixed top-0 left-0 h-full z-30 w-64 bg-white border-r border-[#DDEFE3]
-          shadow-[4px_0_24px_rgba(20,144,79,0.1)] transition-transform duration-300
-          flex flex-col
+          fixed top-0 left-0 h-full z-30 w-64 bg-[#0F3B2C] text-[#CDEBD8]
+          transition-transform duration-300 flex flex-col
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
-        {/* Logo */}
-        <div className="p-5 border-b border-[#DDEFE3]">
-          <div className="flex items-center gap-2">
-            <OrnamentMark size={34} />
-            <div>
-              <p className="font-fredoka font-bold text-[#0F3B2C] text-base leading-none">PINS Admin</p>
-              <p className="text-[10px] text-[#8A9F96] font-nunito">WSSC Dashboard</p>
-            </div>
-          </div>
+        <div className="admin-lights" aria-hidden="true">
+          {Array.from({ length: 16 }).map((_, i) => <span key={i} />)}
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 p-4 space-y-1">
+        {/* Logo */}
+        <div className="px-5 pt-6 pb-5 flex items-center gap-3">
+          <span className="animate-swing origin-top"><OrnamentMark size={40} /></span>
+          <div className="min-w-0">
+            <p className="font-fredoka font-extrabold text-white text-xl leading-none">PINS Workshop</p>
+            <p className="text-xs text-[#9FD6B4] font-nunito mt-1">WSSC admin</p>
+          </div>
+          <button className="ml-auto lg:hidden p-1.5 rounded-lg text-[#9FD6B4] hover:bg-white/10" onClick={() => setSidebarOpen(false)} aria-label="Close menu">
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Nav: gift tags */}
+        <nav className="flex-1 px-4 pt-2 space-y-1.5">
           {NAV_ITEMS.map(({ to, icon: Icon, label }) => {
             const isActive = location.pathname === to
             return (
@@ -83,51 +88,53 @@ function AdminLayout() {
                 key={to}
                 to={to}
                 onClick={() => setSidebarOpen(false)}
+                aria-current={isActive ? 'page' : undefined}
                 className={`
-                  flex items-center gap-3 px-4 py-3 rounded-2xl font-fredoka font-semibold
-                  transition-all text-sm
-                  ${isActive
-                    ? 'bg-[#14904F] text-white shadow-[0_4px_16px_rgba(20,144,79,0.4)]'
-                    : 'text-[#3E6B57] hover:bg-[#DDEFE3]'
-                  }
+                  admin-nav-tag flex items-center gap-3 pr-4 py-3 font-fredoka font-bold text-[15px] transition-colors
+                  ${isActive ? 'bg-[#FFC23A] text-[#0F3B2C]' : 'text-[#CDEBD8] hover:bg-white/10 hover:text-white'}
                 `}
               >
-                <Icon size={18} />
+                <Icon size={18} strokeWidth={2.2} />
                 {label}
               </Link>
             )
           })}
         </nav>
 
-        {/* Sign out */}
-        <div className="p-4 border-t border-[#DDEFE3]">
+        {/* Footer actions */}
+        <div className="px-4 pb-5 pt-4 space-y-1 border-t border-white/10">
+          <a
+            href={`${import.meta.env.BASE_URL}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl font-fredoka font-semibold text-sm text-[#CDEBD8] hover:bg-white/10 hover:text-white transition-colors"
+          >
+            <ExternalLink size={17} /> View the site
+          </a>
           <button
             onClick={() => signOut()}
-            className="flex items-center gap-3 w-full px-4 py-3 rounded-2xl font-fredoka text-sm text-red-400 hover:bg-red-50 transition-all"
+            className="flex items-center gap-3 w-full px-4 py-2.5 rounded-xl font-fredoka font-semibold text-sm text-[#FF8FA3] hover:bg-white/10 transition-colors"
           >
-            <LogOut size={18} />
-            Sign Out
+            <LogOut size={17} /> Sign out
           </button>
         </div>
       </aside>
 
-      {/* ─── Main content ─────────────────────────────────────────────────── */}
-      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
-        {/* Top bar */}
-        <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-[#DDEFE3] px-4 sm:px-6 h-14 flex items-center gap-3">
-          <button
-            className="lg:hidden p-2 rounded-xl hover:bg-[#DDEFE3] transition-colors"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu size={20} className="text-[#3E6B57]" />
+      {/* ─── Main ─────────────────────────────────────────────────────────── */}
+      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen min-w-0">
+        {/* Mobile top bar */}
+        <div className="lg:hidden sticky top-0 z-10 bg-[#0F3B2C] text-white px-3 h-14 flex items-center gap-2">
+          <button className="p-2 rounded-xl hover:bg-white/10 transition-colors" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+            <Menu size={20} />
           </button>
-          <h2 className="font-fredoka font-semibold text-[#0F3B2C] text-lg">
-            {NAV_ITEMS.find((n) => n.to === location.pathname)?.label ?? 'Admin'}
-          </h2>
+          <OrnamentMark size={26} />
+          <p className="font-fredoka font-bold text-lg">{current}</p>
+          <div className="string-lights" aria-hidden="true">
+            {Array.from({ length: 22 }).map((_, i) => <span key={i} />)}
+          </div>
         </div>
 
-        {/* Page content */}
-        <main className="flex-1 p-4 sm:p-6">
+        <main className="flex-1 px-4 sm:px-8 pt-8 pb-10">
           <Outlet />
         </main>
       </div>

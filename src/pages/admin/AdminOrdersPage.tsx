@@ -2,18 +2,18 @@ import { useEffect, useMemo, useState } from 'react'
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
 import { OrderTable } from '@/components/admin/OrderTable'
 import { useOrders } from '@/hooks/useOrders'
-import { OrderStatus, OrderType, ORDER_STATUS_LABELS } from '@/types'
+import { OrderStatus, OrderType } from '@/types'
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 
 const PAGE_SIZE = 20
 
-const STATUS_TABS: Array<{ value: OrderStatus | 'all'; label: string; icon: string }> = [
-  { value: 'all',              label: 'All',             icon: '' },
-  { value: 'pending',          label: 'Pending',         icon: '' },
-  { value: 'accepted',         label: 'Accepted',        icon: '' },
-  { value: 'in_production',    label: 'In Production',   icon: '' },
-  { value: 'ready_for_pickup', label: 'Ready',           icon: '' },
-  { value: 'completed',        label: 'Completed',       icon: '' },
-  { value: 'cancelled',        label: 'Cancelled',       icon: '' },
+// The production line, in order. Cancelled sits apart at the end.
+const PIPELINE: Array<{ value: OrderStatus; label: string; dot: string }> = [
+  { value: 'pending',          label: 'Pending',       dot: '#FFC23A' },
+  { value: 'accepted',         label: 'Accepted',      dot: '#2E9BD6' },
+  { value: 'in_production',    label: 'In production', dot: '#9A6400' },
+  { value: 'ready_for_pickup', label: 'Ready',         dot: '#14904F' },
+  { value: 'completed',        label: 'Completed',     dot: '#0F3B2C' },
 ]
 
 function getPageItems(current: number, total: number): (number | '…')[] {
@@ -34,20 +34,34 @@ function getPageItems(current: number, total: number): (number | '…')[] {
 
 export function AdminOrdersPage() {
   const [activeStatus, setActiveStatus] = useState<OrderStatus | 'all'>('all')
-  const [searchQuery, setSearchQuery] = useState('')
   const [typeFilter, setTypeFilter] = useState<OrderType | 'all'>('all')
+  const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const { data: orders = [], isLoading } = useOrders(activeStatus)
+  const { data: allOrders = [], isLoading } = useOrders('all')
+
+  // Counts per status follow the Custom / Pin Shop filter
+  const typed = useMemo(
+    () => (typeFilter === 'all' ? allOrders : allOrders.filter((o) => (o.order_type ?? 'custom') === typeFilter)),
+    [allOrders, typeFilter],
+  )
+  const counts = useMemo(() => {
+    const m: Record<string, number> = {}
+    for (const o of typed) m[o.status] = (m[o.status] ?? 0) + 1
+    return m
+  }, [typed])
+  const orders = useMemo(
+    () => (activeStatus === 'all' ? typed : typed.filter((o) => o.status === activeStatus)),
+    [typed, activeStatus],
+  )
 
   const filtered = useMemo(() => {
-    const byType = typeFilter === 'all' ? orders : orders.filter((o) => (o.order_type ?? 'custom') === typeFilter)
-    if (!searchQuery.trim()) return byType
+    if (!searchQuery.trim()) return orders
     const q = searchQuery.toLowerCase()
-    return byType.filter((o) =>
+    return orders.filter((o) =>
       [o.order_number, o.full_name, o.student_id]
         .some((field) => field?.toLowerCase().includes(q))
     )
-  }, [orders, searchQuery, typeFilter])
+  }, [orders, searchQuery])
 
   useEffect(() => {
     setCurrentPage(1)
@@ -62,38 +76,31 @@ export function AdminOrdersPage() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-6">
-        <h1 className="font-fredoka text-3xl font-bold text-[#0F3B2C]">Orders</h1>
-        <p className="text-[#8A9F96] font-nunito text-sm mt-1">
-          {filtered.length} order{filtered.length !== 1 ? 's' : ''} found
-          {(searchQuery || typeFilter !== 'all') && orders.length !== filtered.length && ` (filtered from ${orders.length})`}
-          <span className="mx-1.5">·</span>
-          {totalQuantity.toLocaleString()} total qty
-        </p>
-      </div>
+      <AdminPageHeader
+        title="Orders"
+        description={
+          <>
+            {filtered.length} order{filtered.length !== 1 ? 's' : ''} shown
+            {(searchQuery || typeFilter !== 'all' || activeStatus !== 'all') && allOrders.length !== filtered.length && ` of ${allOrders.length}`}
+            , {totalQuantity.toLocaleString()} pin{totalQuantity === 1 ? '' : 's'} in total.
+          </>
+        }
+      />
 
-      {/* Status filter tabs */}
-      <div className="flex gap-2 flex-wrap mb-4">
-        {STATUS_TABS.map(({ value, label, icon }) => (
-          <button
-            key={value}
-            onClick={() => {
-              setActiveStatus(value)
-              setCurrentPage(1)
-            }}
-            className={`
-              flex items-center gap-1.5 px-4 py-2 rounded-2xl text-sm font-fredoka font-semibold
-              transition-all cursor-pointer
-              ${activeStatus === value
-                ? 'bg-[#14904F] text-white shadow-[0_4px_16px_rgba(20,144,79,0.4)]'
-                : 'bg-white text-[#3E6B57] border border-[#DDEFE3] hover:border-[#9FD6B4]'
-              }
-            `}
-          >
-            {icon && <span>{icon}</span>}
-            <span>{label}</span>
-          </button>
-        ))}
+      {/* Production line: pick a stage to filter */}
+      <div className="-mx-4 sm:mx-0 mb-5 overflow-x-auto px-4 sm:px-0 pb-1" role="group" aria-label="Filter by status">
+        <div className="flex items-stretch gap-2 min-w-max">
+          <StageButton active={activeStatus === 'all'} onClick={() => setActiveStatus('all')} label="All" count={typed.length} dot="#E3263F" />
+          <span className="w-px bg-[#CDEBD8] mx-1" aria-hidden="true" />
+          {PIPELINE.map((st, i) => (
+            <div key={st.value} className="flex items-center">
+              <StageButton active={activeStatus === st.value} onClick={() => setActiveStatus(st.value)} label={st.label} count={counts[st.value] ?? 0} dot={st.dot} />
+              {i < PIPELINE.length - 1 && <ChevronRight size={16} className="mx-0.5 text-[#9FD6B4] shrink-0" aria-hidden="true" />}
+            </div>
+          ))}
+          <span className="w-px bg-[#CDEBD8] mx-1" aria-hidden="true" />
+          <StageButton active={activeStatus === 'cancelled'} onClick={() => setActiveStatus('cancelled')} label="Cancelled" count={counts.cancelled ?? 0} dot="#C41C33" muted />
+        </div>
       </div>
 
       {/* Order type filter */}
@@ -182,5 +189,26 @@ export function AdminOrdersPage() {
         </div>
       )}
     </div>
+  )
+}
+
+function StageButton({ active, onClick, label, count, dot, muted }: { active: boolean; onClick: () => void; label: string; count: number; dot: string; muted?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex flex-col items-start rounded-2xl px-3.5 py-2 text-left transition-colors border ${
+        active
+          ? 'bg-[#0F3B2C] border-[#0F3B2C] text-white'
+          : `bg-white border-[#E4EFE8] hover:border-[#9FD6B4] ${muted ? 'text-[#8A9F96]' : 'text-[#0F3B2C]'}`
+      }`}
+    >
+      <span className="font-fredoka font-extrabold text-xl leading-none tabular-nums">{count}</span>
+      <span className="mt-1 flex items-center gap-1.5 text-xs font-nunito font-semibold whitespace-nowrap">
+        <span className="w-2 h-2 rounded-full" style={{ background: dot }} aria-hidden="true" />
+        {label}
+      </span>
+    </button>
   )
 }
