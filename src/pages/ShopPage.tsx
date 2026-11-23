@@ -84,8 +84,8 @@ export function ShopPage() {
         {/* ─── Catalogue ──────────────────────────────────────────────────── */}
         <section className="max-w-5xl mx-auto px-4 sm:px-8 pt-2 pb-14">
           {isLoading ? (
-            <ul className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5" aria-label="Loading designs">
-              {Array.from({ length: 4 }).map((_, i) => <li key={i} className="aspect-[4/5] rounded-3xl shimmer" />)}
+            <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-4 sm:gap-x-5" aria-label="Loading designs">
+              {Array.from({ length: 4 }).map((_, i) => <li key={i} className="mx-auto w-full max-w-[180px] aspect-square rounded-full shimmer" />)}
             </ul>
           ) : pins.length === 0 ? (
             <div className="bg-white rounded-3xl border border-[#DDEFE3] p-8 text-center">
@@ -118,7 +118,7 @@ export function ShopPage() {
                         <span className="flex-1 h-[3px] rounded-full bg-[repeating-linear-gradient(90deg,#E3263F_0_10px,#FFFFFF_10px_14px,#14904F_14px_24px,#FFFFFF_24px_28px)] opacity-60 self-center" aria-hidden="true" />
                       </div>
                     )}
-                    <ul key={activeKey} className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
+                    <ul key={activeKey} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-4 sm:gap-x-5">
                       {g.pins.map((pin, i) => <PinCard key={pin.id} pin={pin} index={i} onSelect={setSelected} />)}
                     </ul>
                   </section>
@@ -182,26 +182,25 @@ function PinCard({ pin, index: i, onSelect }: { pin: ShopPin; index: number; onS
         type="button"
         onClick={() => onSelect(pin)}
         whileTap={{ scale: 0.97 }}
-        className="group w-full text-left bg-white rounded-3xl border border-[#DDEFE3] overflow-hidden focus-visible:ring-4 focus-visible:ring-[#FFC23A]"
+        className="group w-full flex flex-col items-center text-center rounded-3xl p-2 sm:p-3 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#FFC23A]"
         aria-label={`Order ${pin.name}`}
       >
-        <div className="relative aspect-square flex items-center justify-center overflow-hidden" style={{ background: pin.tint }}>
+        <div
+          className="relative w-full max-w-[180px] aspect-square rounded-full overflow-hidden border-4 border-white shadow-[0_6px_18px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3] transition-transform duration-300 group-hover:-translate-y-1"
+          style={{ background: pin.tint }}
+        >
           <img
             src={pin.image}
             alt=""
             loading="lazy"
-            className="w-full h-full object-contain scale-[1.45] -translate-y-[3%] drop-shadow-[0_6px_8px_rgba(15,59,44,.2)] transition-transform duration-300 group-hover:-translate-y-[6%] group-hover:rotate-[-3deg]"
+            className="absolute inset-[8%] w-[84%] h-[84%] object-contain drop-shadow-[0_4px_6px_rgba(15,59,44,.18)] transition-transform duration-300 group-hover:rotate-[-4deg]"
           />
-        </div>
-        <div className="p-3 sm:p-4 flex items-center gap-2">
-          <div className="min-w-0 flex-1">
-            <p className="font-fredoka font-bold text-[15px] sm:text-base text-[#0F3B2C] leading-tight line-clamp-2">{pin.name}</p>
-            <p className="text-xs text-[#3E6B57] font-nunito">{pin.price != null ? formatPeso(pin.price) : 'Ready to order'}</p>
-          </div>
-          <span className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#E3263F] text-white flex items-center justify-center transition-transform group-hover:scale-110" aria-hidden="true">
-            <ShoppingBag size={16} />
+          <span className="absolute bottom-[6%] right-[6%] w-8 h-8 rounded-full bg-[#E3263F] text-white flex items-center justify-center shadow-md transition-transform group-hover:scale-110" aria-hidden="true">
+            <ShoppingBag size={14} />
           </span>
         </div>
+        <p className="mt-2 font-fredoka font-bold text-[14px] sm:text-[15px] text-[#0F3B2C] leading-tight line-clamp-2">{pin.name}</p>
+        <p className="text-xs text-[#3E6B57] font-nunito">{pin.price != null ? formatPeso(pin.price) : 'Ready to order'}</p>
       </motion.button>
     </motion.li>
   )

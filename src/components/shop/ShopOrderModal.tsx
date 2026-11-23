@@ -67,13 +67,13 @@ export function ShopOrderModal({ pin, onClose }: ShopOrderModalProps) {
             {/* the design */}
             <div className="flex items-center gap-4 mb-5">
               <motion.div
-                className="shrink-0 w-24 h-24 rounded-2xl flex items-center justify-center overflow-hidden"
+                className="shrink-0 w-24 h-24 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-[0_4px_12px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3]"
                 style={{ background: pin.tint }}
                 initial={{ rotate: -8, scale: 0.8 }}
                 animate={{ rotate: 0, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 14 }}
               >
-                <img src={pin.image} alt={pin.name} className="w-full h-full object-contain scale-[1.45] -translate-y-[3%]" />
+                <img src={pin.image} alt={pin.name} className="w-[84%] h-[84%] object-contain" />
               </motion.div>
               <div className="min-w-0">
                 <p className="font-fredoka font-extrabold text-lg text-[#0F3B2C] leading-tight">{pin.name}</p>
