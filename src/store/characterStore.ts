@@ -14,6 +14,8 @@ interface CharacterStore {
   /** False on a fresh or just-reset design, until the starter parts are filled in. */
   defaultsApplied: boolean
   applyDefaults: (defaults: Record<string, string>) => void
+  /** Clothes worn before a Christmas outfit went on, put back when it comes off. */
+  stashedClothes: string | null
 }
 
 const DEFAULT_CONFIG: CharacterConfig = {
@@ -30,6 +32,7 @@ const DEFAULT_CONFIG: CharacterConfig = {
   glasses: null,
   college: null,
   accessories: null,
+  'accessories-2': null,
   textOverlay: null,
 }
 
@@ -39,14 +42,21 @@ export const useCharacterStore = create<CharacterStore>()(
       config: { ...DEFAULT_CONFIG },
       activeCategory: 'base',
       defaultsApplied: false,
+      stashedClothes: null,
 
       // Fill only empty slots, so nothing the customer picked is overwritten.
       applyDefaults: (defaults) => {
         set((state) => {
           const config = { ...state.config }
+          const hadOutfit = !!config['christmas-outfit']
           for (const [slug, id] of Object.entries(defaults)) {
             const key = slug as keyof typeof config
             if (!config[key]) (config as Record<string, unknown>)[slug] = id
+          }
+          // Clothes and a Christmas outfit are never worn together.
+          if (config.clothes && config['christmas-outfit']) {
+            if (hadOutfit) config.clothes = null
+            else config['christmas-outfit'] = null
           }
           return { config, defaultsApplied: true }
         })
@@ -54,13 +64,23 @@ export const useCharacterStore = create<CharacterStore>()(
 
       setActiveCategory: (slug) => set({ activeCategory: slug }),
 
+      // Clothes and a Christmas outfit swap each other out.
       setLayer: (categorySlug, assetId) => {
-        set((state) => ({
-          config: {
-            ...state.config,
-            [categorySlug]: assetId,
-          },
-        }))
+        set((state) => {
+          const config = { ...state.config, [categorySlug]: assetId }
+          let stashedClothes = state.stashedClothes
+          if (categorySlug === 'christmas-outfit') {
+            if (assetId) {
+              if (state.config.clothes) stashedClothes = state.config.clothes
+              config.clothes = null
+            } else if (!config.clothes && stashedClothes) {
+              config.clothes = stashedClothes
+            }
+          } else if (categorySlug === 'clothes' && assetId) {
+            config['christmas-outfit'] = null
+          }
+          return { config, stashedClothes }
+        })
       },
 
       setTextOverlay: (overlay) => {
@@ -73,7 +93,7 @@ export const useCharacterStore = create<CharacterStore>()(
       },
 
       resetCharacter: () => {
-        set({ config: { ...DEFAULT_CONFIG }, defaultsApplied: false })
+        set({ config: { ...DEFAULT_CONFIG }, defaultsApplied: false, stashedClothes: null })
       },
 
       getSelectedForCategory: (slug): string | null => {

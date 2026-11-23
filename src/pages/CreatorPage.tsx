@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/Button'
 import { useCategories, useAllAssets, useStarterDefaults } from '@/hooks/useAssets'
 import { useCharacterStore } from '@/store/characterStore'
 import { exportCanvasToDataUrl } from '@/lib/konva-export'
-import { filterActiveCategories } from '@/utils/layerOrder'
+import { filterActiveCategories, withSecondAccessory } from '@/utils/layerOrder'
 import { Asset, TextOverlay } from '@/types'
 
 const TEXT_FONTS = [
@@ -62,11 +62,13 @@ export function CreatorPage() {
   const { config, activeCategory, setActiveCategory, setLayer, setTextOverlay, resetCharacter } = useCharacterStore()
 
   // Filter to our 6 active categories only
-  const activeCategories = useMemo(() => filterActiveCategories(categories), [categories])
+  const dbCategories = useMemo(() => filterActiveCategories(categories), [categories])
+  // Adds the Accessory 2 slot, which reuses the accessory parts.
+  const activeCategories = useMemo(() => withSecondAccessory(dbCategories), [dbCategories])
 
   // A fresh (or just-reset) design starts with a base, eyes, eyebrows, lips and clothes.
   const { defaultsApplied, applyDefaults } = useCharacterStore()
-  const { data: starterDefaults } = useStarterDefaults(activeCategories)
+  const { data: starterDefaults } = useStarterDefaults(dbCategories)
   useEffect(() => {
     if (!defaultsApplied && starterDefaults) applyDefaults(starterDefaults)
   }, [defaultsApplied, starterDefaults, applyDefaults])
@@ -89,23 +91,15 @@ export function CreatorPage() {
     }
   }, [activeCategories, activeCat, activeCategory, setActiveCategory])
 
-  // Set default base, clothes, and background from the first available asset
-  // so the preview shows something immediately, even before clicking those tabs
+  // Safety net once the starred defaults are in: never leave the pin without a
+  // base, background, or something to wear (clothes or a Christmas outfit).
   useEffect(() => {
-    if (allAssets.length === 0) return
-    if (!config.base) {
-      const first = allAssets.find((a) => a.category?.slug === 'base')
-      if (first) setLayer('base', first.id)
-    }
-    if (!config.clothes) {
-      const first = allAssets.find((a) => a.category?.slug === 'clothes')
-      if (first) setLayer('clothes', first.id)
-    }
-    if (!config.background) {
-      const first = allAssets.find((a) => a.category?.slug === 'background')
-      if (first) setLayer('background', first.id)
-    }
-  }, [allAssets, config.base, config.clothes, config.background, setLayer])
+    if (!defaultsApplied || allAssets.length === 0) return
+    const firstIn = (slug: string) => allAssets.find((a) => a.category?.slug === slug)
+    if (!config.base) { const a = firstIn('base'); if (a) setLayer('base', a.id) }
+    if (!config.clothes && !config['christmas-outfit']) { const a = firstIn('clothes'); if (a) setLayer('clothes', a.id) }
+    if (!config.background) { const a = firstIn('background'); if (a) setLayer('background', a.id) }
+  }, [defaultsApplied, allAssets, config.base, config.clothes, config['christmas-outfit'], config.background, setLayer])
 
   // Sync text input to store (debounced)
   useEffect(() => {
@@ -202,7 +196,7 @@ export function CreatorPage() {
               <div className="flex items-center gap-2 mb-2">
                 {(() => { const I = CATEGORY_UI[activeCat.slug]?.icon ?? FALLBACK_ICON; return <I size={18} className="text-[#E3263F]" /> })()}
                 <h2 className="font-fredoka text-base font-semibold text-[#0F3B2C]">
-                  {activeCat.name}
+                  {CATEGORY_UI[activeCat.slug]?.label ?? activeCat.name}
                 </h2>
               </div>
             )}

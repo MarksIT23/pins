@@ -80,6 +80,7 @@ export interface CharacterConfig {
   glasses?: string | null;
   college?: string | null;
   accessories?: string | null;
+  'accessories-2'?: string | null;
   textOverlay?: TextOverlay | null;
   /** Set for Pin Shop orders (a ready-made design instead of a custom build). */
   shopItem?: { id: string; name: string } | null;

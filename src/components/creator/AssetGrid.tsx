@@ -28,19 +28,21 @@ const FORCE_DEFAULT = ['base', 'clothes', 'background', 'eyes', 'eyebrows', 'lip
 export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
   const { config, setLayer, getSelectedForCategory } = useCharacterStore()
   const selected = getSelectedForCategory(categorySlug)
+  // Clothes can be empty while a Christmas outfit is on.
+  const forced = FORCE_DEFAULT.includes(categorySlug) && !(categorySlug === 'clothes' && config['christmas-outfit'])
   const { data: assets, isLoading, error } = useAssetsByCategory(categoryId)
 
   // Auto-select first asset for categories that don't allow "none"
   useEffect(() => {
-    if (assets && assets.length > 0 && FORCE_DEFAULT.includes(categorySlug) && !selected) {
+    if (assets && assets.length > 0 && forced && !selected) {
       setLayer(categorySlug, pickDefault(assets)!.id)
     }
-  }, [assets, categorySlug, selected, setLayer])
+  }, [assets, categorySlug, selected, forced, setLayer])
 
   function handleSelect(assetId: string) {
     if (selected === assetId) {
       // Only allow deselect if the category allows "none"
-      if (!FORCE_DEFAULT.includes(categorySlug)) {
+      if (!forced) {
         setLayer(categorySlug, null)
       }
     } else {
@@ -85,6 +87,16 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
       animate="visible"
       className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-2"
     >
+      {(categorySlug === 'clothes' || categorySlug === 'christmas-outfit') && (
+        <p className="col-span-full text-xs font-nunito text-[#3E6B57] bg-[#EEF8F1] border border-[#DDEFE3] rounded-xl px-3 py-2">
+          {categorySlug === 'clothes'
+            ? config['christmas-outfit']
+              ? 'Your Christmas outfit is on. Pick clothes to switch back.'
+              : 'Picking clothes takes off the Christmas outfit.'
+            : 'A Christmas outfit replaces your clothes. Choose None to put them back on.'}
+        </p>
+      )}
+
       {/* None / Remove option — hidden for categories that require a default */}
       {!FORCE_DEFAULT.includes(categorySlug) && (
         <motion.button

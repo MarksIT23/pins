@@ -19,7 +19,8 @@ export const LAYER_ORDER: Record<string, number> = {
   glasses:      10,
   college:      11,
   accessories:  12,
-  text:         13,
+  'accessories-2': 13,
+  text:         14,
 }
 
 /**
@@ -38,7 +39,8 @@ export const CATEGORY_UI: Record<string, { icon: LucideIcon; label: string }> = 
   hair:         { icon: Scissors,       label: 'Hair' },
   glasses:      { icon: Glasses,        label: 'Glasses' },
   college:      { icon: GraduationCap,  label: 'College' },
-  accessories:  { icon: Gift,           label: 'Accessories' },
+  accessories:  { icon: Gift,           label: 'Accessory 1' },
+  'accessories-2': { icon: Gift,        label: 'Accessory 2' },
   text:         { icon: Type,           label: 'Text' },
 }
 
@@ -59,6 +61,7 @@ export const LAYER_SLUGS = [
   'glasses',
   'college',
   'accessories',
+  'accessories-2',
   'text',
 ]
 
@@ -77,8 +80,24 @@ export const BUTTON_ORDER = [
   'glasses',
   'college',
   'accessories',
+  'accessories-2',
   'text',
 ]
+
+/**
+ * Accessory 2 is a second slot that uses the same parts as Accessory 1,
+ * so it has no category of its own in the database.
+ */
+export const SECOND_ACCESSORY_SLUG = 'accessories-2'
+
+export function withSecondAccessory(categories: AssetCategory[]): AssetCategory[] {
+  const out: AssetCategory[] = []
+  for (const c of categories) {
+    out.push(c)
+    if (c.slug === 'accessories') out.push({ ...c, slug: SECOND_ACCESSORY_SLUG, name: 'Accessory 2' })
+  }
+  return out
+}
 
 /**
  * Filter API categories to only our active layers, sorted in button display order.
