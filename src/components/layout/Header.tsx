@@ -2,6 +2,7 @@ import type React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PackageSearch } from 'lucide-react'
+import { GetPinsMenu } from './GetPinsMenu'
 
 /** Small ornament mark used as the logo. */
 export function OrnamentMark({ size = 36 }: { size?: number }) {
@@ -41,8 +42,7 @@ export function Header() {
             tone="gold"
             label={<><PackageSearch size={16} strokeWidth={2.4} aria-hidden="true" /><span className="sm:hidden">Track</span><span className="hidden sm:inline">Track order</span></>}
           />
-          <NavLink to="/shop" label={<><span className="sm:hidden">Shop</span><span className="hidden sm:inline">Pin Shop</span></>} tone="green" />
-          <NavLink to="/create" label={<><span className="sm:hidden">Create</span><span className="hidden sm:inline">Create a pin</span></>} tone="red" />
+          <GetPinsMenu variant="header" />
         </nav>
       </div>
 

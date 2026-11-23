@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Palette, Shirt, Gift, ShoppingBag } from 'lucide-react'
+import { ArrowRight, Palette, Shirt, Gift } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { SparkleBackground } from '@/components/layout/SparkleBackground'
 import { FestiveTree } from '@/components/home/FestiveTree'
+import { GetPinsMenu } from '@/components/layout/GetPinsMenu'
 
 const STEPS = [
   { icon: Palette, title: 'Choose a base', desc: 'Start from a male or female chibi body.' },
@@ -15,7 +16,7 @@ const STEPS = [
 
 export function HomePage() {
   // Show a sticky CTA on mobile once the hero button scrolls out of view.
-  const heroCtaRef = useRef<HTMLAnchorElement>(null)
+  const heroCtaRef = useRef<HTMLDivElement>(null)
   const [showSticky, setShowSticky] = useState(false)
   // Replay the hero entrance once the opening animation closes.
   const [heroKey, setHeroKey] = useState(0)
@@ -77,20 +78,8 @@ export function HomePage() {
               transition={{ duration: 0.55, delay: 0.4 }}
               className="mt-7 flex flex-col items-center md:items-start gap-3"
             >
-              <div className="w-full sm:w-auto grid grid-cols-2 sm:flex gap-3">
-                <Link
-                  ref={heroCtaRef}
-                  to="/create"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white text-[#E3263F] font-fredoka font-extrabold text-base sm:text-lg px-4 sm:px-8 py-4 shadow-[0_6px_0_#B5142B] active:translate-y-[3px] active:shadow-[0_3px_0_#B5142B] transition-transform whitespace-nowrap"
-                >
-                  Start designing <ArrowRight size={20} strokeWidth={2.6} className="hidden sm:block" />
-                </Link>
-                <Link
-                  to="/shop"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFC23A] text-[#0F3B2C] font-fredoka font-extrabold text-base sm:text-lg px-4 sm:px-7 py-4 shadow-[0_6px_0_#C98A0B] active:translate-y-[3px] active:shadow-[0_3px_0_#C98A0B] transition-transform whitespace-nowrap"
-                >
-                  <ShoppingBag size={19} strokeWidth={2.4} /> Pin Shop
-                </Link>
+              <div ref={heroCtaRef} className="w-full sm:w-auto">
+                <GetPinsMenu variant="hero" />
               </div>
               <p className="text-sm text-[#FFD9DE] font-nunito">Free to design, no account needed</p>
             </motion.div>
@@ -173,20 +162,7 @@ export function HomePage() {
             transition={{ type: 'spring', stiffness: 320, damping: 30 }}
             className="md:hidden fixed inset-x-0 bottom-0 z-40 px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] bg-white/90 backdrop-blur-md border-t border-[#DDEFE3]"
           >
-            <div className="grid grid-cols-2 gap-3">
-              <Link
-                to="/create"
-                className="flex items-center justify-center gap-2 rounded-full bg-[#E3263F] text-white font-fredoka font-bold text-base py-3.5 active:scale-[.98] transition-transform"
-              >
-                Start designing
-              </Link>
-              <Link
-                to="/shop"
-                className="flex items-center justify-center gap-2 rounded-full bg-[#14904F] text-white font-fredoka font-bold text-base py-3.5 active:scale-[.98] transition-transform"
-              >
-                <ShoppingBag size={17} /> Pin Shop
-              </Link>
-            </div>
+            <GetPinsMenu variant="sticky" />
           </motion.div>
         )}
       </AnimatePresence>
