@@ -74,7 +74,7 @@ export function ShopOrderModal({ pin, onClose }: ShopOrderModalProps) {
                 animate={{ rotate: 0, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 14 }}
               >
-                <TrimmedImage src={pin.image} alt={pin.name} padding={0.06} />
+                <TrimmedImage src={pin.image} alt={pin.name} padding={-0.02} />
               </motion.div>
               <div className="min-w-0">
                 <p className="font-fredoka font-extrabold text-lg text-[#0F3B2C] leading-tight">{pin.name}</p>

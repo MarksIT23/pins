@@ -186,19 +186,22 @@ function PinCard({ pin, index: i, onSelect }: { pin: ShopPin; index: number; onS
         className="group w-full flex flex-col items-center text-center rounded-3xl p-2 sm:p-3 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#FFC23A]"
         aria-label={`Order ${pin.name}`}
       >
-        <div
-          className="relative w-full max-w-[180px] aspect-square rounded-full overflow-hidden border-4 border-white shadow-[0_6px_18px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3] transition-transform duration-300 group-hover:-translate-y-1"
-          style={{ background: pin.tint }}
-        >
-          <TrimmedImage
-            src={pin.image}
-            alt=""
-            padding={0.06}
-            className="transition-transform duration-300 group-hover:rotate-[-4deg]"
-            imgClassName="drop-shadow-[0_4px_6px_rgba(15,59,44,.18)]"
-          />
-          <span className="absolute bottom-[6%] right-[6%] w-8 h-8 rounded-full bg-[#E3263F] text-white flex items-center justify-center shadow-md transition-transform group-hover:scale-110" aria-hidden="true">
-            <ShoppingBag size={14} />
+        <div className="relative w-full max-w-[180px] transition-transform duration-300 group-hover:-translate-y-1">
+          <div
+            className="relative w-full aspect-square rounded-full overflow-hidden border-4 border-white shadow-[0_6px_18px_rgba(15,59,44,.14)] ring-1 ring-[#DDEFE3]"
+            style={{ background: pin.tint }}
+          >
+            <TrimmedImage
+              src={pin.image}
+              alt=""
+              padding={-0.02}
+              className="transition-transform duration-300 group-hover:rotate-[-4deg]"
+              imgClassName="drop-shadow-[0_4px_6px_rgba(15,59,44,.18)]"
+            />
+          </div>
+          {/* order badge sits on the circle's rim, outside the clipped area */}
+          <span className="absolute bottom-0 right-0 translate-x-[12%] translate-y-[12%] w-9 h-9 rounded-full bg-[#E3263F] text-white flex items-center justify-center border-[3px] border-white shadow-md transition-transform group-hover:scale-110" aria-hidden="true">
+            <ShoppingBag size={15} />
           </span>
         </div>
         <p className="mt-2 font-fredoka font-bold text-[14px] sm:text-[15px] text-[#0F3B2C] leading-tight line-clamp-2">{pin.name}</p>
