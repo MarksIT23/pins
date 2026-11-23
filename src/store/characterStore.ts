@@ -87,7 +87,10 @@ export const useCharacterStore = create<CharacterStore>()(
     }),
     {
       name: 'pins-character-config',
-      version: 1,
+      // v2: defaults added. Designs saved by older versions start fresh once,
+      // so they pick up the default parts.
+      version: 2,
+      migrate: () => ({ config: { ...DEFAULT_CONFIG }, activeCategory: 'base', defaultsApplied: false }) as unknown as CharacterStore,
     }
   )
 )

@@ -22,7 +22,8 @@ const ITEM_VARIANTS = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring' as const, stiffness: 300, damping: 20 } },
 } as const
 
-const FORCE_DEFAULT = ['base', 'clothes', 'background']
+// Categories that always need a part (no "None" option)
+const FORCE_DEFAULT = ['base', 'clothes', 'background', 'eyes', 'eyebrows', 'lips']
 
 export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
   const { config, setLayer, getSelectedForCategory } = useCharacterStore()

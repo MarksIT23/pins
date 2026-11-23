@@ -110,10 +110,13 @@ export function pickDefault(assets: Asset[]): Asset | undefined {
   return assets.find((a) => a.is_default) ?? [...assets].sort((a, b) => a.name.localeCompare(b.name))[0]
 }
 
-/** Default asset per starter category, fetched in one request. Keyed by category slug. */
+/**
+ * Starting part per category, fetched in one request and keyed by category slug.
+ * Any category with a starred default gets it; the starter categories (base, eyes,
+ * eyebrows, lips, clothes) fall back to their first part when none is starred.
+ */
 export function useStarterDefaults(categories: AssetCategory[]) {
-  const starters = categories.filter((c) => (STARTER_SLUGS as readonly string[]).includes(c.slug))
-  const ids = starters.map((c) => c.id)
+  const ids = categories.map((c) => c.id)
   return useQuery<Record<string, string>>({
     queryKey: ['starter-defaults', ids.join(',')],
     queryFn: async () => {
@@ -125,8 +128,10 @@ export function useStarterDefaults(categories: AssetCategory[]) {
         .eq('is_active', true)
       if (error) throw error
       const out: Record<string, string> = {}
-      for (const cat of starters) {
-        const pick = pickDefault((data ?? []).filter((a) => a.category_id === cat.id) as Asset[])
+      for (const cat of categories) {
+        const inCat = (data ?? []).filter((a) => a.category_id === cat.id) as Asset[]
+        const starred = inCat.find((a) => a.is_default)
+        const pick = starred ?? ((STARTER_SLUGS as readonly string[]).includes(cat.slug) ? pickDefault(inCat) : undefined)
         if (pick) out[cat.slug] = pick.id
       }
       return out
