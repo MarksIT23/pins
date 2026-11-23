@@ -12,7 +12,7 @@ import { AssetGrid } from '@/components/creator/AssetGrid'
 import { OrderModal } from '@/components/creator/OrderModal'
 import { LayerPreview } from '@/components/creator/LayerPreview'
 import { Button } from '@/components/ui/Button'
-import { useCategories, useAllAssets } from '@/hooks/useAssets'
+import { useCategories, useAllAssets, useStarterDefaults } from '@/hooks/useAssets'
 import { useCharacterStore } from '@/store/characterStore'
 import { exportCanvasToDataUrl } from '@/lib/konva-export'
 import { filterActiveCategories } from '@/utils/layerOrder'
@@ -63,6 +63,13 @@ export function CreatorPage() {
 
   // Filter to our 6 active categories only
   const activeCategories = useMemo(() => filterActiveCategories(categories), [categories])
+
+  // A fresh (or just-reset) design starts with a base, eyes, eyebrows, lips and clothes.
+  const { defaultsApplied, applyDefaults } = useCharacterStore()
+  const { data: starterDefaults } = useStarterDefaults(activeCategories)
+  useEffect(() => {
+    if (!defaultsApplied && starterDefaults) applyDefaults(starterDefaults)
+  }, [defaultsApplied, starterDefaults, applyDefaults])
 
   const assetMap = useMemo(() => {
     const m = new Map<string, Asset>()

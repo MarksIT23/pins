@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { uploadAssetFile, deleteAssetFile } from '@/lib/storage'
-import { AssetUploadPayload } from '@/types'
+import { AssetUploadPayload, Asset } from '@/types'
 import toast from 'react-hot-toast'
 
 /** Upload a new asset */
@@ -34,7 +34,7 @@ export function useUploadAsset() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
-      toast.success('Asset uploaded! 🎀')
+      toast.success('Asset uploaded')
     },
     onError: (err: Error) => {
       toast.error(`Upload failed: ${err.message}`)
@@ -56,7 +56,7 @@ export function useDeleteAsset() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
-      toast.success('Asset deleted!')
+      toast.success('Asset deleted')
     },
     onError: (err: Error) => {
       toast.error(`Delete failed: ${err.message}`)
@@ -106,7 +106,7 @@ export function useUpdateAsset() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, name, category_id }: { id: string; name: string; category_id: string }) => {
+    mutationFn: async ({ id, name, category_id, clearDefault }: { id: string; name: string; category_id: string; clearDefault?: boolean }) => {
       const slug = name
         .toLowerCase()
         .replace(/\s+/g, '-')
@@ -118,6 +118,8 @@ export function useUpdateAsset() {
           name,
           slug: `${slug}-${Date.now()}`,
           category_id,
+          // Moving to another category drops "default" (each category has its own)
+          ...(clearDefault ? { is_default: false } : {}),
           updated_at: new Date().toISOString(),
         })
         .eq('id', id)
@@ -125,10 +127,43 @@ export function useUpdateAsset() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
-      toast.success('Asset updated! ✨')
+      toast.success('Asset updated')
     },
     onError: (err: Error) => {
       toast.error(`Update failed: ${err.message}`)
+    },
+  })
+}
+
+/** Make an asset the starting part for its category (clears any other default there). */
+export function useSetDefaultAsset() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ asset, makeDefault }: { asset: Asset; makeDefault: boolean }) => {
+      // Clear first: the database allows one default per category.
+      const { error: clearErr } = await supabase
+        .from('assets')
+        .update({ is_default: false })
+        .eq('category_id', asset.category_id)
+        .eq('is_default', true)
+      if (clearErr) throw clearErr
+      if (makeDefault) {
+        const { error } = await supabase.from('assets').update({ is_default: true }).eq('id', asset.id)
+        if (error) throw error
+      }
+    },
+    onSuccess: (_d, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['assets'] })
+      queryClient.invalidateQueries({ queryKey: ['starter-defaults'] })
+      toast.success(vars.makeDefault ? `${vars.asset.name} is now the default` : 'Default removed')
+    },
+    onError: (err: Error) => {
+      toast.error(
+        /is_default/.test(err.message)
+          ? 'Run the asset defaults SQL in Supabase first (20261123020000_asset_defaults.sql).'
+          : `Couldn't set default: ${err.message}`,
+      )
     },
   })
 }

@@ -186,6 +186,14 @@ export function IntroSplash() {
           >
             WU-P Christmas Chibi Pins
           </motion.p>
+          <motion.p
+            className="relative mt-2 font-nunito text-[17px] text-[#FFE4E8] text-center px-6"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: opened ? 1 : 0, y: opened ? 0 : 10 }}
+            transition={{ duration: 0.6, delay: opened ? 0.7 : 0 }}
+          >
+            Brought to you by the WU-P SSC
+          </motion.p>
           <p className="absolute bottom-[max(20px,env(safe-area-inset-bottom))] text-xs font-nunito text-white/70">Tap to skip</p>
         </motion.div>
       )}

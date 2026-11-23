@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Check, X } from 'lucide-react'
 import { Asset } from '@/types'
 import { useCharacterStore } from '@/store/characterStore'
-import { useAssetsByCategory } from '@/hooks/useAssets'
+import { useAssetsByCategory, pickDefault } from '@/hooks/useAssets'
+import { TrimmedImage } from '@/components/ui/TrimmedImage'
 
 interface AssetGridProps {
   categoryId: string | undefined
@@ -31,7 +32,7 @@ export function AssetGrid({ categoryId, categorySlug }: AssetGridProps) {
   // Auto-select first asset for categories that don't allow "none"
   useEffect(() => {
     if (assets && assets.length > 0 && FORCE_DEFAULT.includes(categorySlug) && !selected) {
-      setLayer(categorySlug, assets[0].id)
+      setLayer(categorySlug, pickDefault(assets)!.id)
     }
   }, [assets, categorySlug, selected, setLayer])
 
@@ -157,12 +158,10 @@ function AssetCard({
             <ImageOff size={22} className="text-[#8A9F96]" />
           </div>
         ) : (
-          <img
+          <TrimmedImage
             src={asset.thumbnail_url || asset.file_url}
             alt={asset.name}
-            className="absolute inset-0 w-full h-full object-contain p-1"
             onError={() => setImgError(true)}
-            loading="lazy"
           />
         )}
 

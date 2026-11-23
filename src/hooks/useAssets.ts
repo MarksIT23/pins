@@ -98,3 +98,40 @@ export function useAssetById(id: string | null) {
     enabled: !!id,
   })
 }
+
+/** Categories a fresh design starts filled in. */
+export const STARTER_SLUGS = ['base', 'eyes', 'eyebrows', 'lips', 'clothes'] as const
+
+/**
+ * The part a category starts with: the one marked default in the admin,
+ * otherwise the first one as listed in the picker (by name).
+ */
+export function pickDefault(assets: Asset[]): Asset | undefined {
+  return assets.find((a) => a.is_default) ?? [...assets].sort((a, b) => a.name.localeCompare(b.name))[0]
+}
+
+/** Default asset per starter category, fetched in one request. Keyed by category slug. */
+export function useStarterDefaults(categories: AssetCategory[]) {
+  const starters = categories.filter((c) => (STARTER_SLUGS as readonly string[]).includes(c.slug))
+  const ids = starters.map((c) => c.id)
+  return useQuery<Record<string, string>>({
+    queryKey: ['starter-defaults', ids.join(',')],
+    queryFn: async () => {
+      if (ids.length === 0) return {}
+      const { data, error } = await supabase
+        .from('assets')
+        .select('*')
+        .in('category_id', ids)
+        .eq('is_active', true)
+      if (error) throw error
+      const out: Record<string, string> = {}
+      for (const cat of starters) {
+        const pick = pickDefault((data ?? []).filter((a) => a.category_id === cat.id) as Asset[])
+        if (pick) out[cat.slug] = pick.id
+      }
+      return out
+    },
+    enabled: categories.length > 0,
+    staleTime: 5 * 60 * 1000,
+  })
+}

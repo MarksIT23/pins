@@ -11,6 +11,9 @@ interface CharacterStore {
   setTextOverlay: (overlay: TextOverlay | null) => void
   resetCharacter: () => void
   getSelectedForCategory: (slug: string) => string | null
+  /** False on a fresh or just-reset design, until the starter parts are filled in. */
+  defaultsApplied: boolean
+  applyDefaults: (defaults: Record<string, string>) => void
 }
 
 const DEFAULT_CONFIG: CharacterConfig = {
@@ -35,6 +38,19 @@ export const useCharacterStore = create<CharacterStore>()(
     (set, get) => ({
       config: { ...DEFAULT_CONFIG },
       activeCategory: 'base',
+      defaultsApplied: false,
+
+      // Fill only empty slots, so nothing the customer picked is overwritten.
+      applyDefaults: (defaults) => {
+        set((state) => {
+          const config = { ...state.config }
+          for (const [slug, id] of Object.entries(defaults)) {
+            const key = slug as keyof typeof config
+            if (!config[key]) (config as Record<string, unknown>)[slug] = id
+          }
+          return { config, defaultsApplied: true }
+        })
+      },
 
       setActiveCategory: (slug) => set({ activeCategory: slug }),
 
@@ -57,7 +73,7 @@ export const useCharacterStore = create<CharacterStore>()(
       },
 
       resetCharacter: () => {
-        set({ config: { ...DEFAULT_CONFIG } })
+        set({ config: { ...DEFAULT_CONFIG }, defaultsApplied: false })
       },
 
       getSelectedForCategory: (slug): string | null => {

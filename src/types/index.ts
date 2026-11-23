@@ -49,6 +49,8 @@ export interface Asset {
   tags?: string[] | null;
   gender: 'male' | 'female' | 'unisex';
   is_active: boolean;
+  /** The part a fresh design starts with (one per category, set in Admin > Assets). */
+  is_default?: boolean;
   sort_order: number;
   created_at: string;
   updated_at: string;

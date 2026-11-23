@@ -1,9 +1,10 @@
 import { FolderOpen } from 'lucide-react'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trash2, Eye, EyeOff, Pencil } from 'lucide-react'
+import { Trash2, Eye, EyeOff, Pencil, Star } from 'lucide-react'
+import { TrimmedImage } from '@/components/ui/TrimmedImage'
 import { Asset, AssetCategory } from '@/types'
-import { useDeleteAsset, useToggleAssetActive, useUpdateAsset } from '@/hooks/useAdmin'
+import { useDeleteAsset, useToggleAssetActive, useUpdateAsset, useSetDefaultAsset } from '@/hooks/useAdmin'
 import { Modal, ConfirmDialog } from '@/components/ui/Modal'
 import { Badge } from '@/components/ui/Badge'
 
@@ -17,6 +18,7 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
   const { mutate: deleteAsset, isPending: isDeleting } = useDeleteAsset()
   const { mutate: toggleActive } = useToggleAssetActive()
   const { mutate: updateAsset, isPending: isUpdating } = useUpdateAsset()
+  const { mutate: setDefault, isPending: isSettingDefault } = useSetDefaultAsset()
   const [confirmDelete, setConfirmDelete] = useState<Asset | null>(null)
   const [editingAsset, setEditingAsset] = useState<Asset | null>(null)
   const [editName, setEditName] = useState('')
@@ -41,6 +43,7 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
       id: editingAsset.id,
       name: editName.trim(),
       category_id: editCategoryId,
+      clearDefault: editCategoryId !== editingAsset.category_id,
     }, {
       onSuccess: () => setEditingAsset(null),
     })
@@ -86,12 +89,21 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
                       backgroundSize: '12px 12px',
                     }}
                   />
-                  <img
-                    src={asset.file_url}
-                    alt={asset.name}
-                    className="absolute inset-0 w-full h-full object-contain p-2"
-                    loading="lazy"
-                  />
+                  <TrimmedImage src={asset.file_url} alt={asset.name} />
+
+                  {/* Default star: always visible, tap to toggle */}
+                  <button
+                    onClick={() => setDefault({ asset, makeDefault: !asset.is_default })}
+                    disabled={isSettingDefault}
+                    title={asset.is_default ? 'Default part (tap to remove)' : 'Set as default part for this category'}
+                    aria-label={asset.is_default ? `Remove ${asset.name} as default` : `Set ${asset.name} as default`}
+                    aria-pressed={!!asset.is_default}
+                    className={`absolute top-1.5 left-1.5 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                      asset.is_default ? 'bg-[#FFC23A] text-[#0F3B2C]' : 'bg-white/90 text-[#A9BAB2] hover:text-[#C98A0B]'
+                    }`}
+                  >
+                    <Star size={15} fill={asset.is_default ? 'currentColor' : 'none'} />
+                  </button>
 
                   {/* Hover action overlay */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
@@ -127,6 +139,9 @@ export function AssetManager({ assets, categories, selectedCategory }: AssetMana
                       <Badge variant="purple" className="text-[9px] px-1.5 py-0">
                         {cat.name}
                       </Badge>
+                    )}
+                    {asset.is_default && (
+                      <span className="text-[9px] font-nunito font-bold rounded-full bg-[#FFF1CC] text-[#9A6400] px-1.5 py-0">Default</span>
                     )}
                     {asset.gender !== 'unisex' && (
                       <Badge variant={asset.gender === 'female' ? 'pink' : 'blue'} className="text-[9px] px-1.5 py-0">
