@@ -193,7 +193,7 @@ function PinCard({ pin, index: i, onSelect }: { pin: ShopPin; index: number; onS
             src={pin.image}
             alt=""
             loading="lazy"
-            className="absolute inset-[8%] w-[84%] h-[84%] object-contain drop-shadow-[0_4px_6px_rgba(15,59,44,.18)] transition-transform duration-300 group-hover:rotate-[-4deg]"
+            className="absolute inset-0 w-full h-full object-contain scale-[1.12] drop-shadow-[0_4px_6px_rgba(15,59,44,.18)] transition-transform duration-300 group-hover:rotate-[-4deg]"
           />
           <span className="absolute bottom-[6%] right-[6%] w-8 h-8 rounded-full bg-[#E3263F] text-white flex items-center justify-center shadow-md transition-transform group-hover:scale-110" aria-hidden="true">
             <ShoppingBag size={14} />
