@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import pin1 from '@/assets/pins-balls/pin1.png'
-import pin2 from '@/assets/pins-balls/pin2.png'
-import pin3 from '@/assets/pins-balls/pin3.png'
-import pin4 from '@/assets/pins-balls/pin4.png'
-import pin5 from '@/assets/pins-balls/pin5.png'
-import pin6 from '@/assets/pins-balls/pin6.png'
+import pin1 from '@/assets/pins-balls/new1.png'
+import pin2 from '@/assets/pins-balls/new2.png'
+import pin3 from '@/assets/pins-balls/new3.png'
+import pin4 from '@/assets/pins-balls/new4.png'
+import pin5 from '@/assets/pins-balls/new5.png'
+import pin6 from '@/assets/pins-balls/new6.png'
 
 const PIN_IMAGES = [pin1, pin2, pin3, pin4, pin5, pin6]
 // Pin artwork is 375×375 with the round pin (≈229px across) centred at (187.5, 198).

@@ -1,9 +1,9 @@
-import pin1 from '@/assets/pins-balls/pin1.png'
-import pin2 from '@/assets/pins-balls/pin2.png'
-import pin3 from '@/assets/pins-balls/pin3.png'
-import pin4 from '@/assets/pins-balls/pin4.png'
-import pin5 from '@/assets/pins-balls/pin5.png'
-import pin6 from '@/assets/pins-balls/pin6.png'
+import pin1 from '@/assets/pins-balls/new1.png'
+import pin2 from '@/assets/pins-balls/new2.png'
+import pin3 from '@/assets/pins-balls/new3.png'
+import pin4 from '@/assets/pins-balls/new4.png'
+import pin5 from '@/assets/pins-balls/new5.png'
+import pin6 from '@/assets/pins-balls/new6.png'
 
 // Pin artwork is 375×375 with the round pin (≈229px across) centred at (187.5, 198).
 const ART = { size: 375, cx: 187.5, cy: 198, d: 229 }
